@@ -1,4 +1,6 @@
 #WebArchiveBOT
+PHP script to save external links to Internet Archive.
+
 This experimental tool looks for New Files uploaded to Wikimedia Commons (or any Wiki), extract the links, and queries to Internet Archive by Wayback Machine to save them.
 
 What is included:
