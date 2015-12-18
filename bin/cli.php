@@ -1,7 +1,7 @@
 <?php
 
 /**
- * UploadFile: botclases.php based MediaWiki file uploader - CLI mode script
+ * WebArchiveBOT: botclases.php based MediaWiki for archiving external links to Web Archive
  *
  *  (c) 2015 Davod - https://commons.wikimedia.org/wiki/User:Amitie_10g
  *
@@ -10,7 +10,7 @@
  *  see README.md and COPYING for more information
  *
  **/
- 
+
 // Check if SAPI is CLI
 if(php_sapi_name() != "cli") die("\nThis script should be executed from CLI.\n");
 
@@ -20,7 +20,7 @@ define('TEMP_PATH',realpath(sys_get_temp_dir()));
 // from the arguments --user and --password for convenience, but them can also
 // be hardcoded (see bellow)
 $shortopts  = "";
-$longopts   = array("user::","password::","project::","help::","license::");
+$longopts   = array("user::","password::","project::","help::","license::","quiet::");
 $options    = getopt($shortopts, $longopts);
 
 if(empty($user))     $user     = $options['user'];
@@ -32,13 +32,10 @@ $license                       = $options['license'];
 // Declare the Help and License text
 $help_text = <<<EOH
 
-$bs::: Davod Uploader (botclasses.php)  Copyright (C) 2015  Davod (Amitie 10g) :::$be
+$bs::: WebArchiveBOT (botclasses.php)  Copyright (C) 2015  Davod (Amitie 10g) :::$be
 
-This simple script  allows to upload one or multiple files to Wikimedia Commons
-or any wiki of your choice, determined by the  Arguments and filelist.ini file.
-
-Also,  this script checks if the file already exists in the Wiki,  and then the
-existing files will be skipped.
+This script is intended to check for new files uploaded to Wiki,
+extract external links and save them at Web Archive by Wayback Machine.
 $bs
 Parameters:
 
@@ -49,21 +46,10 @@ Parameters:
    $bs--project$be  Your Wiki projet where you  will upload your file(s),  with the
 	      "http(s)://"  prefix.  This parameter is optional;  the default
 	      value is "https://commons.wikimedia.org"
-	    
-   $bs--filelist$be The file list in csv format, by default "filelist.csv".
-	      Fields are the following, separated with semicolon (";"):
 
-	      ###############################################################
-	      #    "Filename";"Pagename";"Description";"Date";"Source";     #
-	      #    "Author";"Optional";"License";"Categories"               #
-	      ###############################################################
-	      Characters in each field$bs should$be be properly escaped.
-		
    $bs--help$be     Show this help
 
    $bs--license$be  Show the license of this program
-
-With no parameters, the script will parse './filelist.ini' by default.
 
 See README.md for detailed information about its usage.
 
@@ -96,14 +82,14 @@ if(isset($license)) die($license_text);
 
 require_once('class.php');
 
-$wiki = new WebArchiveBOT($wiki_url,
-			  $flickr_licenses_blacklist,
-			  $ipernity_licenses_blacklist,
-			  $picasa_licenses_blacklist,
-			  $flickr_api_key,
-			  $ipernity_api_key);
+$wiki = new WebArchiveBOT($wiki_url,$quiet);
+
+$login = $wiki->login($wiki_user,$wiki_password);
+if($login['login']['result'] != 'Success') die('Not logged in');
 			  
 $wiki->setUserAgent('WebArchiveBOT/0,1 (https://github.com/Amitie10g/WebArchiveBOT; davidkingnt@gmail.com) Botclasses.php/1.0');
+
+echo "Archiving... ";
 
 $files = $wiki->getLatestFiles(5);
 
@@ -113,14 +99,18 @@ $extlinks_bl = array('(([\w]+\.)*google\.[\w]+)',
 		     '(([\w]+\.)*openstreetmap\.[\w]+)',
 		     '(([\w]+\.)*creativecommons\.[\w]+)',
 		     '(([\w]+\.)*wikipedia\.org)',
-		     '(([\w]+\.)*wikimedia\.org)');
+		     '(([\w]+\.)*wikimedia\.org)',
+     		     '(([\w]+\.)*wmflabs\.org)',
+     		     '(([\w]+\.)*gnu\.org\/copyleft)');
 
 foreach($files['query']['allimages'] as $page){
 	$canonicaltitle = $page['canonicaltitle'];
-	$links = $wiki->GetPageContents($canonicaltitle,"externallinks");
+	$links = $wiki->GetPageContents($canonicaltitle,'externallinks');
 	$links = $wiki->clearLinks($links['parse']['externallinks'],$extlinks_bl,false);
 
-	var_dump($wiki->archive($links,$canonicaltitle));
+	$wiki->archive($links,$json_file,$canonicaltitle);
 }
+
+echo "done.\n";
 
 ?>
