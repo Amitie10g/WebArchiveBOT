@@ -2,9 +2,10 @@
 PHP script to save external links to Internet Archive.
 
 This experimental tool looks for New Files uploaded to Wikimedia Commons (or any Wiki), extract the links, and queries to Internet Archive by Wayback Machine to save them.
+Configure a CRON job to run this script periodicaly.
 
 What is included:
-* /bin The executable and libraries
+* /bin The executable and libraries. For security reasons, keep it outside the public_html!
  * WebArchiveBOT.sh The (bootstarp) script. You should use it and fill it with the appopiate data
  * cli.php The The main script
  * class.php The classes library
