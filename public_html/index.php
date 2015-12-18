@@ -43,10 +43,10 @@ $json_contents = @array_slice($json_contents,0,$limit);
 <?php if(is_file($json_file)){
 	foreach($json_contents as $items){
 		foreach($items as $key=>$item){
-?>			<h2><a href="<?= $site_url ?><?= $key ?>"><?= $key ?></h2>
+?>			<h2><a href="<?= $site_url ?><?= $key ?>" target="blank"><?= $key ?></h2>
 			<ul>
 <?php			foreach($item as $link){
-?>				<li><a href="<?= $link ?>"><?= $link ?></a></li>
+?>				<li><a href="<?= $link ?>" target="blank"><?= $link ?></a></li>
 <?php			}
 ?>			</ul>
 <?php		}
