@@ -35,8 +35,8 @@ $json_contents = @array_slice($json_contents,0,$limit);
 			<h1>WebArchiveBOT, archived items</h1>
 			<p>This page lists the last 100 files uploaded to <?= $sitename ?> and
 			their links archived at Internet Archive by Wayback Machine. You can
-			download the <a href="<?= $json_file ?>">full list in JSON format</a>.</br>
-			For more information, see the <a href="doc">Documentation</a>.
+			download the <a href="<?= $json_file ?>" target="_blank">full list in JSON format</a>.</br>
+			For more information, see the <a href="doc" target=blank>Documentation</a>.
 			<a href="https://github.com/Amitie10g/WebArchiveBOT">Source code</a> is available at GitHub.</p>
 		</div>
 		<div>
