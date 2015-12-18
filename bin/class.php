@@ -259,7 +259,7 @@ class Wiki {
 	function query($query,$post=null,$repeat=null,$url=null){
 
 		if(empty($url)) $url = $this->url;
-		
+
 		if($post==null) $ret = $this->http->get($url.$query);
 		else $ret = $this->http->post($url.$query,$post);
 		if($this->http->http_code() != "200"){
@@ -402,12 +402,12 @@ class WebArchiveBOT extends Wiki {
 			if($this->inArray($host,$blacklist,true,true)){
 				if($allow_empty_path === false){
 					$path = parse_url($link,PHP_URL_PATH);
-					
+
 					if(empty($path) || $path == '/') continue;
 					else $links[] = $link;
 				}else $links[] = $link;
 			}
-		}	
+		}
 		return $links;
 	}
 
@@ -428,7 +428,7 @@ class WebArchiveBOT extends Wiki {
 
 			if(preg_match($regex,$needle) >= 1) $found = true;
 		}else $found = in_array($needle,$haystack);
-		
+
 		return $found;
 	}
 
@@ -438,7 +438,7 @@ class WebArchiveBOT extends Wiki {
 	 * @param string $json_file The JSON file to store the results. It should be writable.
 	 * @param string $title The canonical name (title) of the file
 	 * @return int The returned value from file_put_contents()
-	**/	
+	**/
 	function archive($links,$json_file=null,$title=null){
 		if(!is_array($links)) return false;
 		if(empty($json_file)) $json_file = 'archive.json';
@@ -454,14 +454,14 @@ class WebArchiveBOT extends Wiki {
 			$timestamp = time();
 			if(!is_int($archive_timestamp)) $archive_timestamp = 0;
 			$window_time = $timestamp-$archive_timestamp;
-			
+
 			if($window_time >= 43200){
 				$headers = @get_headers("https://web.archive.org/save/$link");
 				foreach($headers as $item){
 					if(preg_match('/^(Content-Location\: \/web\/[\p{N}]{14}){1}/',$item) >= 1){
 						$item = str_replace('Content-Location: /','https://web.archive.org/',$item);
 						$archive_url[$title][] = $item;
-					}	
+					}
 				}
 			}
 			$num++;
@@ -470,7 +470,7 @@ class WebArchiveBOT extends Wiki {
 		$data = file_get_contents($json_file);
 		$data = json_decode($data,true);
 		$data[] = $archive_url;
-		$data = json_encode($data,JSON_PRETTY_PRINT);
+		$data = json_encode($data,128); // JSON_PRETTY_PRINT is 128
 
 		return file_put_contents($json_file,utf8_encode($data),LOCK_EX);
 	}
