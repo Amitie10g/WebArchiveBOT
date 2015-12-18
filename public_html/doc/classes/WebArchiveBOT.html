@@ -136,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-114592551"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-533266590"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-114592551" class="accordion-body collapse in">
+            <div id="namespace-533266590" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -811,7 +811,7 @@
                                                     <tr>
                                 <td></td>
                                 <td>$pass </td>
-                                <td><p>Password that corrisponds to the username.</p></td>
+                                <td><p>Password that belongs to the username.</p></td>
                             </tr>
                                             </table>
                 
@@ -878,7 +878,7 @@
                 <h3 class="public ">getPageContents()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
                 <pre class="signature" style="margin-right: 54px;">getPageContents(  <span class="argument">$page</span>,   <span class="argument">$props = null</span>) : array</pre>
-                <p><em>Get the contents from the Wiki page in several formats, using the MediaWiki API (cached)</em></p>
+                <p><em>Get the contents from the Wiki page. This is an alternative for getpage() with more features</em></p>
                 
 
                                     <h4>Parameters</h4>
@@ -1035,7 +1035,7 @@ If false, then, in_array() will be used.</p></td>
                 
                                     <h4>Returns</h4>
                     boolean
-                                            &mdash; <p>The links filtered</p>
+                                            &mdash; <p>true if value were found in the array, false if not</p>
                                     				
                             </article>
         </div>
@@ -1056,8 +1056,8 @@ If false, then, in_array() will be used.</p></td>
             <article class="method">
                 <h3 class="public ">archive()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">archive(array  <span class="argument">$links</span>, string  <span class="argument">$json_file = null</span>, string  <span class="argument">$title = null</span>) : integer</pre>
-                <p><em>Do the queries to save the given links to Web Archive</em></p>
+                <pre class="signature" style="margin-right: 54px;">archive(array  <span class="argument">$links</span>, string  <span class="argument">$json_file</span>, string  <span class="argument">$title</span>) : integer</pre>
+                <p><em>Do the queries to save the given links to Web Archive, and check if them was already archived</em></p>
                 
 
                                     <h4>Parameters</h4>
@@ -1146,7 +1146,7 @@ If false, then, in_array() will be used.</p></td>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on December 18th, 2015 at 02:17.
+                    on December 18th, 2015 at 14:04.
                 </section>
             </section>
         </section>

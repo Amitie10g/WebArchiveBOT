@@ -32,7 +32,7 @@ $license                       = $options['license'];
 // Declare the Help and License text
 $help_text = <<<EOH
 
-$bs::: WebArchiveBOT (botclasses.php)  Copyright (C) 2015  Davod (Amitie 10g) :::$be
+$bs::: WebArchiveBOT  Copyright (C) 2015  Davod (Amitie 10g) :::$be
 
 This script is intended to check for new files uploaded to Wiki,
 extract external links and save them at Web Archive by Wayback Machine.
@@ -58,7 +58,7 @@ EOH;
 
 $license_text = <<<EOL
 $bs
-Davod Uploader (botclasses.php)  Copyright (C) 2015  Davod (Amitie 10g)$be
+WebArchiveBOT  Copyright (C) 2015  Davod (Amitie 10g)$be
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

@@ -299,7 +299,7 @@ class Wiki {
 	/**
 	 * This function takes a username and password and logs you into Wiki.
 	 * @param $user Username to login as.
-	 * @param $pass Password that corrisponds to the username.
+	 * @param $pass Password that belongs to the username.
 	 * @return array The API result
 	 **/
 	function login($user,$pass){
@@ -356,7 +356,7 @@ class WebArchiveBOT extends Wiki {
 	}
 
 	/**
-	 * Get the contents from the Wiki page in several formats, using the MediaWiki API (cached)
+	 * Get the contents from the Wiki page. This is an alternative for getpage() with more features
 	 * @param $page The page that we're working
 	 * @param $props The properties that we want to obtain from the query (string or array)
 	 * @return array The contents as array
@@ -418,7 +418,7 @@ class WebArchiveBOT extends Wiki {
 	 * @param bool $regex To allow or not regex (contents in $haystack should be string and valid regex).
 	 * If false, then, in_array() will be used.
 	 * @param bool $inverse To flip or not the array
-	 * @return bool The links filtered
+	 * @return bool true if value were found in the array, false if not
 	**/
 	function inArray($needle,$haystack,$regex=false,$inverse=false){
 		if($regex === true){
@@ -433,15 +433,14 @@ class WebArchiveBOT extends Wiki {
 	}
 
 	/**
-	 * Do the queries to save the given links to Web Archive
+	 * Do the queries to save the given links to Web Archive, and check if them was already archived
 	 * @param array $links The links to save.
 	 * @param string $json_file The JSON file to store the results. It should be writable.
 	 * @param string $title The canonical name (title) of the file
 	 * @return int The returned value from file_put_contents()
 	**/
-	function archive($links,$json_file=null,$title=null){
+	function archive($links,$json_file,$title){
 		if(!is_array($links)) return false;
-		if(empty($json_file)) $json_file = 'archive.json';
 
 		foreach($links as $link){
 			$archive = file_get_contents('http://archive.org/wayback/available?url='.urlencode($link));
