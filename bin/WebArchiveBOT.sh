@@ -7,7 +7,8 @@ $wiki_user = '';
 $wiki_password = '';
 $wiki_url = ''; // https://commons.wikimedia.org/w/api.php
 $pages_per_query = 100; // This should be 100 for normal users, much more for bots
-$json_file = ''; // Absolute path!
+$json_file = ''; // The gzipped JSON file path
+$json_file_cache = ''; // The cached, plain JSON file path (to improve performance, specifically in Bastion server) 
 
 require_once('cli.php');
 ?>

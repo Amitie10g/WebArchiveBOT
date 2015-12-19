@@ -7,7 +7,7 @@
  *
  *  This program is free software, and you are welcome to redistribute it under
  *  certain conditions. This program comes with ABSOLUTELY NO WARRANTY.
- *  see README.md and COPYING for more information
+ *  see README.md and LICENSE for more information
  *
  **/
 
@@ -91,7 +91,7 @@ $wiki->setUserAgent('WebArchiveBOT/0,1 (https://github.com/Amitie10g/WebArchiveB
 
 echo "Archiving... ";
 
-$files = $wiki->getLatestFiles(5);
+$files = $wiki->getLatestFiles($pages_per_query);
 
 // External links blacklist that will never be requested to archive.
 // Use valid regular expressions in each array value
@@ -105,11 +105,12 @@ $extlinks_bl = array('(([\w]+\.)*google\.[\w]+)',
 
 foreach($files['query']['allimages'] as $page){
 	$canonicaltitle = $page['canonicaltitle'];
-	$links = $wiki->GetPageContents($canonicaltitle,'externallinks');
-	$links = $wiki->clearLinks($links['parse']['externallinks'],$extlinks_bl,false);
-
-	$wiki->archive($links,$json_file,$canonicaltitle);
+	$links_g = $wiki->GetPageContents($canonicaltitle,'externallinks');
+	$links_g = $wiki->clearLinks($links_g['parse']['externallinks'],$extlinks_bl,false);
+	$links[$canonicaltitle] = $links_g;
 }
+
+$wiki->archive($links,$json_file,$json_file_cache);
 
 echo "done.\n";
 

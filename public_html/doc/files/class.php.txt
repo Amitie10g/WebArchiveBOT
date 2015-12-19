@@ -434,45 +434,57 @@ class WebArchiveBOT extends Wiki {
 
 	/**
 	 * Do the queries to save the given links to Web Archive, and check if them was already archived
-	 * @param array $links The links to save.
-	 * @param string $json_file The JSON file to store the results. It should be writable.
-	 * @param string $title The canonical name (title) of the file
+	 * @param array $links_g The links (with the pagename as key) to save.
+	 * @param string $json_file The JSON file to store the results (gzipped). It should be writable.
+	 * @param string $json_file_cache The JSON file to store the results (cache, latest 100 ones).
 	 * @return int The returned value from file_put_contents()
 	**/
-	function archive($links,$json_file,$title){
-		if(!is_array($links)) return false;
+	function archive($links_g,$json_file,$json_file_cache){
+		if(!is_array($links_g)) return false;
 
-		foreach($links as $link){
-			$archive = file_get_contents('http://archive.org/wayback/available?url='.urlencode($link));
-			if($archive != '{"archived_snapshots":{}}'){
-				$archive = json_decode($archive,true);
-				$archive_url_g = $archive['archived_snapshots']['closest']['url'];
-				$archive_timestamp = strtotime($archive['archived_snapshots']['closest']['timestamp']);
-			}
+		foreach($links_g as $title=>$links){
+			if(empty($links)) continue;
+			foreach($links as $link){
+				$archive = file_get_contents('http://archive.org/wayback/available?url='.urlencode($link));
+				if($archive != '{"archived_snapshots":{}}'){
+					$archive = json_decode($archive,true);
+					$archive_url_g = $archive['archived_snapshots']['closest']['url'];
+					$archive_timestamp = strtotime($archive['archived_snapshots']['closest']['timestamp']);
+				}
 
-			$timestamp = time();
-			if(!is_int($archive_timestamp)) $archive_timestamp = 0;
-			$window_time = $timestamp-$archive_timestamp;
+				$timestamp = time();
+				if(!is_int($archive_timestamp)) $archive_timestamp = 0;
+				$window_time = $timestamp-$archive_timestamp;
 
-			if($window_time >= 43200){
-				$headers = @get_headers("https://web.archive.org/save/$link");
-				foreach($headers as $item){
-					if(preg_match('/^(Content-Location\: \/web\/[\p{N}]{14}){1}/',$item) >= 1){
-						$item = str_replace('Content-Location: /','https://web.archive.org/',$item);
-						$archive_url[$title][] = $item;
+				if($window_time >= 43200){
+					$headers = @get_headers("https://web.archive.org/save/$link");
+					foreach($headers as $item){
+						if(preg_match('/^(Content-Location\: \/web\/[\p{N}]{14}){1}/',$item) >= 1){
+							$item = str_replace('Content-Location: /','https://web.archive.org/',$item);
+							$archive_url[] = $item;
+						}
 					}
 				}
 			}
-			$num++;
+			$data[$title] = $archive_url;
 		}
 
-		$data = file_get_contents($json_file);
-		$data = json_decode($data,true);
-		$data[] = $archive_url;
-		$data = json_encode($data,128); // JSON_PRETTY_PRINT is 128
+                if(is_file($json_file)){
+                        $json_data = gzdecode(file_get_contents($json_file));
+                        $json_data = json_decode($json_data,true);
+			// Flip the array from JSON to append the new elements
+			arsort($json_data);
+			$data[] = $json_data;
+                }
 
-		return file_put_contents($json_file,utf8_encode($data),LOCK_EX);
+		// Flip de array to order newest to oldest
+		arsort($data);
+
+                if(file_put_contents($json_file,gzencode(str_replace('null,','',utf8_encode(json_encode($data,128))),9),LOCK_EX) === false) return false;
+
+                $data = array_slice($data,0,100);
+
+                if(file_put_contents($json_file_cache,str_replace('null,','',utf8_encode(json_encode($data,128))),LOCK_EX) === false) return false;
 	}
 }
 ?>
-

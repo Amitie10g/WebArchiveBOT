@@ -136,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-533266590"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1274563320"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-533266590" class="accordion-body collapse in">
+            <div id="namespace-1274563320" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -1056,7 +1056,7 @@ If false, then, in_array() will be used.</p></td>
             <article class="method">
                 <h3 class="public ">archive()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">archive(array  <span class="argument">$links</span>, string  <span class="argument">$json_file</span>, string  <span class="argument">$title</span>) : integer</pre>
+                <pre class="signature" style="margin-right: 54px;">archive(array  <span class="argument">$links_g</span>, string  <span class="argument">$json_file</span>, string  <span class="argument">$json_file_cache</span>) : integer</pre>
                 <p><em>Do the queries to save the given links to Web Archive, and check if them was already archived</em></p>
                 
 
@@ -1064,18 +1064,18 @@ If false, then, in_array() will be used.</p></td>
                     <table class="table table-condensed table-hover">
                                                     <tr>
                                 <td>array</td>
-                                <td>$links </td>
-                                <td><p>The links to save.</p></td>
+                                <td>$links_g </td>
+                                <td><p>The links (with the pagename as key) to save.</p></td>
                             </tr>
                                                     <tr>
                                 <td>string</td>
                                 <td>$json_file </td>
-                                <td><p>The JSON file to store the results. It should be writable.</p></td>
+                                <td><p>The JSON file to store the results (gzipped). It should be writable.</p></td>
                             </tr>
                                                     <tr>
                                 <td>string</td>
-                                <td>$title </td>
-                                <td><p>The canonical name (title) of the file</p></td>
+                                <td>$json_file_cache </td>
+                                <td><p>The JSON file to store the results (cache, latest 100 ones).</p></td>
                             </tr>
                                             </table>
                 
@@ -1146,7 +1146,7 @@ If false, then, in_array() will be used.</p></td>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on December 18th, 2015 at 14:04.
+                    on December 19th, 2015 at 03:21.
                 </section>
             </section>
         </section>

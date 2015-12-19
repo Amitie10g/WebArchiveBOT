@@ -7,28 +7,26 @@
  *
  *  This program is free software, and you are welcome to redistribute it under
  *  certain conditions. This program comes with ABSOLUTELY NO WARRANTY.
- *  see README.md and COPYING for more information
+ *  see README.md and LICENSE for more information
  *
  **/
 error_reporting(E_ALL ^ E_NOTICE);
 
 if(php_sapi_name() == "cli") die("\nThis script should be executed from Web.\n");
 
-$json_file = 'archived.json'; // Absolute path!
-$site_url = 'https://commons.wikimedia.org/wiki/';
-$sitename = "Wikimedia Commons";
+$json_file = ''; // The gzipped JSON file path
+$json_file_cache = ''; // The cached, plain JSON file path (to improve performance, specifically in Bastion server) 
+$site_url = ''; // https://commons.wikimedia.org/wiki/
+$sitename = ''; // Wikimedia Commons
 
-$limit = abs((int)$_GET['limit']);
-if($limit == 0) $limit = 100;
-
-$contents = @file_get_contents($json_file);
-$json_contents = @json_decode($contents,true);
-rsort($json_contents);
-$json_contents = @array_slice($json_contents,0,$limit);
+$json_contents = @file_get_contents($json_file_cache);
+$json_contents = @json_decode($json_contents,true);
 
 ?><html>
 	<head>
 		<title>WebArchiveBOT, archived items</title>
+		<meta charset=utf-8 />
+		<meta http-equiv="refresh" content="120" />
 	</head>
 		<body>
 		<div>
@@ -51,7 +49,7 @@ $json_contents = @array_slice($json_contents,0,$limit);
 ?>			</ul>
 <?php		}
 	}
-	}else{
+      }else{
 ?>			<p>No links archived yet</p>
 <?php } ?>		</div>
 	</body>
