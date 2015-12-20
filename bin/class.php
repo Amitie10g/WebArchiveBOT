@@ -397,9 +397,11 @@ class WebArchiveBOT extends Wiki {
 		if(!is_array($links_g)) return false;
 
 		foreach($links_g as $link){
-			$host = parse_url($link,PHP_URL_HOST);
 			if(preg_match('/^((http|https){1}\:)/',$link) == 0) $link = "http:$link";
-			if($this->inArray($host,$blacklist,true,true)){
+			$host = parse_url($link,PHP_URL_HOST);
+
+			if($this->inArray($host,$blacklist,true,true) === true){
+
 				if($allow_empty_path === false){
 					$path = parse_url($link,PHP_URL_PATH);
 
@@ -408,6 +410,7 @@ class WebArchiveBOT extends Wiki {
 				}else $links[] = $link;
 			}
 		}
+		if(!empty($links)) $links = array_unique($links);
 		return $links;
 	}
 
@@ -421,20 +424,25 @@ class WebArchiveBOT extends Wiki {
 	 * @return bool true if value were found in the array, false if not
 	**/
 	function inArray($needle,$haystack,$regex=false,$inverse=false){
+		if(empty($needle)) return false;
 		if($regex === true){
 			$regex = implode('|',$haystack);
 			if($inverse === true) $regex = "/^(?!$regex)/";
 			else $regex = "/^($regex)/";
 
 			if(preg_match($regex,$needle) >= 1) $found = true;
+			else $found = false;
 		}else $found = in_array($needle,$haystack);
-
 		return $found;
 	}
 
 	/**
 	 * Do the queries to save the given links to Web Archive, and check if them was already archived
-	 * @param array $links_g The links (with the pagename as key) to save.
+	 * @param array $links_g The links (with the pagename as key) to save. The array should be composed as:
+	 * * key: Pagename
+	 * * value: Array:
+	 *   * timestamp: The timestamp of the file uploaded
+	 *   * links: The array with the links associated with the Pagename
 	 * @param string $json_file The JSON file to store the results (gzipped). It should be writable.
 	 * @param string $json_file_cache The JSON file to store the results (cache, latest 100 ones).
 	 * @return int The returned value from file_put_contents()
@@ -442,7 +450,9 @@ class WebArchiveBOT extends Wiki {
 	function archive($links_g,$json_file,$json_file_cache){
 		if(!is_array($links_g)) return false;
 
-		foreach($links_g as $title=>$links){
+		foreach($links_g as $title=>$items){
+			$timestamp_f = $items['timestamp'];
+			$links = $items['urls'];
 			if(empty($links)) continue;
 			foreach($links as $link){
 				$archive = file_get_contents('http://archive.org/wayback/available?url='.urlencode($link));
@@ -456,7 +466,7 @@ class WebArchiveBOT extends Wiki {
 				if(!is_int($archive_timestamp)) $archive_timestamp = 0;
 				$window_time = $timestamp-$archive_timestamp;
 
-				if($window_time >= 43200){
+				if($window_time >= 172800){
 					$headers = @get_headers("https://web.archive.org/save/$link");
 					foreach($headers as $item){
 						if(preg_match('/^(Content-Location\: \/web\/[\p{N}]{14}){1}/',$item) >= 1){
@@ -466,25 +476,30 @@ class WebArchiveBOT extends Wiki {
 					}
 				}
 			}
-			$data[$title] = $archive_url;
+			$data[$title] = array('timestamp'=>$timestamp_f,'urls'=>$archive_url);
 		}
 
                 if(is_file($json_file)){
-                        $json_data = gzdecode(file_get_contents($json_file));
+			$zp = gzopen($json_file,'r');
+                        $json_data = gzread($zp,10485760);
+			gzclose($zp);
                         $json_data = json_decode($json_data,true);
-			// Flip the array from JSON to append the new elements
-			arsort($json_data);
-			$data[] = $json_data;
+			$data = $data + $json_data;
                 }
 
-		// Flip de array to order newest to oldest
-		arsort($data);
+		$data = array_filter($data);
+		
+		if(empty($data)) return false;
+
+		array_multisort($data,SORT_DESC);
 
                 if(file_put_contents($json_file,gzencode(str_replace('null,','',utf8_encode(json_encode($data,128))),9),LOCK_EX) === false) return false;
 
                 $data = array_slice($data,0,100);
 
                 if(file_put_contents($json_file_cache,str_replace('null,','',utf8_encode(json_encode($data,128))),LOCK_EX) === false) return false;
+
+		return true;
 	}
 }
 ?>

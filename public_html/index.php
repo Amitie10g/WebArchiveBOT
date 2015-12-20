@@ -10,17 +10,17 @@
  *  see README.md and LICENSE for more information
  *
  **/
-error_reporting(E_ALL ^ E_NOTICE);
+	error_reporting(E_ALL ^ E_NOTICE);
 
-if(php_sapi_name() == "cli") die("\nThis script should be executed from Web.\n");
+	if(php_sapi_name() == "cli") die("\nThis script should be executed from Web.\n");
 
-$json_file = ''; // The gzipped JSON file path
-$json_file_cache = ''; // The cached, plain JSON file path (to improve performance, specifically in Bastion server) 
-$site_url = ''; // https://commons.wikimedia.org/wiki/
-$sitename = ''; // Wikimedia Commons
+	$json_file = ''; // The gzipped JSON file path
+	$json_file_cache = ''; // The cached, plain JSON file path (to improve performance, specifically in Bastion server) 
+	$site_url = ''; // https://commons.wikimedia.org/wiki/
+	$sitename = ''; // Wikimedia Commons
 
-$json_contents = @file_get_contents($json_file_cache);
-$json_contents = @json_decode($json_contents,true);
+	$json_contents = @file_get_contents($json_file_cache);
+	$json_contents = @json_decode($json_contents,true);
 
 ?><html>
 	<head>
@@ -33,24 +33,24 @@ $json_contents = @json_decode($json_contents,true);
 			<h1>WebArchiveBOT, archived items</h1>
 			<p>This page lists the last 100 files uploaded to <?= $sitename ?> and
 			their links archived at Internet Archive by Wayback Machine. You can
-			download the <a href="<?= $json_file ?>" target="_blank">full list in JSON format</a>.</br>
+			download the <a href="<?= $json_file ?>">full list in JSON format</a>.</br>
 			For more information, see the <a href="doc" target="blank">Documentation</a>.
 			<a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU General Public License v3.</p>
 		</div>
 		<div>
-<?php if(is_file($json_file)){
-	foreach($json_contents as $items){
-		foreach($items as $key=>$item){
-?>			<h2><a href="<?= $site_url ?><?= $key ?>" target="blank"><?= $key ?></h2>
+<?php	if(is_file($json_file)){
+		foreach($json_contents as $title=>$links){
+?>			<h2><a href="<?= $site_url ?><?= $title ?>" target="blank"><?= $title ?></h2>
+			<b>Uploaded: </b><?= strftime("%F %T",$links['timestamp']) ?>
 			<ul>
-<?php			foreach($item as $link){
+<?php			foreach($links['links'] as $link){
 ?>				<li><a href="<?= $link ?>" target="blank"><?= $link ?></a></li>
 <?php			}
-?>			</ul>
-<?php		}
-	}
-      }else{
+		}
+?>			<ul>
+<?php	}else{
 ?>			<p>No links archived yet</p>
-<?php } ?>		</div>
+<?php	}
+?>		</div>
 	</body>
 </html>
