@@ -53,7 +53,7 @@
 <?php   if(is_file($json_file)){
                 foreach($json_contents as $title=>$item){ 
 ?>                      <h2><a href="<?= $site_url ?><?= $title ?>" target="blank"><?= $title ?></a></h2>
-                        <b>Uploaded: </b><?= strftime("%F %T",$item['timestamp']) ?>
+                        <b>Uploaded: </b><?= strftime("%F %T",$item['timestamp']) ?> (UTC)
                         <ul>
 <?php                   foreach($item['urls'] as $link){
 ?>                              <li><a href="<?= $link ?>" target="blank"><?= $link ?></a></li>

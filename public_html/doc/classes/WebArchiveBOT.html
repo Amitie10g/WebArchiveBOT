@@ -136,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-110775391"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-87093113"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-110775391" class="accordion-body collapse in">
+            <div id="namespace-87093113" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -897,14 +897,15 @@
                                                     <tr>
                                 <td></td>
                                 <td>$props </td>
-                                <td><p>The properties that we want to obtain from the query (string or array)</p></td>
+                                <td><p>The properties that we want to obtain from the query (string or array), according to
+the 'prop' variable used by the MediaWiki API.</p></td>
                             </tr>
                                             </table>
                 
                 
                                     <h4>Returns</h4>
                     array
-                                            &mdash; <p>The API result (page contents and metadata in the desired format)</p>
+                                            &mdash; <p>The API result (page contents and metadata according to $props)</p>
                                     				
                             </article>
         </div>
@@ -926,7 +927,7 @@
                 <h3 class="public ">getLatestFiles()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
                 <pre class="signature" style="margin-right: 54px;">getLatestFiles(integer  <span class="argument">$limit = null</span>) : array</pre>
-                <p><em>Get a list of the latest files uploaded to Commons</em></p>
+                <p><em>Get a list of the latest files uploaded to Wiki</em></p>
                 
 
                                     <h4>Parameters</h4>
@@ -963,7 +964,7 @@
                 <h3 class="public ">clearLinks()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
                 <pre class="signature" style="margin-right: 54px;">clearLinks(array  <span class="argument">$links_g</span>, array  <span class="argument">$blacklist = null</span>, boolean  <span class="argument">$allow_empty_path = true</span>) : mixed</pre>
-                <p><em>Parse a list of URs and remove blacklisted domains ones</em></p>
+                <p><em>Parse a list of URLs and remove blacklisted domain and empty-path ones</em></p>
                 
 
                                     <h4>Parameters</h4>
@@ -1202,7 +1203,7 @@ If false, then, in_array() will be used. Used only for regex, does not matter fo
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on December 20th, 2015 at 18:39.
+                    on December 20th, 2015 at 20:20.
                 </section>
             </section>
         </section>

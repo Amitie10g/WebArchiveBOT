@@ -358,12 +358,13 @@ class WebArchiveBOT extends Wiki {
 	/**
 	 * Get the contents from the Wiki page. This is an alternative for getpage() with more features
 	 * @param $page The page that we're working
-	 * @param $props The properties that we want to obtain from the query (string or array)
-	 * @return array The API result (page contents and metadata in the desired format)
+	 * @param $props The properties that we want to obtain from the query (string or array), according to
+	 * the 'prop' variable used by the MediaWiki API.
+	 * @return array The API result (page contents and metadata according to $props)
 	**/
 	function getPageContents($page,$props=null){
 
-		if(is_array($props)) $props = implode('|',$props);
+		if(is_array($props)) $props = implode('%7C',$props);
 
 		if(!empty($_SESSION['wiki_page_contents'][$page][$props])) $contents = $_SESSION['wiki_page_contents'][$page][$props];
 		else{
@@ -376,7 +377,7 @@ class WebArchiveBOT extends Wiki {
 	}
 
 	/**
-	 * Get a list of the latest files uploaded to Commons
+	 * Get a list of the latest files uploaded to Wiki
 	 * @param int $limit The maximum pages retrived
 	 * @return array The API result (the list of the latest files uploaded)
 	**/
@@ -388,7 +389,7 @@ class WebArchiveBOT extends Wiki {
 	}
 
 	/**
-	 * Parse a list of URs and remove blacklisted domains ones
+	 * Parse a list of URLs and remove blacklisted domain and empty-path ones
 	 * @param array $links_g The URLs to be parsed
 	 * @param array $blacklist the blacklisted domains
 	 * @param bool $allow_empty_path To allow or not empy path links (with the domain name only)
