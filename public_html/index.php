@@ -27,6 +27,18 @@
 		<title>WebArchiveBOT</title>
 		<meta charset=utf-8 />
 		<meta http-equiv="refresh" content="120" />
+		<style> 
+		body{
+			font-family:Roboto,droid-sans,Arial,sans-serif;
+		}
+		h1{
+			font-size:16pt;
+		}
+		h2{
+			font-size:14pt;
+		}
+	</style>
+
 	</head>
 		<body>
 		<div>
