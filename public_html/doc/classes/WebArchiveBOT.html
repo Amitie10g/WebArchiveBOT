@@ -106,7 +106,7 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="../reports/errors.html">
-                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">17</span>
+                                                                                                                                                                                        <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">18</span>
                                 </a>
                             </li>
                             <li>
@@ -136,10 +136,10 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1274563320"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-110775391"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-1274563320" class="accordion-body collapse in">
+            <div id="namespace-110775391" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                     
@@ -197,6 +197,7 @@
                                                                     <a href="../classes/WebArchiveBOT.html#method_getLatestFiles" class="">getLatestFiles()</a><br />
                                                                     <a href="../classes/WebArchiveBOT.html#method_clearLinks" class="">clearLinks()</a><br />
                                                                     <a href="../classes/WebArchiveBOT.html#method_inArray" class="">inArray()</a><br />
+                                                                    <a href="../classes/WebArchiveBOT.html#method_getPagesExternalLinks" class="">getPagesExternalLinks()</a><br />
                                                                     <a href="../classes/WebArchiveBOT.html#method_archive" class="">archive()</a><br />
                                                             </section>
                             <section class="span4">
@@ -519,7 +520,7 @@
             <article class="method">
                 <h3 class="public ">__construct()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">__construct(  <span class="argument">$url</span>) : void</pre>
+                <pre class="signature" style="margin-right: 54px;">__construct(  <span class="argument">$url</span>,   <span class="argument">$max_files_retrived</span>) : void</pre>
                 <p><em>This is the constructor</em></p>
                 
 
@@ -529,6 +530,11 @@
                                 <td></td>
                                 <td>$url </td>
                                 <td><p>The Project URL (forwarded to the parent class)</p></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$max_files_retrived </td>
+                                <td></td>
                             </tr>
                                             </table>
                 
@@ -898,7 +904,7 @@
                 
                                     <h4>Returns</h4>
                     array
-                                            &mdash; <p>The contents as array</p>
+                                            &mdash; <p>The API result (page contents and metadata in the desired format)</p>
                                     				
                             </article>
         </div>
@@ -920,7 +926,7 @@
                 <h3 class="public ">getLatestFiles()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
                 <pre class="signature" style="margin-right: 54px;">getLatestFiles(integer  <span class="argument">$limit = null</span>) : array</pre>
-                <p><em>Get the canonical name of the latest files uploaded to Wiki</em></p>
+                <p><em>Get a list of the latest files uploaded to Commons</em></p>
                 
 
                                     <h4>Parameters</h4>
@@ -935,7 +941,7 @@
                 
                                     <h4>Returns</h4>
                     array
-                                            &mdash; <p>The list</p>
+                                            &mdash; <p>The API result (the list of the latest files uploaded)</p>
                                     				
                             </article>
         </div>
@@ -956,8 +962,8 @@
             <article class="method">
                 <h3 class="public ">clearLinks()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">clearLinks(array  <span class="argument">$links_g</span>, array  <span class="argument">$blacklist = null</span>, boolean  <span class="argument">$allow_empty_path = true</span>) : array</pre>
-                <p><em>Parse a list of links and remove blacklisted ones</em></p>
+                <pre class="signature" style="margin-right: 54px;">clearLinks(array  <span class="argument">$links_g</span>, array  <span class="argument">$blacklist = null</span>, boolean  <span class="argument">$allow_empty_path = true</span>) : mixed</pre>
+                <p><em>Parse a list of URs and remove blacklisted domains ones</em></p>
                 
 
                                     <h4>Parameters</h4>
@@ -965,7 +971,7 @@
                                                     <tr>
                                 <td>array</td>
                                 <td>$links_g </td>
-                                <td><p>The list of pages</p></td>
+                                <td><p>The URLs to be parsed</p></td>
                             </tr>
                                                     <tr>
                                 <td>array</td>
@@ -981,8 +987,8 @@
                 
                 
                                     <h4>Returns</h4>
-                    array
-                                            &mdash; <p>The links filtered</p>
+                    mixed
+                                            &mdash; <p>The links filtered as array, or null if no valid links got</p>
                                     				
                             </article>
         </div>
@@ -1023,12 +1029,12 @@
                                 <td>boolean</td>
                                 <td>$regex </td>
                                 <td><p>To allow or not regex (contents in $haystack should be string and valid regex).
-If false, then, in_array() will be used.</p></td>
+If false, then, in_array() will be used. Used only for regex, does not matter for non-regex search.</p></td>
                             </tr>
                                                     <tr>
                                 <td>boolean</td>
                                 <td>$inverse </td>
-                                <td><p>To flip or not the array</p></td>
+                                <td><p>To match or not the regex (no match is done with '?!')</p></td>
                             </tr>
                                             </table>
                 
@@ -1052,11 +1058,53 @@ If false, then, in_array() will be used.</p></td>
 
                                     <div class="row-fluid">
         <div class="span8 content class">
+            <a id="method_getPagesExternalLinks" name="method_getPagesExternalLinks" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">getPagesExternalLinks()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getPagesExternalLinks(array  <span class="argument">$query</span>,   <span class="argument">$extlinks_bl</span>) : array</pre>
+                <p><em>List the Pagenames list with the Timestamp and external links in an array, suitable for archive()</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$query </td>
+                                <td><p>The query result from getLatestFiles(), $files['query']['allimages']</p></td>
+                            </tr>
+                                                    <tr>
+                                <td></td>
+                                <td>$extlinks_bl </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>The desired data ordered</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
             <a id="method_archive" name="method_archive" class="anchor"></a>
             <article class="method">
                 <h3 class="public ">archive()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">archive(array  <span class="argument">$links_g</span>, string  <span class="argument">$json_file</span>, string  <span class="argument">$json_file_cache</span>) : integer</pre>
+                <pre class="signature" style="margin-right: 54px;">archive(array  <span class="argument">$links_g</span>, string  <span class="argument">$json_file</span>, string  <span class="argument">$json_file_cache</span>) : boolean</pre>
                 <p><em>Do the queries to save the given links to Web Archive, and check if them was already archived</em></p>
                 
 
@@ -1065,7 +1113,15 @@ If false, then, in_array() will be used.</p></td>
                                                     <tr>
                                 <td>array</td>
                                 <td>$links_g </td>
-                                <td><p>The links (with the pagename as key) to save.</p></td>
+                                <td><p>The links (with the pagename as key) to save. The array should be composed as:</p>
+<ul>
+<li>key: Canonical pagename</li>
+<li>value: array:
+<ul>
+<li>'timestamp': The timestamp of the file uploaded to Wiki</li>
+<li>'urls': The array with the URLs associated with the Pagename</li>
+</ul></li>
+</ul></td>
                             </tr>
                                                     <tr>
                                 <td>string</td>
@@ -1081,8 +1137,8 @@ If false, then, in_array() will be used.</p></td>
                 
                 
                                     <h4>Returns</h4>
-                    integer
-                                            &mdash; <p>The returned value from file_put_contents()</p>
+                    boolean
+                                            &mdash; <p>true if everything is OK, or false in case of any error.</p>
                                     				
                             </article>
         </div>
@@ -1146,7 +1202,7 @@ If false, then, in_array() will be used.</p></td>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on December 19th, 2015 at 03:21.
+                    on December 20th, 2015 at 18:39.
                 </section>
             </section>
         </section>
