@@ -349,7 +349,7 @@ class WebArchiveBOT extends Wiki {
 	  * @param $url The Project URL (forwarded to the parent class)
 	  * @return void
 	 **/
-	function __construct($url){
+	function __construct($url,$max_files_retrived){
 		Wiki::__construct($url); // Pass main parameter to parent Class' __construct()
 		$this->site_url = parse_url($this->url);
 		$this->site_url = $this->site_url['scheme'].'://'.$this->site_url['host'].'/wiki/';
@@ -359,7 +359,7 @@ class WebArchiveBOT extends Wiki {
 	 * Get the contents from the Wiki page. This is an alternative for getpage() with more features
 	 * @param $page The page that we're working
 	 * @param $props The properties that we want to obtain from the query (string or array)
-	 * @return array The contents as array
+	 * @return array The API result (page contents and metadata in the desired format)
 	**/
 	function getPageContents($page,$props=null){
 
@@ -376,22 +376,23 @@ class WebArchiveBOT extends Wiki {
 	}
 
 	/**
-	 * Get the canonical name of the latest files uploaded to Wiki
+	 * Get a list of the latest files uploaded to Commons
 	 * @param int $limit The maximum pages retrived
-	 * @return array The list
+	 * @return array The API result (the list of the latest files uploaded)
 	**/
 	function getLatestFiles($limit=null){
 		if(!is_int($limit)) $limit = 10;
 		$query = "?action=query&list=allimages&format=php&aisort=timestamp&aidir=older&aiprop=timestamp%7Ccanonicaltitle&ailimit=$limit";
-		return $this->query($query);
+		$query = $this->query($query);		
+		return $query['query']['allimages'];
 	}
 
 	/**
-	 * Parse a list of links and remove blacklisted ones
-	 * @param array $links_g The list of pages
+	 * Parse a list of URs and remove blacklisted domains ones
+	 * @param array $links_g The URLs to be parsed
 	 * @param array $blacklist the blacklisted domains
 	 * @param bool $allow_empty_path To allow or not empy path links (with the domain name only)
-	 * @return array The links filtered
+	 * @return mixed The links filtered as array, or null if no valid links got
 	**/
 	function clearLinks($links_g,$blacklist=null,$allow_empty_path=true){
 		if(!is_array($links_g)) return false;
@@ -419,8 +420,8 @@ class WebArchiveBOT extends Wiki {
 	 * @param mixed $needle The value to find.
 	 * @param array $haystack The array where find in.
 	 * @param bool $regex To allow or not regex (contents in $haystack should be string and valid regex).
-	 * If false, then, in_array() will be used.
-	 * @param bool $inverse To flip or not the array
+	 * If false, then, in_array() will be used. Used only for regex, does not matter for non-regex search.
+	 * @param bool $inverse To match or not the regex (no match is done with '?!')
 	 * @return bool true if value were found in the array, false if not
 	**/
 	function inArray($needle,$haystack,$regex=false,$inverse=false){
@@ -437,15 +438,40 @@ class WebArchiveBOT extends Wiki {
 	}
 
 	/**
+	 * List the Pagenames list with the Timestamp and external links in an array, suitable for archive()
+	 * @param array $query The query result from getLatestFiles(), $files['query']['allimages']
+	 * @param array $haystack The array where find in.
+	 * @return array The desired data ordered
+	**/
+	function getPagesExternalLinks($query,$extlinks_bl){
+
+		foreach($query as $page){
+
+			$canonicaltitle = $page['canonicaltitle'];
+			$timestamp = strtotime($page['timestamp']);
+			
+			$links_g = $this->GetPageContents($canonicaltitle,'externallinks');
+
+			$links_g = $this->clearLinks($links_g['parse']['externallinks'],$extlinks_bl,false);
+
+			if(!empty($links_g)){
+				$links_g = array_filter($links_g);
+				$links[$canonicaltitle] = array('timestamp'=>$timestamp,'urls'=>$links_g);
+			}
+		}
+		return $links;
+	}
+
+	/**
 	 * Do the queries to save the given links to Web Archive, and check if them was already archived
 	 * @param array $links_g The links (with the pagename as key) to save. The array should be composed as:
-	 * * key: Pagename
-	 * * value: Array:
-	 *   * timestamp: The timestamp of the file uploaded
-	 *   * links: The array with the links associated with the Pagename
+	 * * key: Canonical pagename
+	 * * value: array:
+	 *   * 'timestamp': The timestamp of the file uploaded to Wiki
+	 *   * 'urls': The array with the URLs associated with the Pagename
 	 * @param string $json_file The JSON file to store the results (gzipped). It should be writable.
 	 * @param string $json_file_cache The JSON file to store the results (cache, latest 100 ones).
-	 * @return int The returned value from file_put_contents()
+	 * @return bool true if everything is OK, or false in case of any error.
 	**/
 	function archive($links_g,$json_file,$json_file_cache){
 		if(!is_array($links_g)) return false;
@@ -479,25 +505,25 @@ class WebArchiveBOT extends Wiki {
 			$data[$title] = array('timestamp'=>$timestamp_f,'urls'=>$archive_url);
 		}
 
-                if(is_file($json_file)){
+		if(is_file($json_file) && is_readable($json_file)){
 			$zp = gzopen($json_file,'r');
-                        $json_data = gzread($zp,10485760);
+			$json_data = gzread($zp,10485760);
 			gzclose($zp);
-                        $json_data = json_decode($json_data,true);
+			$json_data = json_decode($json_data,true);
 			$data = $data + $json_data;
-                }
+		}
 
 		$data = array_filter($data);
-		
+
 		if(empty($data)) return false;
 
 		array_multisort($data,SORT_DESC);
 
-                if(file_put_contents($json_file,gzencode(str_replace('null,','',utf8_encode(json_encode($data,128))),9),LOCK_EX) === false) return false;
+		if(file_put_contents($json_file,gzencode(str_replace('null,','',utf8_encode(json_encode($data,128))),9),LOCK_EX) === false) return false;
 
-                $data = array_slice($data,0,100);
+		$data = array_slice($data,0,100);
 
-                if(file_put_contents($json_file_cache,str_replace('null,','',utf8_encode(json_encode($data,128))),LOCK_EX) === false) return false;
+		if(file_put_contents($json_file_cache,str_replace('null,','',utf8_encode(json_encode($data,128))),LOCK_EX) === false) return false;
 
 		return true;
 	}

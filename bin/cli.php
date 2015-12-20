@@ -82,15 +82,6 @@ if(isset($license)) die($license_text);
 
 require_once('class.php');
 
-$wiki = new WebArchiveBOT($wiki_url,$quiet);
-
-$login = $wiki->login($wiki_user,$wiki_password);
-if($login['login']['result'] != 'Success') die('Not logged in');
-			  
-$wiki->setUserAgent('WebArchiveBOT/0,1 (https://github.com/Amitie10g/WebArchiveBOT; davidkingnt@gmail.com) Botclasses.php/1.0');
-
-$files = $wiki->getLatestFiles($pages_per_query);
-
 // External links blacklist that will never be requested to archive.
 // Use valid regular expressions in each array value
 $extlinks_bl = array('(([\w]+\.)*google\.[\w]+)',
@@ -101,22 +92,16 @@ $extlinks_bl = array('(([\w]+\.)*google\.[\w]+)',
      		     '(([\w]+\.)*wmflabs\.org)',
      		     '(([\w]+\.)*gnu\.org\/copyleft)',
 		     'validator\.w3\.org');
-		     
-		     
 
-foreach($files['query']['allimages'] as $page){
+$wiki = new WebArchiveBOT($wiki_url,$quiet);
 
-	$canonicaltitle = $page['canonicaltitle'];
-	$timestamp = strtotime($page['timestamp']);
-	$links_g = $wiki->GetPageContents($canonicaltitle,'externallinks');
-	$links_g = $wiki->clearLinks($links_g['parse']['externallinks'],$extlinks_bl,false);
-	
-	if(!empty($links_g)){
-		$links_g = array_filter($links_g);
-		$links[$canonicaltitle] = array('timestamp'=>$timestamp,'urls'=>$links_g);
-	}
-}
+$login = $wiki->login($wiki_user,$wiki_password);
+if($login['login']['result'] != 'Success') die('Not logged in');
+			  
+$wiki->setUserAgent('WebArchiveBOT/0,1 (https://github.com/Amitie10g/WebArchiveBOT; davidkingnt@gmail.com) Botclasses.php/1.0');
 
+$files  = $wiki->getLatestFiles($pages_per_query);
+$links  = $wiki->getPagesExternalLinks($files,$extlinks_bl);
 $result = $wiki->archive($links,$json_file,$json_file_cache);
 
 if($result === true) echo "everything OK.\n";

@@ -39,11 +39,11 @@
 		</div>
 		<div>
 <?php	if(is_file($json_file)){
-		foreach($json_contents as $title=>$links){
+		foreach($json_contents as $title=>$item){
 ?>			<h2><a href="<?= $site_url ?><?= $title ?>" target="blank"><?= $title ?></h2>
-			<b>Uploaded: </b><?= strftime("%F %T",$links['timestamp']) ?>
+			<b>Uploaded: </b><?= strftime("%F %T",$item['timestamp']) ?>
 			<ul>
-<?php			foreach($links['links'] as $link){
+<?php			foreach($item['links'] as $link){
 ?>				<li><a href="<?= $link ?>" target="blank"><?= $link ?></a></li>
 <?php			}
 		}
