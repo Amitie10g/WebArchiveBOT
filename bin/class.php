@@ -411,7 +411,10 @@ class WebArchiveBOT extends Wiki {
 				}else $links[] = $link;
 			}
 		}
-		if(!empty($links)) $links = array_unique($links);
+		if(!empty($links)){
+			$links = array_unique($links);
+			$links = array_filter($links);
+		}
 		return $links;
 	}
 
@@ -444,14 +447,11 @@ class WebArchiveBOT extends Wiki {
 	 * @return array The desired data ordered
 	**/
 	function getPagesExternalLinks($query,$extlinks_bl){
-
 		foreach($query as $page){
-
 			$canonicaltitle = $page['canonicaltitle'];
 			$timestamp = strtotime($page['timestamp']);
-			
-			$links_g = $this->GetPageContents($canonicaltitle,'externallinks');
 
+			$links_g = $this->GetPageContents($canonicaltitle,'externallinks');
 			$links_g = $this->clearLinks($links_g['parse']['externallinks'],$extlinks_bl,false);
 
 			if(!empty($links_g)){
@@ -497,12 +497,12 @@ class WebArchiveBOT extends Wiki {
 					foreach($headers as $item){
 						if(preg_match('/^(Content-Location\: \/web\/[\p{N}]{14}){1}/',$item) >= 1){
 							$item = str_replace('Content-Location: /','https://web.archive.org/',$item);
-							$archive_url[] = $item;
+							if(!empty($item)) $archive_url[] = $item;
 						}
 					}
 				}
 			}
-			$data[$title] = array('timestamp'=>$timestamp_f,'urls'=>$archive_url);
+			if(!empty($archive_url)) $data[$title] = array('timestamp'=>$timestamp_f,'urls'=>$archive_url);
 		}
 
 		if(is_file($json_file) && is_readable($json_file)){

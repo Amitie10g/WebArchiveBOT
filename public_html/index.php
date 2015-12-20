@@ -24,7 +24,7 @@
 
 ?><html>
 	<head>
-		<title>WebArchiveBOT, archived items</title>
+		<title>WebArchiveBOT</title>
 		<meta charset=utf-8 />
 		<meta http-equiv="refresh" content="120" />
 	</head>
@@ -38,19 +38,21 @@
 			<a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU General Public License v3.</p>
 		</div>
 		<div>
-<?php	if(is_file($json_file)){
-		foreach($json_contents as $title=>$item){
-?>			<h2><a href="<?= $site_url ?><?= $title ?>" target="blank"><?= $title ?></h2>
-			<b>Uploaded: </b><?= strftime("%F %T",$item['timestamp']) ?>
-			<ul>
-<?php			foreach($item['links'] as $link){
-?>				<li><a href="<?= $link ?>" target="blank"><?= $link ?></a></li>
-<?php			}
-		}
-?>			<ul>
-<?php	}else{
-?>			<p>No links archived yet</p>
-<?php	}
-?>		</div>
-	</body>
+<?php   if(is_file($json_file)){
+                foreach($json_contents as $title=>$item){ 
+?>                      <h2><a href="<?= $site_url ?><?= $title ?>" target="blank"><?= $title ?></a></h2>
+                        <b>Uploaded: </b><?= strftime("%F %T",$item['timestamp']) ?>
+                        <ul>
+<?php                   foreach($item['urls'] as $link){
+?>                              <li><a href="<?= $link ?>" target="blank"><?= $link ?></a></li>
+<?php                   }
+?>
+                      </ul>
+<?php           }
+?>
+<?php   }else{
+?>                      <p>No links archived yet</p>
+<?php   }
+?>              </div>
+        </body>
 </html>
