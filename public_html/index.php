@@ -37,8 +37,13 @@
 		h2{
 			font-size:14pt;
 		}
+		
+		a {
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
 	</style>
-
 	</head>
 		<body>
 		<div>

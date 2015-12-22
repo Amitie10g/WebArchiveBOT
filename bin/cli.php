@@ -93,6 +93,9 @@ $extlinks_bl = array('(([\w]+\.)*google\.[\w]+)',
      		     '(([\w]+\.)*gnu\.org\/copyleft)',
 		     'validator\.w3\.org');
 
+$time = strftime('%F %T');
+echo "\n$time\nArchiving... ";
+
 $wiki = new WebArchiveBOT($wiki_url,$quiet);
 
 $login = $wiki->login($wiki_user,$wiki_password);
