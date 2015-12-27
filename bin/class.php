@@ -448,7 +448,9 @@ class WebArchiveBOT extends Wiki {
 	 * @return array The desired data ordered
 	**/
 	function getPagesExternalLinks($query,$extlinks_bl){
+		$num = 0;
 		foreach($query as $page){
+			if(is_int($num/50)) sleep(5);
 			$canonicaltitle = $page['canonicaltitle'];
 			$timestamp = strtotime($page['timestamp']);
 
@@ -459,7 +461,9 @@ class WebArchiveBOT extends Wiki {
 				$links_g = array_filter($links_g);
 				$links[$canonicaltitle] = array('timestamp'=>$timestamp,'urls'=>$links_g);
 			}
+			$num++;
 		}
+		var_dump($links);
 		return $links;
 	}
 

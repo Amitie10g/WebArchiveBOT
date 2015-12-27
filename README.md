@@ -1,3 +1,6 @@
+#DON'T run this tool to Wikimedia Commons!
+Discussion about the main purpose of this tool, archiving external links from files uploaded to Wikimedia Commons is in progress. You can, of course, test the code to your own Wiki.
+
 #WebArchiveBOT
 PHP script to save external links to Internet Archive.
 
