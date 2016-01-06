@@ -512,7 +512,7 @@ class WebArchiveBOT extends Wiki {
 
 		if(is_file($json_file) && is_readable($json_file)){
 			$zp = gzopen($json_file,'r');
-			$json_data = gzread($zp,10485760);
+			$json_data = gzread($zp,2097152);
 			gzclose($zp);
 			$json_data = json_decode($json_data,true);
 			$data = $data + $json_data;
@@ -523,10 +523,12 @@ class WebArchiveBOT extends Wiki {
 		if(empty($data)) return false;
 
 		array_multisort($data,SORT_DESC);
+		
+		$data = array_slice($data,0,1000);
 
 		if(file_put_contents($json_file,gzencode(str_replace('null,','',utf8_encode(json_encode($data,128))),9),LOCK_EX) === false) return false;
 
-		$data = array_slice($data,0,100);
+		$data = array_slice($data,0,50);
 
 		if(file_put_contents($json_file_cache,str_replace('null,','',utf8_encode(json_encode($data,128))),LOCK_EX) === false) return false;
 

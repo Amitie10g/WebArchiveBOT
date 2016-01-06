@@ -48,9 +48,9 @@
 		<body>
 		<div>
 			<h1>WebArchiveBOT, archived items</h1>
-			<p>This page lists the last 100 files uploaded to <?= $sitename ?> and
+			<p>This page lists the last 50 files uploaded to <?= $sitename ?> and
 			their links archived at Internet Archive by Wayback Machine. You can
-			download the <a href="<?= $json_file ?>">full list in JSON format</a>.</br>
+			download the <a href="<?= $json_file ?>">latest 1000 files in gziped JSON format</a>.</br>
 			For more information, see the <a href="doc" target="blank">Documentation</a>.
 			<a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU General Public License v3.</p>
 		</div>
