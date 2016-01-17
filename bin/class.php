@@ -343,16 +343,18 @@ class Wiki {
 class WebArchiveBOT extends Wiki {
 	public $url;
 	public $site_url;
+	public $mail_operator;
 
 	/**
 	  * This is the constructor
 	  * @param $url The Project URL (forwarded to the parent class)
 	  * @return void
 	 **/
-	function __construct($url,$max_files_retrived){
+	function __construct($url,$mail_operator){
 		Wiki::__construct($url); // Pass main parameter to parent Class' __construct()
 		$this->site_url = parse_url($this->url);
 		$this->site_url = $this->site_url['scheme'].'://'.$this->site_url['host'].'/wiki/';
+		$this->mail_operator = $mail_operator;
 	}
 
 	/**
@@ -511,11 +513,8 @@ class WebArchiveBOT extends Wiki {
 		}
 
 		if(is_file($json_file) && is_readable($json_file)){
-			$zp = gzopen($json_file,'r');
-			$json_data = gzread($zp,2097152);
-			gzclose($zp);
-			$json_data = json_decode($json_data,true);
-			$data = $data + $json_data;
+			$json_data = json_decode(gzdecode($json_file),true);
+			if(!empty($json_data)) $data = $data + $json_data;
 		}
 
 		$data = array_filter($data);
@@ -534,5 +533,20 @@ class WebArchiveBOT extends Wiki {
 
 		return true;
 	}
+
+	/**
+	 * Send an email using mail() to the Bot operator in case of unexpected stop
+	 * @param string $message The message to send
+	 * @return bool the returning value from mail()
+	 * 
+	**/	
+	function sendMailError($message){
+		$from = "webarchivebot-noreply@wmflabs.org";
+		$to = $this->mail_operator;
+		$subject = "Errors with WebArchiveBOT";
+		$headers = "From: WebArchiveBOT <$from>\r\n";
+		return mail($to,$subject,$message,$headers);
+	}
+
 }
 ?>

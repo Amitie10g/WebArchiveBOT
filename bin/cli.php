@@ -96,17 +96,29 @@ $extlinks_bl = array('(([\w]+\.)*google\.[\w]+)',
 $time = strftime('%F %T');
 echo "\n$time\nArchiving... ";
 
-$wiki = new WebArchiveBOT($wiki_url,$quiet);
+$wiki = new WebArchiveBOT($wiki_url,$email_operator);
 
 $login = $wiki->login($wiki_user,$wiki_password);
 if($login['login']['result'] != 'Success') die('Not logged in');
 			  
 $wiki->setUserAgent('WebArchiveBOT/0,1 (https://github.com/Amitie10g/WebArchiveBOT; davidkingnt@gmail.com) Botclasses.php/1.0');
 
-$files  = $wiki->getLatestFiles($pages_per_query);
-$links  = $wiki->getPagesExternalLinks($files,$extlinks_bl);
-$result = $wiki->archive($links,$json_file,$json_file_cache);
+if(!is_int($interval)) $interval = 10;
+$interval = $interval*60;
+$result = true;
+while($result == true){
+		$time = strftime('%F %T');
+		echo "\n$time\nArchiving... ";
+        $files  = $wiki->getLatestFiles($pages_per_query);
+        $links  = $wiki->getPagesExternalLinks($files,$extlinks_bl);
+        $result = $wiki->archive($links,$json_file,$json_file_cache);
 
-if($result === true) echo "everything OK.\n";
-else echo "errors ocurred.\n"
+        if($result === true) echo "everything OK.\n";
+        else{
+                echo("errors ocurred.\n");
+                $wiki->sendMailError("WebArchiveBOT stopped! Please check and restart");
+                die();
+        }
+		sleep($interval);
+}
 ?>
