@@ -480,13 +480,9 @@ class WebArchiveBOT extends Wiki {
         **/
         function archive($links_g,$json_file,$json_file_cache){
 
-
                 if(!is_array($links_g)) return false;
-
                 $data = $this->archive1($links_g);
-
                 if(empty($data)) return false;
-
                 $data = $this->archive2($data,$json_file);
 
                 return $this->archive3($data,$json_file,$json_file_cache);
@@ -521,12 +517,10 @@ class WebArchiveBOT extends Wiki {
         function archive2($data,$json_file){
 
                 if(!is_array($data)) return false;
-
                 if(is_file($json_file)) $json_data = json_decode(gzdecode(file_get_contents($json_file)),true);
-
                 if(is_array($json_data)) $data = $data + $json_data;
-
                 array_multisort($data,SORT_DESC);
+
                 return $data;
         }
 
@@ -559,7 +553,6 @@ class WebArchiveBOT extends Wiki {
 
                 if(file_put_contents($json_file,$data,LOCK_EX) != false) return true;
                 else return false;
-
         }
 
         /**
@@ -598,7 +591,7 @@ class WebArchiveBOT extends Wiki {
                         if(!is_int($archive_timestamp)) $archive_timestamp = 0;
                         $window_time = $timestamp-$archive_timestamp;
 
-                        //if($window_time >= 172800){
+                        if($window_time >= 172800){
                                 $headers = @get_headers("https://web.archive.org/save/$url",1);
 
                                 $location = $headers['Content-Location'];
@@ -606,7 +599,7 @@ class WebArchiveBOT extends Wiki {
                                 $location = "https://web.archive.org$location";
 
                                 if(preg_match("/^https:\/\/web.archive.org\/web\/[0-9]{14}\/[\p{L}\p{N}\.\/@:!@#$%^&*?+]+$/",$location) > 0) $archive_urls[] =  $location;
-                        //}
+                        }
                 }
                 return $archive_urls;
         }
