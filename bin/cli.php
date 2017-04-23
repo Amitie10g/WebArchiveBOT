@@ -1,13 +1,14 @@
+
 <?php
 
 /**
  * WebArchiveBOT: botclases.php based MediaWiki for archiving external links to Web Archive
  *
- *  (c) 2015 Davod - https://commons.wikimedia.org/wiki/User:Amitie_10g
+ *  (c) 2015 - 2017 Davod - https://commons.wikimedia.org/wiki/User:Amitie_10g
  *
  *  This program is free software, and you are welcome to redistribute it under
  *  certain conditions. This program comes with ABSOLUTELY NO WARRANTY.
- *  see README.md and LICENSE for more information
+ *  see README.md and LICENSE for more information.
  *
  **/
 
@@ -15,6 +16,9 @@
 if(php_sapi_name() != "cli") die("\nThis script should be executed from CLI.\n");
 
 define('TEMP_PATH',realpath(sys_get_temp_dir()));
+
+// Set the timezone to UTC
+date_default_timezone_set('UTC');
 
 // Declare the arguments to be taken from command line. User and Password may be received
 // from the arguments --user and --password for convenience, but them can also
@@ -44,8 +48,8 @@ Parameters:
    $bs--password$be Your Wiki password (hardcoded by default)
 
    $bs--project$be  Your Wiki projet where you  will upload your file(s),  with the
-	      "http(s)://"  prefix.  This parameter is optional;  the default
-	      value is "https://commons.wikimedia.org"
+              "http(s)://"  prefix.  This parameter is optional;  the default
+              value is "https://commons.wikimedia.org"
 
    $bs--help$be     Show this help
 
@@ -85,40 +89,50 @@ require_once('class.php');
 // External links blacklist that will never be requested to archive.
 // Use valid regular expressions in each array value
 $extlinks_bl = array('(([\w]+\.)*google\.[\w]+)',
-		     '(([\w]+\.)*openstreetmap\.[\w]+)',
-		     '(([\w]+\.)*creativecommons\.[\w]+)',
-		     '(([\w]+\.)*wikipedia\.org)',
-		     '(([\w]+\.)*wikimedia\.org)',
-     		     '(([\w]+\.)*wmflabs\.org)',
-     		     '(([\w]+\.)*gnu\.org\/copyleft)',
-		     'validator\.w3\.org');
-
-$time = strftime('%F %T');
-echo "\n$time\nArchiving... ";
+                     '(([\w]+\.)*openstreetmap\.[\w]+)',
+                     '(([\w]+\.)*creativecommons\.[\w]+)',
+                     '(([\w]+\.)*wikipedia\.org)',
+                     '(([\w]+\.)*wikimedia\.org)',
+                     '(([\w]+\.)*wmflabs\.org)',
+                     '(([\w]+\.)*gnu\.org\/copyleft)',
+                     'validator\.w3\.org');
 
 $wiki = new WebArchiveBOT($wiki_url,$email_operator);
 
 $login = $wiki->login($wiki_user,$wiki_password);
 if($login['login']['result'] != 'Success') die('Not logged in');
-			  
+
 $wiki->setUserAgent('WebArchiveBOT/0,1 (https://github.com/Amitie10g/WebArchiveBOT; davidkingnt@gmail.com) Botclasses.php/1.0');
 
 if(!is_int($interval)) $interval = 10;
 $interval = $interval*60;
 $result = true;
-while($result == true){
-		$time = strftime('%F %T');
-		echo "\n$time\nArchiving... ";
-        $files  = $wiki->getLatestFiles($pages_per_query);
-        $links  = $wiki->getPagesExternalLinks($files,$extlinks_bl);
-        $result = $wiki->archive($links,$json_file,$json_file_cache);
+while(true){
+        $time = strftime('%F %T');
+        echo "\n$time\nArchiving... ";
 
-        if($result === true) echo "everything OK.\n";
-        else{
-                echo("errors ocurred.\n");
-                $wiki->sendMailError("WebArchiveBOT stopped! Please check and restart");
-                die();
+        try{
+                $files  = $wiki->getLatestFiles($pages_per_query);
+                $links  = $wiki->getPagesExternalLinks($files,$extlinks_bl);
+                $result = $wiki->archive($links,$json_file,$json_file_cache);
+
+                if($result !== true) throw new Exception("errors ocurred when trying to archive. See the log for details.\n");
+                echo "everything OK.\n";
+                $memory_peak = memory_get_peak_usage (true);
+                echo "Memory peak: $memory_peak\n";
+
+        }catch (Exception $e){
+                $message = $e->getMessage();
+                $memory_peak = memory_get_peak_usage (true);
+
+                echo "$message\nMemory peak: $memory_peak\n";
+
+                $date = date("Y-m-d H:i:s");
+                $message .= "\n\nMemory peak: $memory_peak\n\nGenerated: $timestamp";
+
+                $this->sendMail($message);
         }
-		sleep($interval);
+        sleep($interval);
 }
 ?>
+tools.webarchivebot@tools-bastion-03:~$
