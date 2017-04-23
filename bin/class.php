@@ -1,56 +1,57 @@
 <?php
 /**
- * WebArchiveBOT: botclases.php based MediaWiki for archiving external links to Web Archive
- *
- * @copyright (c) 2015-2017  Davod - https://commons.wikimedia.org/wiki/User:Amitie_10g
- *
- * Contains parts of the Chris G's Bot classes library
- *
- *  (c) 2008-2012       Chris G http://en.wikipedia.org/wiki/User:Chris_G
- *  (c) 2009-2010       Fale    http://en.wikipedia.org/wiki/User:Fale
- *  (c) 2010            Kaldari http://en.wikipedia.org/wiki/User:Kaldari
- *  (c) 2011            Gutza   http://en.wikipedia.org/wiki/User:Gutza
- *  (c) 2012            Sean    http://en.wikipedia.org/wiki/User:SColombo
- *  (c) 2012            Brain   http://en.wikipedia.org/wiki/User:Brian_McNeil
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU Affero General Public License as published by
- *  the Free Software Foundation; either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Affero General Public License for more details.
- *
- *  You should have received a copy of the GNU Affero General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- *
- *  Developers (add yourself here if you worked on the code):
- *      Cobi    - [[User:Cobi]]         - Wrote the http class and some of the wikipedia class
- *      Chris   - [[User:Chris_G]]      - Wrote the most of the wikipedia class
- *      Fale    - [[User:Fale]]         - Polish, wrote the extended and some of the wikipedia class
- *      Kaldari - [[User:Kaldari]]      - Submitted a patch for the imagematches function
- *      Gutza   - [[User:Gutza]]        - Submitted a patch for http->setHTTPcreds(), and http->quiet
- *      Sean    - [[User:SColombo]]     - Wrote the lyricwiki class (now moved to lyricswiki.php)
- *      Brain   - [[User:Brian_McNeil]] - Wrote wikipedia->getfileuploader() and wikipedia->getfilelocation
- *      Davod   - [[User:Amitie_10g]]   - See bellow:
- *
+  * WebArchiveBOT: botclases.php based MediaWiki for archiving external links to Web Archive
+  *
+  * @copyright (c) 2015-2017  Davod - https://commons.wikimedia.org/wiki/User:Amitie_10g
+  *
+  * Contains parts of the Chris G's Bot classes library
+  *
+  *  (c) 2008-2012       Chris G http://en.wikipedia.org/wiki/User:Chris_G
+  *  (c) 2009-2010       Fale    http://en.wikipedia.org/wiki/User:Fale
+  *  (c) 2010            Kaldari http://en.wikipedia.org/wiki/User:Kaldari
+  *  (c) 2011            Gutza   http://en.wikipedia.org/wiki/User:Gutza
+  *  (c) 2012            Sean    http://en.wikipedia.org/wiki/User:SColombo
+  *  (c) 2012            Brain   http://en.wikipedia.org/wiki/User:Brian_McNeil
+  *
+  *  This program is free software; you can redistribute it and/or modify
+  *  it under the terms of the GNU Affero General Public License as published by
+  *  the Free Software Foundation; either version 3 of the License, or
+  *  (at your option) any later version.
+  *
+  *  This program is distributed in the hope that it will be useful,
+  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  *  GNU Affero General Public License for more details.
+  *
+  *  You should have received a copy of the GNU Affero General Public License
+  *  along with this program; if not, write to the Free Software
+  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  *
+  *  Developers (add yourself here if you worked on the code):
+  *      Cobi    - [[User:Cobi]]         - Wrote the http class and some of the wikipedia class
+  *      Chris   - [[User:Chris_G]]      - Wrote the most of the wikipedia class
+  *      Fale    - [[User:Fale]]         - Polish, wrote the extended and some of the wikipedia class
+  *      Kaldari - [[User:Kaldari]]      - Submitted a patch for the imagematches function
+  *      Gutza   - [[User:Gutza]]        - Submitted a patch for http->setHTTPcreds(), and http->quiet
+  *      Sean    - [[User:SColombo]]     - Wrote the lyricwiki class (now moved to lyricswiki.php)
+  *      Brain   - [[User:Brian_McNeil]] - Wrote wikipedia->getfileuploader() and wikipedia->getfilelocation
+  *      Davod   - [[User:Amitie_10g]]   - See bellow:
+  *
+**/
 
 /**
- * This class is designed to provide a simplified interface to cURL which maintains cookies.
- * @author Cobi
- * @property $ch The cURL class reference
- * @property $uid The cURL UID object
- * @property $cookie_jar The cURL cookie_jar object
- * @property $postfollowredirs
- * @property $getfollowredirs
- * @property $quiet
- * @property $userAgent The default User agent
- * @property $httpHeader
- * @property $defaultHttpHeader
- **/
+  * This class is designed to provide a simplified interface to cURL which maintains cookies.
+  * @author Cobi
+  * @property $ch The cURL class reference
+  * @property $uid The cURL UID object
+  * @property $cookie_jar The cURL cookie_jar object
+  * @property $postfollowredirs
+  * @property $getfollowredirs
+  * @property $quiet
+  * @property $userAgent The default User agent
+  * @property $httpHeader
+  * @property $defaultHttpHeader
+**/
 class http {
         private $ch;
         private $uid;
