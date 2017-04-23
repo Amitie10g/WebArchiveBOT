@@ -4,7 +4,7 @@
 /**
  * WebArchiveBOT: botclases.php based MediaWiki for archiving external links to Web Archive
  *
- *  (c) 2015 - 2017 Davod - https://commons.wikimedia.org/wiki/User:Amitie_10g
+ *  (c) 2015-2017 Davod - https://commons.wikimedia.org/wiki/User:Amitie_10g
  *
  *  This program is free software, and you are welcome to redistribute it under
  *  certain conditions. This program comes with ABSOLUTELY NO WARRANTY.
