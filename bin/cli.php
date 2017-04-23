@@ -1,4 +1,3 @@
-
 <?php
 
 /**
@@ -135,4 +134,3 @@ while(true){
         sleep($interval);
 }
 ?>
-tools.webarchivebot@tools-bastion-03:~$
