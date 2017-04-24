@@ -20,6 +20,9 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  **/
+
+// :: This file is intended to be copied and edited
+
 error_reporting(E_ALL ^ E_NOTICE);
 
 if(php_sapi_name() == "cli") die("\nThis script should be executed from Web.\n");
@@ -29,58 +32,7 @@ $json_file_cache = 'archived.json'; // The cached, plain JSON file path (to impr
 $site_url = 'https://commons.wikimedia.org/wiki/'; // https://commons.wikimedia.org/wiki/
 $sitename = 'Wikimedia Commons'; // Wikimedia Commons
 
-$json_contents = json_decode(file_get_contents($json_file_cache),true);
+define('IN_WEBARCHIVEBOT',true);
 
-?><html>
-        <head>
-                <title>WebArchiveBOT, archived items</title>
-                <meta charset=utf-8 />
-                <meta http-equiv="refresh" content="120" />
-                <style>
-                        body{
-                                font-family:Roboto,droid-sans,Arial,sans-serif;
-                        }
-                        h1{
-                                font-size:16pt;
-                        }
-                        h2{
-                                font-size:14pt;
-                        }
-                        a {
-                                overflow: hidden;
-                                white-space: nowrap;
-                                text-overflow: ellipsis;
-                        }
-
-                </style>
-        </head>
-                <body>
-                <div>
-                        <h1>WebArchiveBOT, archived items</h1>
-                        <p>This page lists the last 50 files uploaded to <?= $sitename ?> and
-                        their links archived at Internet Archive by Wayback Machine. You can
-                        download the <a href="<?= $json_file ?>">latest 1000 files listed in JSON format</a>.</br>
-                        For more information, see the <a href="doc" target="blank">Documentation</a>.
-                        <a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU Affero General Public License v3.</p>
-                </div>
-                <div>
-<?php if(is_file($json_file_cache)){
-
-                foreach($json_contents as $title=>$item){
-
-?>                      <h2><a href="<?= $site_url ?><?= $title ?>" target="blank"><?= $title ?></a></h2>
-                        <b>Uploaded: </b><?= strftime("%F %T",$item['timestamp']) ?> (UTC)
-                        <ul>
-<?php                   foreach($item['urls'] as $link){
-?>                              <li><a href="<?= $link ?>" target="blank"><?= $link ?></a></li>
-<?php                   }
+require_once('template.php');
 ?>
-                        </ul>
-<?php           }
-?>
-<?php   }else{
-?>                      <p>No links archived yet</p>
-<?php   }
-?>              </div>
-        </body>
-</html>
