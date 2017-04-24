@@ -600,7 +600,7 @@ class WebArchiveBOT extends Wiki {
                                 if(is_array($location)) $location = $location[0];
                                 $location = "https://web.archive.org$location";
 
-                                if(preg_match("/^https:\/\/web.archive.org\/web\/[0-9]{14}\/[\p{L}\p{N}\.\/@:!@#$%^&*?+]+$/",$location) > 0) $archive_urls[] =  $location;
+                                if(preg_match("/^https:\/\/web.archive.org\/web\/[0-9]{14}\/[\p{L}\p{N}\.\/@:!@#$%^&*?+]+$/",$location) === 1) $archive_urls[] =  $location;
                         }
                 }
                 if(is_array($archive_urls)) return array_unique($archive_urls);
