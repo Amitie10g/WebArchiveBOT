@@ -479,10 +479,11 @@ class WebArchiveBOT extends Wiki {
          * @param string $json_file_cache The JSON file to store the results (cache, latest 100 ones).
          * @return bool true if everything is OK, or false in case of any error.
         **/
-        function archive($links_g,$json_file,$json_file_cache){
+        function archive($data,$json_file,$json_file_cache){
 
-                if(!is_array($links_g)) return false;
-                $data = $this->archive1($links_g);
+                if(!is_array($data)) return false;
+                $data = $this->archive1($data);
+
                 if(empty($data)) return false;
                 $data = $this->archive2($data,$json_file);
 
@@ -494,18 +495,18 @@ class WebArchiveBOT extends Wiki {
          * @param array $data_g the array containing the filenames and URLs
          * @return array the data given with $data_g, with the Wayback Machine URLs instead
         **/
-        function archive1($data_g){
+        function archive1($data){
 
-                if(empty($data_g)) return false;
+                if(empty($data)) return false;
 
-                foreach($data_g as $title=>$item){
+                foreach($data as $title=>$item){
 
                         $timestamp = $item['timestamp'];
                         $urls = $this->urls2archive_urls($item['urls']);
                         if(!empty($urls)) $data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
                 }
 
-                return array_unique($data);
+                return $data;
         }
 
         /**
@@ -566,8 +567,8 @@ class WebArchiveBOT extends Wiki {
 
                 if(!is_array($data)) return false;
                 $data = array_slice($data,0,50,true);
-                $data = json_encode($data,JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE,8);
 
+                $data = json_encode($data,JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE,8);
                 if(file_put_contents($json_file,$data,LOCK_EX) != false) return true;
                 else return false;
         }
@@ -602,7 +603,8 @@ class WebArchiveBOT extends Wiki {
                                 if(preg_match("/^https:\/\/web.archive.org\/web\/[0-9]{14}\/[\p{L}\p{N}\.\/@:!@#$%^&*?+]+$/",$location) > 0) $archive_urls[] =  $location;
                         }
                 }
-                return $archive_urls;
+                if(is_array($archive_urls)) return array_unique($archive_urls);
+                else return null;
         }
 
         /**
