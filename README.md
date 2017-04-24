@@ -5,13 +5,18 @@ This experimental tool looks for New Files uploaded to Wikimedia Commons (or any
 
 Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
 
-What is included:
+## Instalaltion: 
 
-* /bin The executable and libraries. For security reasons, keep it outside the public_html!
- * WebArchiveBOT.sh The (bootstarp) script. You should use it and fill it with the appopiate data
- * cli.php The The main script
- * class.php The classes library
- 
-* /public_html The files intended to be exposed to Internet (optional)
- * index.php The PHP/HTML script to display the latest pages parsed and links archived
- * doc/ The documentation generated with phpDocumentator (optional but useful)
+* Run `git clone` to download the files:
+
+    `git clone https://github.com/Amitie10g/WebArchiveBOT.git`
+
+* Create a directory for the backend script (eg "bin") outside the WWW access, and,
+  * Copy "WebArchiveBOT.sh" and edit it to add credentials and other settings
+  * Symlink "cli.php" and "class.php"
+
+* Create a directory inside the WWW access if you want, and,
+  * Copy "index.php"
+  * Symlink "template.php"
+
+Ensure the "WebArchiveBOT.sh" has exec permissions
