@@ -21,6 +21,8 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  **/
+
+// :: This file is intended to be copied and edited
  
 error_reporting(E_ALL ^ E_NOTICE);
 
@@ -32,13 +34,15 @@ $pages_per_query = 100; // This should be 100 for normal users, much more for bo
 $interval = 10; // Interval between every execution in minutes
 $json_file = 'archived.json.gz'; // Compressed JSON (Absolute path!)
 $json_file_cache = 'archived.json'; // Uncompressed JSON for caching (Absolute path!)
-$email_operator = "";
+$email_operator = '';
 
 ini_set("memory_limit",'1024M');
 
 ini_set('xdebug.var_display_max_depth',-1);
 ini_set('xdebug.var_display_max_children',-1);
 ini_set('xdebug.var_display_max_data',-1);
+
+define('IN_WEBARCHIVEBOT',true);
 
 require_once('cli.php');
 
