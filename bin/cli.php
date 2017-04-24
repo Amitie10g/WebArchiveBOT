@@ -21,6 +21,10 @@
  *
  **/
 
+// :: This file is intended to be symlinked
+
+if(!defined('IN_WEBARCHIVEBOT')) die;
+
 // Check if SAPI is CLI
 if(php_sapi_name() != "cli") die("\nThis script should be executed from CLI.\n");
 
@@ -45,7 +49,7 @@ $license                       = $options['license'];
 // Declare the Help and License text
 $help_text = <<<EOH
 
-$bs::: WebArchiveBOT  Copyright (C) 2015  Davod (Amitie 10g) :::$be
+$bs::: WebArchiveBOT  Copyright (C) 2015-2017  Davod (Amitie 10g) :::$be
 
 This script is intended to check for new files uploaded to Wiki,
 extract external links and save them at Web Archive by Wayback Machine.
@@ -85,7 +89,6 @@ WebArchiveBOT  Copyright (C) 2015  Davod (Amitie 10g)$be
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 
 EOL;
 
@@ -139,7 +142,7 @@ while(true){
                 $date = date("Y-m-d H:i:s");
                 $message .= "\n\nMemory peak: $memory_peak\n\nGenerated: $timestamp";
 
-                $this->sendMail($message);
+                $wiki->sendMail($message);
         }
         sleep($interval);
 }
