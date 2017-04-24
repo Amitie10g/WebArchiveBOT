@@ -18,5 +18,11 @@ Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
 * Create a directory inside the WWW access if you want, and,
   * Copy "index.php"
   * Symlink "template.php" and "doc"
+  
+## Running in HHVM
+
+To use HHVM instead of PHP, replace the default shebang with the HHVM one:
+
+  `#!/usr/bin/hhvm -d hhvm.hack.lang.look_for_typechecker=0`
 
 Ensure the "WebArchiveBOT.sh" has exec permissions
