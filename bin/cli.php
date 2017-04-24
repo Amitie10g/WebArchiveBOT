@@ -140,7 +140,7 @@ while(true){
                 echo "$message\nMemory peak: $memory_peak\n";
 
                 $date = date("Y-m-d H:i:s");
-                $message .= "\n\nMemory peak: $memory_peak\n\nGenerated: $timestamp";
+                $message .= "\n\nMemory peak: $memory_peak\n\nGenerated: $date";
 
                 $wiki->sendMail($message);
         }
