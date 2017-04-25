@@ -345,6 +345,7 @@ class WebArchiveBOT extends Wiki {
         public $url;
         public $site_url;
         public $email_operator;
+        public $extlinks_bl;
 
         /**
           * This is the constructor
@@ -353,11 +354,12 @@ class WebArchiveBOT extends Wiki {
           * @param mail_operator The Operator's email address
           * @return void
          **/
-        function __construct($url,$email_operator){
+        function __construct($url,$email_operator,$extlinks_bl){
                 Wiki::__construct($url); // Pass main parameter to parent Class' __construct()
                 $this->site_url = parse_url($this->url);
                 $this->site_url = $this->site_url['scheme'].'://'.$this->site_url['host'].'/wiki/';
                 $this->email_operator = $email_operator;
+                $this->extlinks_bl = $extlinks_bl;
         }
 
         /**
