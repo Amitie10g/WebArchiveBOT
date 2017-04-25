@@ -25,6 +25,10 @@
 
 if(!defined('IN_WEBARCHIVEBOT')) die;
 
+ini_set('xdebug.var_display_max_depth',-1);
+ini_set('xdebug.var_display_max_children',-1);
+ini_set('xdebug.var_display_max_data',-1);
+
 // Check if SAPI is CLI
 if(php_sapi_name() != "cli") die("\nThis script should be executed from CLI.\n");
 
@@ -75,7 +79,7 @@ EOH;
 
 $license_text = <<<EOL
 $bs
-WebArchiveBOT  Copyright (C) 2015  Davod (Amitie 10g)$be
+WebArchiveBOT  Copyright (C) 2015-2017  Davod (Amitie 10g)$be
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -99,10 +103,6 @@ if(isset($license)) die($license_text);
 require_once('class.php');
 
 $wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl);
-
-var_dump($wiki);
-
-die;
 
 $login = $wiki->login($wiki_user,$wiki_password);
 if($login['login']['result'] != 'Success') die('Not logged in!');
