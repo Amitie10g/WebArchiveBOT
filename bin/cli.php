@@ -98,17 +98,6 @@ if(isset($license)) die($license_text);
 
 require_once('class.php');
 
-// External links blacklist that will never be requested to archive.
-// Use valid regular expressions in each array value
-$extlinks_bl = array('(([\w]+\.)*google\.[\w]+)',
-                     '(([\w]+\.)*openstreetmap\.[\w]+)',
-                     '(([\w]+\.)*creativecommons\.[\w]+)',
-                     '(([\w]+\.)*wikipedia\.org)',
-                     '(([\w]+\.)*wikimedia\.org)',
-                     '(([\w]+\.)*wmflabs\.org)',
-                     '(([\w]+\.)*gnu\.org\/copyleft)',
-                     'validator\.w3\.org');
-
 $wiki = new WebArchiveBOT($wiki_url,$email_operator);
 
 $login = $wiki->login($wiki_user,$wiki_password);
