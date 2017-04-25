@@ -98,10 +98,10 @@ if(isset($license)) die($license_text);
 
 require_once('class.php');
 
-$wiki = new WebArchiveBOT($wiki_url,$email_operator);
+$wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl);
 
 $login = $wiki->login($wiki_user,$wiki_password);
-if($login['login']['result'] != 'Success') die('Not logged in');
+if($login['login']['result'] != 'Success') die('Not logged in!');
 
 $wiki->setUserAgent('WebArchiveBOT/0,1 (https://github.com/Amitie10g/WebArchiveBOT; davidkingnt@gmail.com) Botclasses.php/1.0');
 
