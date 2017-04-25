@@ -359,7 +359,7 @@ class WebArchiveBOT extends Wiki {
                 $this->site_url = parse_url($this->url);
                 $this->site_url = $this->site_url['scheme'].'://'.$this->site_url['host'].'/wiki/';
                 $this->email_operator = $email_operator;
-                $this->extlinks_bl = $extlinks_bl;
+                $this->extlinks_bl = '/('.implode('|',$extlinks_bl).')/';
         }
 
         /**
@@ -497,11 +497,11 @@ class WebArchiveBOT extends Wiki {
          * @param array $data_g the array containing the filenames and URLs
          * @return array the data given with $data_g, with the Wayback Machine URLs instead
         **/
-        function archive1($data){
+        function archive1($data_g){
 
-                if(empty($data)) return false;
+                if(empty($data_g)) return false;
 
-                foreach($data as $title=>$item){
+                foreach($data_g as $title=>$item){
 
                         $timestamp = $item['timestamp'];
                         $urls = $this->urls2archive_urls($item['urls']);
@@ -517,7 +517,6 @@ class WebArchiveBOT extends Wiki {
          * @param string $json_file the local JSON file (GZIP compressed)
          * @return array the contents from the local JSON
         **/
-
         function archive2($data,$json_file){
 
                 if(!is_array($data)) return false;
@@ -583,11 +582,12 @@ class WebArchiveBOT extends Wiki {
         function urls2archive_urls($urls){
 
                 foreach($urls as $url){
+                 
+                        if(preg_match($this->extlinks_bl,$url)) continue;
 
                         $archive_g = file_get_contents('http://archive.org/wayback/available?url='.urlencode($url));
                         if($archive_g != '{"archived_snapshots":{}}'){
                                 $archive = json_decode($archive_g,true);
-                                $archive_url = $archive['archived_snapshots']['closest']['url'];
                                 $archive_timestamp = strtotime($archive['archived_snapshots']['closest']['timestamp']);
                         }
 
@@ -597,20 +597,20 @@ class WebArchiveBOT extends Wiki {
 
                         if($window_time >= 172800){
                                 $headers = @get_headers("https://web.archive.org/save/$url",1);
+                         
+                                if($headers[0] == "HTTP/1.1 403 FORBIDDEN") continue;
 
                                 $location = $headers['Content-Location'];
 
                                 if(!empty($location)){
-
-                                        if(is_array($location)) $location = $location[0];
-
-                                        $location = "https://web.archive.org$location";
-
-                                        if(preg_match("/^https:\/\/web.archive.org\/web\/[0-9]{14}\/[\p{L}\p{N}\.\/@:!@#$%^&*?+]+$/",$location) === 1) $archive_urls[] =  $location;
+                                        if(is_array($location)) $location = end($location);
+                                        if(preg_match("/^\/web\/[0-9]{14}\/[\p{L}\p{N}\p{S}\p{P}\p{M}\p{Zs}]+$/",$location) === 1) $archive_urls[] = "https://web.archive.org$location";
+                                        else echo "Wrong location: $location\n";
                                 }
                         }
                 }
-                if(is_array($archive_urls)) return array_unique($archive_urls);
+         
+                if(!empty($archive_urls)) return array_unique($archive_urls);
         }
 
         /**
