@@ -100,6 +100,10 @@ require_once('class.php');
 
 $wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl);
 
+var_dump($wiki);
+
+die;
+
 $login = $wiki->login($wiki_user,$wiki_password);
 if($login['login']['result'] != 'Success') die('Not logged in!');
 
