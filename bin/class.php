@@ -597,14 +597,18 @@ class WebArchiveBOT extends Wiki {
                                 $headers = @get_headers("https://web.archive.org/save/$url",1);
 
                                 $location = $headers['Content-Location'];
-                                if(is_array($location)) $location = $location[0];
-                                $location = "https://web.archive.org$location";
 
-                                if(preg_match("/^https:\/\/web.archive.org\/web\/[0-9]{14}\/[\p{L}\p{N}\.\/@:!@#$%^&*?+]+$/",$location) === 1) $archive_urls[] =  $location;
+                                if(!empty($location)){
+
+                                        if(is_array($location)) $location = $location[0];
+
+                                        $location = "https://web.archive.org$location";
+
+                                        if(preg_match("/^https:\/\/web.archive.org\/web\/[0-9]{14}\/[\p{L}\p{N}\.\/@:!@#$%^&*?+]+$/",$location) === 1) $archive_urls[] =  $location;
+                                }
                         }
                 }
                 if(is_array($archive_urls)) return array_unique($archive_urls);
-                else return null;
         }
 
         /**
