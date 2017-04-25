@@ -36,6 +36,21 @@ $json_file = 'archived.json.gz'; // Compressed JSON (Absolute path!)
 $json_file_cache = 'archived.json'; // Uncompressed JSON for caching (Absolute path!)
 $email_operator = '';
 
+// External links blacklist that will never be requested to archive.
+// Use valid regular expressions in each array value
+$extlinks_bl = array('(([\w]+\.)*google\.[\w]+)',
+                     '(([\w]+\.)*openstreetmap\.[\w]+)',
+                     '(([\w]+\.)*creativecommons\.[\w]+)',
+                     '(([\w]+\.)*wikipedia\.org)',
+                     '(([\w]+\.)*wikimedia\.org)',
+                     '(([\w]+\.)*wmflabs\.org)',
+                     '(([\w]+\.)*gnu\.org\/copyleft)',
+                     '(([\w]+\.)*gnu\.org\/licenses)',
+                     '(([\w]+\.)*archive\.org)',
+                     '(([\w]+\.)*flickr\.com)',
+                     'validator\.w3\.org');
+
+
 ini_set("memory_limit",'1024M');
 
 ini_set('xdebug.var_display_max_depth',-1);
