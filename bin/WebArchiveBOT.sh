@@ -23,8 +23,10 @@
  **/
 
 // :: This file is intended to be copied and edited
- 
+
+// Edit this only if you know what you doing
 error_reporting(E_ALL ^ E_NOTICE);
+ini_set("memory_limit",'1024M');
 
 // Edit the following as you need
 $wiki_user = '';
@@ -36,29 +38,32 @@ $json_file = 'archived.json.gz'; // Compressed JSON (Absolute path!)
 $json_file_cache = 'archived.json'; // Uncompressed JSON for caching (Absolute path!)
 $email_operator = '';
 
-// External links blacklist that will never be requested to archive.
-// Use valid regular expressions in each array value
-$extlinks_bl = array('(([\w]+\.)*google\.[\w]+)',
-                     '(([\w]+\.)*openstreetmap\.[\w]+)',
-                     '(([\w]+\.)*creativecommons\.[\w]+)',
-                     '(([\w]+\.)*wikipedia\.org)',
-                     '(([\w]+\.)*wikimedia\.org)',
-                     '(([\w]+\.)*wmflabs\.org)',
-                     '(([\w]+\.)*gnu\.org\/copyleft)',
-                     '(([\w]+\.)*gnu\.org\/licenses)',
-                     '(([\w]+\.)*archive\.org)',
-                     '(([\w]+\.)*flickr\.com)',
-                     'validator\.w3\.org');
+// Excluded external links
+$extlinks_bl[] = '(([\p{P}\p{N}]+\.)*google\.[\p{L}\p{N}]+)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*openstreetmap\.[\p{L}\p{N}]+)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*creativecommons\.[\p{L}\p{N}]+)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*gnu\.org)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*artlibre\.org)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*flickr\.com)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*archive\.org)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*facebook\.com)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wipo\.int)';
+$extlinks_bl[] = '(validator\.w3\.org)';
 
+// Wikimedia links
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wikipedia\.org)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wiktionary\.org)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wikiquote\.org)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wikibooks\.org)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wikisource\.org)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wikinews\.org)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wikiversity\.org)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wikimedia\.org)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wikidata\.org)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wmflabs\.org)';
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*mediawiki\.org)';
 
-ini_set("memory_limit",'1024M');
-
-ini_set('xdebug.var_display_max_depth',-1);
-ini_set('xdebug.var_display_max_children',-1);
-ini_set('xdebug.var_display_max_data',-1);
-
+// Do not edit from here
 define('IN_WEBARCHIVEBOT',true);
-
 require_once('cli.php');
-
 ?>
