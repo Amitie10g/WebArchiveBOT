@@ -107,7 +107,7 @@ $wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl);
 $login = $wiki->login($wiki_user,$wiki_password);
 if($login['login']['result'] != 'Success') die('Not logged in!');
 
-$wiki->setUserAgent('WebArchiveBOT/0,1 (https://github.com/Amitie10g/WebArchiveBOT; davidkingnt@gmail.com) Botclasses.php/1.0');
+$wiki->setUserAgent('WebArchiveBOT/1.0 (https://github.com/Amitie10g/WebArchiveBOT; davidkingnt@gmail.com) Botclasses.php/1.0');
 
 if(!is_int($interval)) $interval = 10;
 $interval = $interval*60;
