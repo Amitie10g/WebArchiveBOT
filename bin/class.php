@@ -395,37 +395,6 @@ class WebArchiveBOT extends Wiki {
         }
 
         /**
-         * Parse a list of URs and remove blacklisted domains ones
-         * @param array $links_g The URLs to be parsed
-         * @param array $blacklist the blacklisted domains
-         * @param bool $allow_empty_path To allow or not empy path links (with the domain name only)
-         * @return mixed The links filtered as array, or null if no valid links got
-        **/
-        function clearLinks($links_g,$blacklist=null,$allow_empty_path=true){
-                if(!is_array($links_g)) return false;
-
-                foreach($links_g as $link){
-                        if(preg_match('/^((http|https){1}\:)/',$link) == 0) $link = "http:$link";
-                        $host = parse_url($link,PHP_URL_HOST);
-
-                        if($this->inArray($host,$blacklist,true,true) === true){
-
-                                if($allow_empty_path === false){
-                                        $path = parse_url($link,PHP_URL_PATH);
-
-                                        if(empty($path) || $path == '/') continue;
-                                        else $links[] = $link;
-                                }else $links[] = $link;
-                        }
-                }
-                if(!empty($links)){
-                        $links = array_unique($links);
-                        $links = array_filter($links);
-                }
-                return $links;
-        }
-
-        /**
          * Wraper for in_array() that also parse regex
          * @param mixed $needle The value to find.
          * @param array $haystack The array where find in.
@@ -460,7 +429,6 @@ class WebArchiveBOT extends Wiki {
                         $timestamp = strtotime($page['timestamp']);
 
                         $links_g = $this->GetPageContents($canonicaltitle,'externallinks');
-                        $links_g = $this->clearLinks($links_g['parse']['externallinks'],$extlinks_bl,false);
 
                         if(!empty($links_g)){
                                 $links_g = array_filter($links_g);
