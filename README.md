@@ -23,6 +23,6 @@ Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
 
 To use HHVM instead of PHP, replace the default shebang with the HHVM one:
 
-  `#!/usr/bin/hhvm -d hhvm.hack.lang.look_for_typechecker=0`
+  `#!/usr/bin/hhvm`
 
 Ensure the "WebArchiveBOT.sh" has exec permissions
