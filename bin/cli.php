@@ -74,7 +74,6 @@ Parameters:
 
 See README.md for detailed information about its usage.
 
-
 EOH;
 
 $license_text = <<<EOL
