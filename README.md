@@ -21,7 +21,7 @@ Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
   
 ## Running in HHVM
 
-To use HHVM instead of PHP, replace the default shebang with the HHVM one:
+To run the backend script under HHVM instead of php-cli, replace the default shebang with the HHVM one:
 
   `#!/usr/bin/hhvm`
 
