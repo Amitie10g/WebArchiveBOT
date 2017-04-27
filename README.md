@@ -21,8 +21,15 @@ Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
   
 ## Running in HHVM
 
-To run the backend script under HHVM instead of php-cli, replace the default shebang with the HHVM one:
+To run the backend script (WebArchiveBOT.sh) under HHVM instead of php-cli, replace the default shebang with the HHVM one:
 
-  `#!/usr/bin/hhvm`
+    #!/usr/bin/hhvm
+
+## Running in Windows
+
+To run the backend script in Windows, create a batch script to execute php-cli (or hhvm) calling the script:
+
+    @echo off
+    php WebArchiveBOT.sh
 
 Ensure the "WebArchiveBOT.sh" has exec permissions
