@@ -36,6 +36,7 @@ $pages_per_query = 100; // This should be 100 for normal users, much more for bo
 $interval = 10; // Interval between every execution in minutes
 $json_file = 'archived.json.gz'; // Compressed JSON (Absolute path!)
 $json_file_cache = 'archived.json'; // Uncompressed JSON for caching (Absolute path!)
+$json_file_max_size = 1000; //Maximum ammou8nt of files stored in the JSON
 $email_operator = '';
 
 // Excluded external links
