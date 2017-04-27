@@ -101,7 +101,7 @@ if(isset($license)) die($license_text);
 
 require_once('class.php');
 
-$wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl);
+$wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl,$json_file_max_size);
 
 $login = $wiki->login($wiki_user,$wiki_password);
 if($login['login']['result'] != 'Success') die('Not logged in!');
