@@ -343,9 +343,10 @@ class Wiki {
  **/
 class WebArchiveBOT extends Wiki {
         public $url;
-        public $site_url;
-        public $email_operator;
-        public $extlinks_bl;
+        private $site_url;
+        private $email_operator;
+        private $extlinks_bl;
+        private $json_file_max_size;
 
         /**
           * This is the constructor
@@ -354,12 +355,13 @@ class WebArchiveBOT extends Wiki {
           * @param mail_operator The Operator's email address
           * @return void
          **/
-        function __construct($url,$email_operator,$extlinks_bl){
+        function __construct($url,$email_operator,$extlinks_bl,$json_file_max_size){
                 Wiki::__construct($url); // Pass main parameter to parent Class' __construct()
                 $this->site_url = parse_url($this->url);
                 $this->site_url = $this->site_url['scheme'].'://'.$this->site_url['host'].'/wiki/';
                 $this->email_operator = $email_operator;
                 $this->extlinks_bl = '/('.implode('|',$extlinks_bl).')/';
+                $this->json_file_max_size = $json_file_max_size;
         }
 
         /**
@@ -519,7 +521,8 @@ class WebArchiveBOT extends Wiki {
         function archive31($data,$json_file){
 
                 if(!is_array($data)) return false;
-                $data = array_slice($data,0,1000,true);
+                if(!is_int($this->json_file_max_size)) $this->json_file_max_size = 1000;
+                $data = array_slice($data,0,$this->json_file_max_size,true);
                 $data = gzencode(json_encode($data,JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE,8),9);
 
                 if(file_put_contents($json_file,$data,LOCK_EX) != false) return true;
