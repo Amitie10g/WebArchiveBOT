@@ -339,6 +339,7 @@ class Wiki {
  * This class is intended to do the archiving.
  * @author Davod
  * @property string $url The Project URL (API path)
+ * @property string $site_url The Project URL (website)
  * @property string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error
  * @property array $extlinks_bl The blacklisted URLs to exclude for archiving
  * @property int $pages_per_query The maximum pages retrived per query (iteration) (100 by default)
@@ -361,9 +362,15 @@ class WebArchiveBOT extends Wiki {
 
         /**
           * This is the constructor
-          * @param $url The Project URL (forwarded to the parent class)
-          * @param $max_files_retrived Maximum ammount of files retreived per query
-          * @param mail_operator The Operator's email address
+          * @property string $url The Project URL (API path)
+          * @property string $site_url The Project URL (website)
+          * @property string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error
+          * @property array $extlinks_bl The blacklisted URLs to exclude for archiving
+          * @property int $pages_per_query The maximum pages retrived per query (iteration) (100 by default)
+          * @property string $public_html_path The path to the public_html directory, where the JSONs will be stored
+          * @property string $json_file The compressed JSON file
+          * @property string $json_file_cache the plain JSON file to be used for the Page
+          * @property int $json_file_max_size The maximum ammount files stored in the JSON file (1000 by default)
           * @return void
          **/
         function __construct($url,$email_operator,$extlinks_bl,$pages_per_query=100,$public_html_path,$json_file,$json_file_cache,$json_file_max_size=1000){
