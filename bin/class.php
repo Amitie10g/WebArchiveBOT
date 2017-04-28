@@ -444,9 +444,7 @@ class WebArchiveBOT extends Wiki {
 
                         $links_g = $this->GetPageContents($canonicaltitle,'externallinks');
                         $links_g = $links_g['parse']['externallinks'];
-var_dump($canonicaltitle);
-var_dump($links_g);
-echo "\n\n----\n\n";
+
                         if(!empty($links_g)){
                                 $links_g = array_filter($links_g);
                                 $links[$canonicaltitle] = array('timestamp'=>$timestamp,'urls'=>$links_g);
