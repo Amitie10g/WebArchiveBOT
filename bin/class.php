@@ -183,7 +183,7 @@ class http {
 }
 
 /**
- * This class is interacts with the Wiki using api.php.
+ * This class interacts with the Wiki using api.php.
  * @author Chris G and Cobi.
  * @property string $url The Project URL (API path).
  **/
