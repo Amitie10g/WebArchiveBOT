@@ -502,7 +502,7 @@ class WebArchiveBOT extends Wiki {
         **/
         function archive2($data){
                 if(!is_array($data)) return false;
-                if(is_file("$this->public_html_path/$this->json_file")) $json_data = json_decode(gzdecode(file_get_contents($json_file)),true);
+                if(is_file("$this->public_html_path/$this->json_file")) $json_data = json_decode(gzdecode(file_get_contents("$this->public_html_path/$this->json_file")),true);
                 if(is_array($json_data)) $data = $data + $json_data;
                 array_multisort($data,SORT_DESC);
 
