@@ -41,4 +41,4 @@ Ensure the "WebArchiveBOT.sh" has exec permissions
 
 ## License
 
-This program is licensed under the GNU Affero General Public License version 3. Contains parts of the Chris G's Bot classes library, licensed originally under the GNU General Public License version 2
+This program is licensed under the GNU Affero General Public License version 3. Contains parts of the Chris G's Bot classes library, licensed originally under the GNU General Public License version 2.
