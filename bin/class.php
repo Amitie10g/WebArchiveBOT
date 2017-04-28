@@ -565,6 +565,8 @@ class WebArchiveBOT extends Wiki {
 
                 foreach($urls as $url){
                  
+                 var_dump($urls);
+                 
                         if(preg_match($this->extlinks_bl,$url)) continue;
 
                         $archive_g = file_get_contents('http://archive.org/wayback/available?url='.urlencode($url));
