@@ -118,7 +118,7 @@ while(true){
         try{
                 $files  = $wiki->getLatestFiles();
                 $links  = $wiki->getPagesExternalLinks($files);
-var_dump($links);
+//var_dump($links);
                 $result = $wiki->archive($links);
 
                 if($result !== true) throw new Exception("errors ocurred when trying to archive. See the log for details.\n");
