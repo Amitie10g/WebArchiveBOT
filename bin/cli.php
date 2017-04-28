@@ -101,7 +101,7 @@ if(isset($license)) die($license_text);
 
 require_once('class.php');
 
-$wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl,$json_file_max_size);
+$wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl,$pages_per_query,$public_html_path,$json_file,$json_file_cache,$json_file_max_size);
 
 $login = $wiki->login($wiki_user,$wiki_password);
 if($login['login']['result'] != 'Success') die('Not logged in!');
@@ -116,9 +116,9 @@ while(true){
         echo "\n$time\nArchiving... ";
 
         try{
-                $files  = $wiki->getLatestFiles($pages_per_query);
+                $files  = $wiki->getLatestFiles();
                 $links  = $wiki->getPagesExternalLinks($files);
-                $result = $wiki->archive($links,$json_file,$json_file_cache);
+                $result = $wiki->archive($links);
 
                 if($result !== true) throw new Exception("errors ocurred when trying to archive. See the log for details.\n");
                 echo "everything OK.\n";
