@@ -369,9 +369,10 @@ class WebArchiveBOT extends Wiki {
           * @param string $json_file The compressed JSON file.
           * @param string $json_file_cache the plain JSON file to be used for the Page.
           * @param int $json_file_max_size The maximum ammount files stored in the JSON file (1000 by default).
+          * @param string $redis_server The Redis server if used.
           * @return void
          **/
-        function __construct($url,$email_operator,$extlinks_bl,$pages_per_query=100,$public_html_path,$json_file,$json_file_cache,$json_file_max_size=1000){
+        function __construct($url,$email_operator,$extlinks_bl,$pages_per_query=100,$public_html_path,$json_file,$json_file_cache,$json_file_max_size=1000,$redis_server=null){
                 
                 if(!is_array($extlinks_bl)) $extlinks_bl = null;
                 if(!is_int($pages_per_query)) $pages_per_query = 100;
@@ -387,6 +388,11 @@ class WebArchiveBOT extends Wiki {
                 $this->json_file = $json_file;
                 $this->json_file_cache = $json_file_cache;
                 $this->json_file_max_size = $json_file_max_size;
+                $this->redis_server = $redis_server;
+                $this->redis_port = $redis_port;
+                $this->redis_id = 'WebArchiveBOT_'.hash('sha512',get_current_user().bin2hex(openssl_random_pseudo_bytes(30)));
+         
+                @file_put_contents($this->public_html_path.'/.redis_id',$this->redis_id);
         }
 
         /**
@@ -594,10 +600,21 @@ class WebArchiveBOT extends Wiki {
 
                 if(!is_array($data)) return false;
                 $data = array_slice($data,0,50,true);
-
-                $data = json_encode($data,JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE,8);
-                if(file_put_contents("$this->public_html_path/$this->json_file_cache",$data,LOCK_EX) != false) return true;
-                else return false;
+         
+                // Store in Redis
+                if(class_exists('Redis') && !empty($this->redis_server) && !empty($this->redis_port) && !empty($this->redis_id)){
+                        $redis = new Redis();
+                        $redis->pconnect($this->redis_server,$this->redis_port,0,$this->redis_id);
+                 
+                        if($redis->set('list',serialize($data))) return true;
+                        else return false;
+                
+                // Store in on-disk JSON file
+                }else{
+                        $data = json_encode($data,JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE,8);
+                        if(file_put_contents("$this->public_html_path/$this->json_file_cache",$data,LOCK_EX) != false) return true;
+                        else return false;
+                }
         }
 
         /**
