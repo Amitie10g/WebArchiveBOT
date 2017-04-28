@@ -539,6 +539,7 @@ class WebArchiveBOT extends Wiki {
 
         /**
          * Step two of the Archive process: Get the archived pages stored in the local JSON file, if exists, and append the new pages uploaded
+         * @para array $data Then incomming data (retrived from the first step) to be added to the previous data (the existing JSON file)
          * @return array the contents from the local JSON
         **/
         function archive2($data){
