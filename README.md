@@ -33,3 +33,8 @@ To run the backend script in Windows, create a batch script to execute php-cli (
     php WebArchiveBOT.sh
 
 Ensure the "WebArchiveBOT.sh" has exec permissions
+
+## TODO
+
+* Auto-rotate JSON file (to presserve archives and avoid data loss).
+* Use memcached for the List of files used for the frontend instead of JSON on disk.
