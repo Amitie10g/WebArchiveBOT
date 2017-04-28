@@ -4,7 +4,7 @@
   *
   * @copyright (c) 2015-2017  Davod - https://commons.wikimedia.org/wiki/User:Amitie_10g
   *
-  * Contains parts of the Chris G's Bot classes library
+  * Contains parts of the Chris G's Bot classes library - https://www.mediawiki.org/wiki/Manual:Chris_G%27s_botclasses
   *
   *  (c) 2008-2012       Chris G http://en.wikipedia.org/wiki/User:Chris_G
   *  (c) 2009-2010       Fale    http://en.wikipedia.org/wiki/User:Fale
@@ -183,6 +183,7 @@ class http {
 
 /**
  * This class interacts with the Wiki using api.php.
+ * This is a modified version of the original class.
  * @author Chris G and Cobi.
  * @property string $url The Project URL (API path).
  **/
@@ -346,7 +347,6 @@ class Wiki {
  * @property string $json_file The compressed JSON file.
  * @property string $json_file_cache the plain JSON file to be used for the Page.
  * @property int $json_file_max_size The maximum ammount files stored in the JSON file (1000 by default).
-
  **/
 class WebArchiveBOT extends Wiki {
         public $url;
