@@ -343,6 +343,7 @@ class Wiki {
  **/
 class WebArchiveBOT extends Wiki {
         public $url;
+        private $site_url;
         private $email_operator;
         private $extlinks_bl;
         private $pages_per_query;
