@@ -339,7 +339,14 @@ class Wiki {
  * This class is intended to do the archiving.
  * @author Davod
  * @property string $url The Project URL (API path)
- * @property string $site_url The project URL (main page)
+ * @property string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error
+ * @property array $extlinks_bl The blacklisted URLs to exclude for archiving
+ * @property int $pages_per_query The maximum pages retrived per query (iteration) (100 by default)
+ * @property string $public_html_path The path to the public_html directory, where the JSONs will be stored
+ * @property string $json_file The compressed JSON file
+ * @property string $json_file_cache the plain JSON file to be used for the Page
+ * @property int $json_file_max_size The maximum ammount files stored in the JSON file (1000 by default)
+
  **/
 class WebArchiveBOT extends Wiki {
         public $url;
@@ -399,7 +406,7 @@ class WebArchiveBOT extends Wiki {
 
         /**
          * Get a list of the latest files uploaded to Commons
-         * @param int $limit The maximum pages retrived
+         * @param void
          * @return array The API result (the list of the latest files uploaded)
         **/
         function getLatestFiles(){
@@ -453,15 +460,51 @@ class WebArchiveBOT extends Wiki {
                 return $links;
         }
 
+         /**
+         * Parse URLs and retrive the Archived version at Wayback Machine
+         * @param array $urls the URLs to be parsed
+         * @return array the Wayback Machine URLs retrived
+        **/
+        function urls2archive_urls($urls){
+                foreach($urls as $url){
+                 
+                        if(preg_match($this->extlinks_bl,$url)) continue;
+
+                        $archive_g = file_get_contents('http://archive.org/wayback/available?url='.urlencode($url));
+                        if($archive_g != '{"archived_snapshots":{}}'){
+                                $archive = json_decode($archive_g,true);
+                                $archive_timestamp = strtotime($archive['archived_snapshots']['closest']['timestamp']);
+                        }
+
+                        $timestamp = time();
+                        if(!is_int($archive_timestamp)) $archive_timestamp = 0;
+                        $window_time = $timestamp-$archive_timestamp;
+
+                        if($window_time >= 172800){
+                                $headers = @get_headers("https://web.archive.org/save/$url",1);
+                         
+                                if($headers[0] == "HTTP/1.1 403 FORBIDDEN") continue;
+
+                                $location = $headers['Content-Location'];
+
+                                if(!empty($location)){
+                                        if(is_array($location)) $location = end($location);
+                                        if(preg_match("/^\/web\/[0-9]{14}\/[\p{L}\p{N}\p{S}\p{P}\p{M}\p{Zs}]+$/",$location) === 1) $archive_urls[] = "https://web.archive.org$location";
+                                        else echo "Wrong location: $location\n";
+                                }
+                        }
+                }
+         
+                if(!empty($archive_urls)) return array_unique($archive_urls);
+        }
+ 
         /**
          * Do the queries to save the given links to Web Archive, and check if them was already archived
-         * @param array $links_g The links (with the pagename as key) to save. The array should be composed as:
+         * @param array $data The links (with the pagename as key) to save. The array should be composed as:
          * * key: Canonical pagename
          * * value: array:
          *   * 'timestamp': The timestamp of the file uploaded to Wiki
          *   * 'urls': The array with the URLs associated with the Pagename
-         * @param string $json_file The JSON file to store the results (gzipped). It should be writable.
-         * @param string $json_file_cache The JSON file to store the results (cache, latest 100 ones).
          * @return bool true if everything is OK, or false in case of any error.
         **/
         function archive($data){
@@ -496,8 +539,6 @@ class WebArchiveBOT extends Wiki {
 
         /**
          * Step two of the Archive process: Get the archived pages stored in the local JSON file, if exists, and append the new pages uploaded
-         * @param array $data the array containing the data retrived in the first step
-         * @param string $json_file the local JSON file (GZIP compressed)
          * @return array the contents from the local JSON
         **/
         function archive2($data){
@@ -512,8 +553,6 @@ class WebArchiveBOT extends Wiki {
         /**
          * Step three of the Archive process: Write the data retrived from the new files uploaded and the previous local JSON to the local JSON
          * @param array $data the data to be writen
-         * @param string $json_file the local JSON filename
-         * @param string $json_file_cache the local JSON filename (cache, to be used for the web application)
          * @return bool true if success, false if fail
         **/
         function archive3($data){
@@ -527,7 +566,6 @@ class WebArchiveBOT extends Wiki {
         /**
          * Step 3.1 of the Archive process: Write the JSON file
          * @param array $data the data to be writen
-         * @param string $json_file the JSON filename
          * @return bool true if success, false if error
         **/
         function archive31($data){
@@ -544,7 +582,6 @@ class WebArchiveBOT extends Wiki {
         /**
          * Step 3.2 of the Archive process: Write the JSON cache file
          * @param array $data the data to be writen
-         * @param string $json_file the JSON filename
          * @return bool true if success, false if error
         **/
         function archive32($data){
@@ -555,44 +592,6 @@ class WebArchiveBOT extends Wiki {
                 $data = json_encode($data,JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE,8);
                 if(file_put_contents("$this->public_html_path/$this->json_file_cache",$data,LOCK_EX) != false) return true;
                 else return false;
-        }
-
-        /**
-         * Parse URLs and retrive the Archived version at Wayback Machine
-         * @param array $urls the URLs to be parsed
-         * return array the Wayback Machine URLs retrived
-        **/
-        function urls2archive_urls($urls){
-                foreach($urls as $url){
-                 
-                        if(preg_match($this->extlinks_bl,$url)) continue;
-
-                        $archive_g = file_get_contents('http://archive.org/wayback/available?url='.urlencode($url));
-                        if($archive_g != '{"archived_snapshots":{}}'){
-                                $archive = json_decode($archive_g,true);
-                                $archive_timestamp = strtotime($archive['archived_snapshots']['closest']['timestamp']);
-                        }
-
-                        $timestamp = time();
-                        if(!is_int($archive_timestamp)) $archive_timestamp = 0;
-                        $window_time = $timestamp-$archive_timestamp;
-
-                        if($window_time >= 172800){
-                                $headers = @get_headers("https://web.archive.org/save/$url",1);
-                         
-                                if($headers[0] == "HTTP/1.1 403 FORBIDDEN") continue;
-
-                                $location = $headers['Content-Location'];
-
-                                if(!empty($location)){
-                                        if(is_array($location)) $location = end($location);
-                                        if(preg_match("/^\/web\/[0-9]{14}\/[\p{L}\p{N}\p{S}\p{P}\p{M}\p{Zs}]+$/",$location) === 1) $archive_urls[] = "https://web.archive.org$location";
-                                        else echo "Wrong location: $location\n";
-                                }
-                        }
-                }
-         
-                if(!empty($archive_urls)) return array_unique($archive_urls);
         }
 
         /**
