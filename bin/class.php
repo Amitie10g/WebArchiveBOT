@@ -534,7 +534,6 @@ class WebArchiveBOT extends Wiki {
 
                 if(!is_array($data)) return false;
                 if(!is_int($this->json_file_max_size)) $this->json_file_max_size = 1000;
-var_dump($this->json_file_max_size);
                 $data = array_slice($data,0,$this->json_file_max_size,true);
                 $data = gzencode(json_encode($data,JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE,8),9);
 
