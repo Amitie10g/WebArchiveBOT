@@ -372,12 +372,12 @@ class WebArchiveBOT extends Wiki {
           * @param string $redis_server The Redis server if used.
           * @return void
          **/
-        function __construct($url,$email_operator,$extlinks_bl,$pages_per_query=100,$public_html_path,$json_file,$json_file_cache,$json_file_max_size=1000,$redis_server=null){
+        function __construct($url,$email_operator,$extlinks_bl,$pages_per_query=100,$public_html_path,$json_file,$json_file_cache,$json_file_max_size=1000,$redis_server,$redis_port){
                 
                 if(!is_array($extlinks_bl)) $extlinks_bl = null;
                 if(!is_int($pages_per_query)) $pages_per_query = 100;
                 if(!is_int($json_file_max_size)) $json_file_max_size = 1000;
-         
+
                 Wiki::__construct($url); // Pass main parameter to parent Class' __construct()
                 $this->site_url = parse_url($this->url);
                 $this->site_url = $this->site_url['scheme'].'://'.$this->site_url['host'].'/wiki/';
