@@ -28,7 +28,7 @@ if(!defined('IN_WEBARCHIVEBOT')){
     die;
 }
 
-if(class_exists('Redis') && is_file(.redis_id)){
+if(class_exists('Redis') && is_file('.redis_id')){
 	
 	$redis = new Redis();
 	$redis->pconnect($redis_server,$redis_port,0,$redis_id);
