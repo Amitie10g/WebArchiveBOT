@@ -360,7 +360,7 @@ class WebArchiveBOT extends Wiki {
         private $json_file_max_size;
         private $redis_server;
         private $redis_port;
-        private $redis__id;
+        private $redis_id;
 
         /**
           * This is the constructor.
