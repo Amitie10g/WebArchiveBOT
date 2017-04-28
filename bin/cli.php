@@ -117,6 +117,7 @@ while(true){
 
         try{
                 $files  = $wiki->getLatestFiles();
+var_dump($files);
                 $links  = $wiki->getPagesExternalLinks($files);
                 $result = $wiki->archive($links);
 
