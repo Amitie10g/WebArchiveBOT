@@ -343,9 +343,12 @@ class Wiki {
  **/
 class WebArchiveBOT extends Wiki {
         public $url;
-        private $site_url;
         private $email_operator;
         private $extlinks_bl;
+        private $pages_per_query;
+        private $public_html_path;
+        private $json_file;
+        private $json_file_cache;
         private $json_file_max_size;
 
         /**
@@ -355,12 +358,21 @@ class WebArchiveBOT extends Wiki {
           * @param mail_operator The Operator's email address
           * @return void
          **/
-        function __construct($url,$email_operator,$extlinks_bl,$json_file_max_size){
+        function __construct($url,$email_operator,$extlinks_bl,$pages_per_query=100,$public_html_path,$json_file,$json_file_cache,$json_file_max_size=1000){
+                
+                if(!is_array($extlinks_bl)) $extlinks_bl = null;
+                if(!is_int($pages_per_query)) $pages_per_query = 100;
+                if(!is_int($json_file_max_size)) $json_file_max_size = 1000;
+         
                 Wiki::__construct($url); // Pass main parameter to parent Class' __construct()
                 $this->site_url = parse_url($this->url);
                 $this->site_url = $this->site_url['scheme'].'://'.$this->site_url['host'].'/wiki/';
                 $this->email_operator = $email_operator;
                 $this->extlinks_bl = '/('.implode('|',$extlinks_bl).')/';
+                $this->pages_per_query = $pages_per_query;
+                $this->public_html_path = $public_html_path;
+                $this->json_file = $json_file;
+                $this->json_file_cache = $json_file_cache;
                 $this->json_file_max_size = $json_file_max_size;
         }
 
@@ -389,9 +401,8 @@ class WebArchiveBOT extends Wiki {
          * @param int $limit The maximum pages retrived
          * @return array The API result (the list of the latest files uploaded)
         **/
-        function getLatestFiles($limit=null){
-                if(!is_int($limit)) $limit = 10;
-                $query = "?action=query&list=allimages&format=php&aisort=timestamp&aidir=older&aiprop=timestamp%7Ccanonicaltitle&ailimit=$limit";
+        function getLatestFiles(){
+                $query = "?action=query&list=allimages&format=php&aisort=timestamp&aidir=older&aiprop=timestamp%7Ccanonicaltitle&ailimit=$this->pages_per_query";
                 $query = $this->query($query);
                 return $query['query']['allimages'];
         }
@@ -424,7 +435,7 @@ class WebArchiveBOT extends Wiki {
          * @param array $haystack The array where find in.
          * @return array The desired data ordered
         **/
-        function getPagesExternalLinks($query,$extlinks_bl){
+        function getPagesExternalLinks($query){
                 foreach($query as $page){
 
                         $canonicaltitle = $page['canonicaltitle'];
@@ -451,15 +462,15 @@ class WebArchiveBOT extends Wiki {
          * @param string $json_file_cache The JSON file to store the results (cache, latest 100 ones).
          * @return bool true if everything is OK, or false in case of any error.
         **/
-        function archive($data,$json_file,$json_file_cache){
+        function archive($data){
 
                 if(!is_array($data)) return false;
                 $data = $this->archive1($data);
 
                 if(empty($data)) return false;
-                $data = $this->archive2($data,$json_file);
+                $data = $this->archive2($data);
 
-                return $this->archive3($data,$json_file,$json_file_cache);
+                return $this->archive3($data);
         }
 
         /**
@@ -487,10 +498,9 @@ class WebArchiveBOT extends Wiki {
          * @param string $json_file the local JSON file (GZIP compressed)
          * @return array the contents from the local JSON
         **/
-        function archive2($data,$json_file){
-
+        function archive2($data){
                 if(!is_array($data)) return false;
-                if(is_file($json_file)) $json_data = json_decode(gzdecode(file_get_contents($json_file)),true);
+                if(is_file("$this->public_html_path/$this->json_file")) $json_data = json_decode(gzdecode(file_get_contents($json_file)),true);
                 if(is_array($json_data)) $data = $data + $json_data;
                 array_multisort($data,SORT_DESC);
 
@@ -504,10 +514,10 @@ class WebArchiveBOT extends Wiki {
          * @param string $json_file_cache the local JSON filename (cache, to be used for the web application)
          * @return bool true if success, false if fail
         **/
-        function archive3($data,$json_file,$json_file_cache){
+        function archive3($data){
 
-                $json_wrote = $this->archive31($data,$json_file);
-                $json_cache_wrote = $this->archive32($data,$json_file_cache);
+                $json_wrote = $this->archive31($data);
+                $json_cache_wrote = $this->archive32($data);
                 if($json_wrote && $json_cache_wrote) return true;
                 else return false;
         }
@@ -518,14 +528,14 @@ class WebArchiveBOT extends Wiki {
          * @param string $json_file the JSON filename
          * @return bool true if success, false if error
         **/
-        function archive31($data,$json_file){
+        function archive31($data){
 
                 if(!is_array($data)) return false;
                 if(!is_int($this->json_file_max_size)) $this->json_file_max_size = 1000;
                 $data = array_slice($data,0,$this->json_file_max_size,true);
                 $data = gzencode(json_encode($data,JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE,8),9);
 
-                if(file_put_contents($json_file,$data,LOCK_EX) != false) return true;
+                if(file_put_contents("$this->public_html_path/$this->json_file",$data,LOCK_EX) != false) return true;
                 else return false;
         }
 
@@ -535,13 +545,13 @@ class WebArchiveBOT extends Wiki {
          * @param string $json_file the JSON filename
          * @return bool true if success, false if error
         **/
-        function archive32($data,$json_file){
+        function archive32($data){
 
                 if(!is_array($data)) return false;
                 $data = array_slice($data,0,50,true);
 
                 $data = json_encode($data,JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE,8);
-                if(file_put_contents($json_file,$data,LOCK_EX) != false) return true;
+                if(file_put_contents("$this->public_html_path/$this->json_file_cache",$data,LOCK_EX) != false) return true;
                 else return false;
         }
 
