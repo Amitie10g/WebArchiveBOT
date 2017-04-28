@@ -395,8 +395,6 @@ class WebArchiveBOT extends Wiki {
                 $this->redis_port = $redis_port;
                 $this->redis_id = 'WebArchiveBOT_'.hash('sha512',get_current_user().bin2hex(openssl_random_pseudo_bytes(30)));
          
-         var_dump($this->redis_id);
-         
                 file_put_contents($this->public_html_path.'/.redis_id',$this->redis_id);
         }
 
