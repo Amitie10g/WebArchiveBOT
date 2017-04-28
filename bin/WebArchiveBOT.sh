@@ -37,6 +37,8 @@ $json_file = 'archived.json.gz'; // Compressed JSON filename
 $json_file_cache = 'archived.json'; // Uncompressed JSON filename, for caching
 $json_file_max_size = 1000; //Maximum ammount of files stored in the JSON
 $email_operator = '';
+$redis_server = '';
+$redis_port = '6379';
 
 // Excluded external links (valid REGEX pattern, each one enclosed with parenthesis)
 $extlinks_bl[] = '(([\p{P}\p{N}]+\.)*google\.[\p{L}\p{N}]+)';
