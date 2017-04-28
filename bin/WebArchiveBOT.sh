@@ -40,7 +40,7 @@ $json_file_cache = 'archived.json'; // Uncompressed JSON filename, for caching
 $json_file_max_size = 1000; //Maximum ammount of files stored in the JSON
 $email_operator = '';
 
-// Excluded external links
+// Excluded external links (valid REGEX pattern, each one enclosed with parenthesis)
 $extlinks_bl[] = '(([\p{P}\p{N}]+\.)*google\.[\p{L}\p{N}]+)';
 $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*openstreetmap\.[\p{L}\p{N}]+)';
 $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*creativecommons\.[\p{L}\p{N}]+)';
