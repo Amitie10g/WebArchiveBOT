@@ -39,8 +39,6 @@ if(class_exists('Redis') && is_file('.redis_id')){
 	$list = json_decode(file_get_contents($json_file_cache),true);
 }
 
-var_dump($list);
-
 ?><?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
