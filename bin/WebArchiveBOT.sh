@@ -1,7 +1,7 @@
 #!/usr/bin/php
 <?php
 /**
- * WebArchiveBOT: botclases.php based MediaWiki for archiving external links to Web Archive
+ * WebArchiveBOT: botclases.php based MediaWiki script for archiving external links to Internet Archive Wayback Machine.
  *
  *  @copyright (c) 2015-2017 Davod - https://commons.wikimedia.org/wiki/User:Amitie_10g
  *
