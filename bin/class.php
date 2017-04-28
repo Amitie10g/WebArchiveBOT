@@ -437,6 +437,8 @@ class WebArchiveBOT extends Wiki {
          * @return array The desired data ordered
         **/
         function getPagesExternalLinks($query){
+var_dump($query);
+         
                 foreach($query as $page){
 
                         $canonicaltitle = $page['canonicaltitle'];
