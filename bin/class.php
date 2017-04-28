@@ -358,6 +358,9 @@ class WebArchiveBOT extends Wiki {
         private $json_file;
         private $json_file_cache;
         private $json_file_max_size;
+        private $redis_server;
+        private $redis_port;
+        private $redis__id;
 
         /**
           * This is the constructor.
@@ -372,7 +375,7 @@ class WebArchiveBOT extends Wiki {
           * @param string $redis_server The Redis server if used.
           * @return void
          **/
-        function __construct($url,$email_operator,$extlinks_bl,$pages_per_query=100,$public_html_path,$json_file,$json_file_cache,$json_file_max_size=1000,$redis_server,$redis_port){
+        function __construct($url,$email_operator,$extlinks_bl,$pages_per_query=100,$public_html_path,$json_file,$json_file_cache,$json_file_max_size=1000,$redis_server=null,$redis_port=null){
                 
                 if(!is_array($extlinks_bl)) $extlinks_bl = null;
                 if(!is_int($pages_per_query)) $pages_per_query = 100;
