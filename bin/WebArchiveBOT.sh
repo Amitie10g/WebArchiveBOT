@@ -34,9 +34,10 @@ $wiki_password = '';
 $wiki_url = 'https://commons.wikimedia.org/w/api.php'; // https://commons.wikimedia.org/w/api.php
 $pages_per_query = 100; // This should be 100 for normal users, much more for bots
 $interval = 10; // Interval between every execution in minutes
-$json_file = 'archived.json.gz'; // Compressed JSON (Absolute path!)
-$json_file_cache = 'archived.json'; // Uncompressed JSON for caching (Absolute path!)
-$json_file_max_size = 1000; //Maximum ammou8nt of files stored in the JSON
+$public_html_path = ''; // Path to public_html directory, where the JSON fires will be stored (absolute path!)
+$json_file = 'archived.json.gz'; // Compressed JSON filename
+$json_file_cache = 'archived.json'; // Uncompressed JSON filename, for caching
+$json_file_max_size = 1000; //Maximum ammount of files stored in the JSON
 $email_operator = '';
 
 // Excluded external links
