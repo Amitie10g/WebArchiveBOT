@@ -1,5 +1,4 @@
 <?php
-
 /**
  * WebArchiveBOT: botclases.php based MediaWiki for archiving external links to Web Archive
  *
