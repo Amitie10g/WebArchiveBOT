@@ -36,7 +36,6 @@
   *      Sean    - [[User:SColombo]]     - Wrote the lyricwiki class (now moved to lyricswiki.php)
   *      Brain   - [[User:Brian_McNeil]] - Wrote wikipedia->getfileuploader() and wikipedia->getfilelocation
   *      Davod   - [[User:Amitie_10g]]   - See bellow:
-  *
 **/
 
 /**
