@@ -28,7 +28,16 @@ if(!defined('IN_WEBARCHIVEBOT')){
     die;
 }
 
-$json_contents = json_decode(file_get_contents($json_file_cache),true);
+if(class_exists('Redis') && is_file(.redis_id)){
+	
+	$redis = new Redis();
+	$redis->pconnect($redis_server,$redis_port,0,$redis_id);
+
+	$list = unserialize($redis->get('list'));
+	
+}else{
+	$list = json_decode(file_get_contents($json_file_cache),true);
+}
 
 ?><?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -61,9 +70,9 @@ $json_contents = json_decode(file_get_contents($json_file_cache),true);
 		For more information, see the <a href="doc" target="blank">Documentation</a>. <a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU Affero General Public License v3.</p>
 	</div>
 	<div>
-<?php if(is_file($json_file_cache)){
+<?php if(!empty($list)){
 
-	foreach($json_contents as $title=>$item){
+	foreach($list as $title=>$item){
 ?>
 		<h2><a href="<?= $site_url ?><?= str_replace(array('%3A','%2F','%3F','%26','%3D','%23'),array(':','/','?','&','=','#'),rawurlencode($title)) ?>" target="blank"><?= $title ?></a></h2>
 		<b>Uploaded: </b><?= strftime("%F %T",$item['timestamp']) ?> (UTC)
