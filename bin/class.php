@@ -404,10 +404,7 @@ class WebArchiveBOT extends Wiki {
         **/
         function getLatestFiles(){
                 $query = "?action=query&list=allimages&format=php&aisort=timestamp&aidir=older&aiprop=timestamp%7Ccanonicaltitle&ailimit=$this->pages_per_query";
- 
-var_dump($query);
-         
-         $query = $this->query($query);
+                $query = $this->query($query);
                 return $query['query']['allimages'];
         }
 
@@ -565,10 +562,7 @@ var_dump($query);
          * return array the Wayback Machine URLs retrived
         **/
         function urls2archive_urls($urls){
-
                 foreach($urls as $url){
-                 
-var_dump($urls);
                  
                         if(preg_match($this->extlinks_bl,$url)) continue;
 
