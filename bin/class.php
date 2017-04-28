@@ -337,16 +337,16 @@ class Wiki {
 
 /**
  * This class is intended to do the archiving.
- * @author Davod
- * @property string $url The Project URL (API path)
- * @property string $site_url The Project URL (website)
- * @property string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error
- * @property array $extlinks_bl The blacklisted URLs to exclude for archiving
- * @property int $pages_per_query The maximum pages retrived per query (iteration) (100 by default)
- * @property string $public_html_path The path to the public_html directory, where the JSONs will be stored
- * @property string $json_file The compressed JSON file
- * @property string $json_file_cache the plain JSON file to be used for the Page
- * @property int $json_file_max_size The maximum ammount files stored in the JSON file (1000 by default)
+ * @author Davod.
+ * @property string $url The Project URL (API path).
+ * @property string $site_url The Project URL (website).
+ * @property string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error.
+ * @property array $extlinks_bl The blacklisted URLs to exclude for archiving.
+ * @property int $pages_per_query The maximum pages retrived per query (iteration) (100 by default).
+ * @property string $public_html_path The path to the public_html directory, where the JSONs will be stored.
+ * @property string $json_file The compressed JSON file.
+ * @property string $json_file_cache the plain JSON file to be used for the Page.
+ * @property int $json_file_max_size The maximum ammount files stored in the JSON file (1000 by default).
 
  **/
 class WebArchiveBOT extends Wiki {
@@ -361,15 +361,15 @@ class WebArchiveBOT extends Wiki {
         private $json_file_max_size;
 
         /**
-          * This is the constructor
-          * @param string $url The Project URL (API path)
-          * @param string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error
-          * @param array $extlinks_bl The blacklisted URLs to exclude for archiving
-          * @param int $pages_per_query The maximum pages retrived per query (iteration) (100 by default)
-          * @param string $public_html_path The path to the public_html directory, where the JSONs will be stored
-          * @param string $json_file The compressed JSON file
-          * @param string $json_file_cache the plain JSON file to be used for the Page
-          * @param int $json_file_max_size The maximum ammount files stored in the JSON file (1000 by default)
+          * This is the constructor.
+          * @param string $url The Project URL (API path).
+          * @param string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error.
+          * @param array $extlinks_bl The blacklisted URLs to exclude for archiving.
+          * @param int $pages_per_query The maximum pages retrived per query (iteration) (100 by default).
+          * @param string $public_html_path The path to the public_html directory, where the JSONs will be stored.
+          * @param string $json_file The compressed JSON file.
+          * @param string $json_file_cache the plain JSON file to be used for the Page.
+          * @param int $json_file_max_size The maximum ammount files stored in the JSON file (1000 by default).
           * @return void
          **/
         function __construct($url,$email_operator,$extlinks_bl,$pages_per_query=100,$public_html_path,$json_file,$json_file_cache,$json_file_max_size=1000){
@@ -391,10 +391,10 @@ class WebArchiveBOT extends Wiki {
         }
 
         /**
-         * Get the contents from the Wiki page. This is an alternative for getpage() with more features
-         * @param $page The page that we're working
-         * @param $props The properties that we want to obtain from the query (string or array)
-         * @return array The API result (page contents and metadata in the desired format)
+         * Get the contents from the Wiki page. This is an alternative for getpage() with more features.
+         * @param $page The page that we're working.
+         * @param $props The properties that we want to obtain from the query (string or array).
+         * @return array The API result (page contents and metadata in the desired format).
         **/
         function getPageContents($page,$props=null){
 
@@ -411,9 +411,9 @@ class WebArchiveBOT extends Wiki {
         }
 
         /**
-         * Get a list of the latest files uploaded to Commons
+         * Get a list of the latest files uploaded to Commons.
          * @param void
-         * @return array The API result (the list of the latest files uploaded)
+         * @return array The API result (the list of the latest files uploaded).
         **/
         function getLatestFiles(){
                 $query = "?action=query&list=allimages&format=php&aisort=timestamp&aidir=older&aiprop=timestamp%7Ccanonicaltitle&ailimit=$this->pages_per_query";
@@ -422,13 +422,13 @@ class WebArchiveBOT extends Wiki {
         }
 
         /**
-         * Wraper for in_array() that also parse regex
+         * Wraper for in_array() that also parse regex.
          * @param mixed $needle The value to find.
          * @param array $haystack The array where find in.
          * @param bool $regex To allow or not regex (contents in $haystack should be string and valid regex).
          * If false, then, in_array() will be used. Used only for regex, does not matter for non-regex search.
-         * @param bool $inverse To match or not the regex (no match is done with '?!')
-         * @return bool true if value were found in the array, false if not
+         * @param bool $inverse To match or not the regex (no match is done with '?!').
+         * @return bool true if value were found in the array, false if not.
         **/
         function inArray($needle,$haystack,$regex=false,$inverse=false){
                 if(empty($needle)) return false;
@@ -444,10 +444,10 @@ class WebArchiveBOT extends Wiki {
         }
 
         /**
-         * List the Pagenames list with the Timestamp and external links in an array, suitable for archive()
-         * @param array $query The query result from getLatestFiles(), $files['query']['allimages']
+         * List the Pagenames list with the Timestamp and external links in an array, suitable for archive().
+         * @param array $query The query result from getLatestFiles(), $files['query']['allimages'].
          * @param array $haystack The array where find in.
-         * @return array The desired data ordered
+         * @return array The desired data ordered.
         **/
         function getPagesExternalLinks($query){
                 foreach($query as $page){
@@ -467,9 +467,9 @@ class WebArchiveBOT extends Wiki {
         }
 
          /**
-         * Parse URLs and retrive the Archived version at Wayback Machine
-         * @param array $urls the URLs to be parsed
-         * @return array the Wayback Machine URLs retrived
+         * Parse URLs and retrive the Archived version at Wayback Machine.
+         * @param array $urls the URLs to be parsed.
+         * @return array the Wayback Machine URLs retrived.
         **/
         function urls2archive_urls($urls){
                 foreach($urls as $url){
@@ -505,12 +505,12 @@ class WebArchiveBOT extends Wiki {
         }
  
         /**
-         * Do the queries to save the given links to Web Archive, and check if them was already archived
+         * Do the queries to save the given links to Web Archive, and check if them was already archived.
          * @param array $data The links (with the pagename as key) to save. The array should be composed as:
          * * key: Canonical pagename
          * * value: array:
-         *   * 'timestamp': The timestamp of the file uploaded to Wiki
-         *   * 'urls': The array with the URLs associated with the Pagename
+         *   * 'timestamp': The timestamp of the file uploaded to Wiki.
+         *   * 'urls': The array with the URLs associated with the Pagename.
          * @return bool true if everything is OK, or false in case of any error.
         **/
         function archive($data){
@@ -525,9 +525,9 @@ class WebArchiveBOT extends Wiki {
         }
 
         /**
-         * Step one of the Archive process: Query to Wayback Machine to archive the links and get the Archived URLs
-         * @param array $data_g the array containing the filenames and URLs
-         * @return array the data given with $data_g, with the Wayback Machine URLs instead
+         * Step one of the Archive process: Query to Wayback Machine to archive the links and get the Archived URLs.
+         * @param array $data_g the array containing the filenames and URLs.
+         * @return array the data given with $data_g, with the Wayback Machine URLs instead.
         **/
         function archive1($data_g){
 
@@ -544,9 +544,9 @@ class WebArchiveBOT extends Wiki {
         }
 
         /**
-         * Step two of the Archive process: Get the archived pages stored in the local JSON file, if exists, and append the new pages uploaded
-         * @para array $data Then incomming data (retrived from the first step) to be added to the previous data (the existing JSON file)
-         * @return array the contents from the local JSON
+         * Step two of the Archive process: Get the archived pages stored in the local JSON file, if exists, and append the new pages uploaded.
+         * @param array $data Then incomming data (retrived from the first step) to be added to the previous data (the existing JSON file).
+         * @return array the contents from the local JSON.
         **/
         function archive2($data){
                 if(!is_array($data)) return false;
@@ -558,9 +558,9 @@ class WebArchiveBOT extends Wiki {
         }
 
         /**
-         * Step three of the Archive process: Write the data retrived from the new files uploaded and the previous local JSON to the local JSON
-         * @param array $data the data to be writen
-         * @return bool true if success, false if fail
+         * Step three of the Archive process: Write the data retrived from the new files uploaded and the previous local JSON to the local JSON.
+         * @param array $data the data to be writen.
+         * @return bool true if success, false if fail.
         **/
         function archive3($data){
 
@@ -571,9 +571,9 @@ class WebArchiveBOT extends Wiki {
         }
 
         /**
-         * Step 3.1 of the Archive process: Write the JSON file
-         * @param array $data the data to be writen
-         * @return bool true if success, false if error
+         * Step 3.1 of the Archive process: Write the JSON file.
+         * @param array $data the data to be writen.
+         * @return bool true if success, false if error.
         **/
         function archive31($data){
 
@@ -587,9 +587,9 @@ class WebArchiveBOT extends Wiki {
         }
 
         /**
-         * Step 3.2 of the Archive process: Write the JSON cache file
-         * @param array $data the data to be writen
-         * @return bool true if success, false if error
+         * Step 3.2 of the Archive process: Write the JSON cache file.
+         * @param array $data the data to be writen.
+         * @return bool true if success, false if error.
         **/
         function archive32($data){
 
@@ -602,9 +602,9 @@ class WebArchiveBOT extends Wiki {
         }
 
         /**
-         * Send email (mostly for errors)
-         * @param string $message the message
-         * @param string $subject the subject ("Errors with WebArchiveBOT" by default)
+         * Send email (mostly for errors).
+         * @param string $message the message.
+         * @param string $subject the subject ("Errors with WebArchiveBOT" by default).
          * @return void
         **/
         function sendMail($message,$subject=null){
