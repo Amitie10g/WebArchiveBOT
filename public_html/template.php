@@ -33,7 +33,7 @@ if(class_exists('Redis') && is_file('.redis_id')){
 	$redis = new Redis();
 	$redis->pconnect($redis_server,$redis_port,0,$redis_id);
 
-	$list = /*unserialize(*/$redis->get('list')/*)*/;
+	$list = unserialize($redis->get('list'));
 	
 }else{
 	$list = json_decode(file_get_contents($json_file_cache),true);
