@@ -26,16 +26,68 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 if(php_sapi_name() == "cli") die("\nThis script should be executed from Web.\n");
 
-$site_url			= 'https://commons.wikimedia.org/wiki/'; // https://commons.wikimedia.org/wiki/
-$sitename			= 'Wikimedia Commons'; // Wikimedia Commons
-$json_file			= 'archived.json.gz'; // The gzipped JSON file path
-$json_file_cache 	= 'archived.json'; // The cached, plain JSON file path (to be used by the page)
-$json_file_max_size = 1000; // Tme maximum size of the JSON file defined at the backend script
-$redis_server		= '';
-$redis_port			= '6379';
-$redis_id			= @file_get_contents('.redis_id');
+require_once('.config.php');
 
-define('IN_WEBARCHIVEBOT',true);
+if(!defined('IN_WEBARCHIVEBOT')){
+	header('HTTP/1.0 403 Forbidden');
+	die;
+}
 
-require_once('template.php');
+if(class_exists('Redis') && is_file('.redis_id')){
+	$redis = new Redis();
+	$redis->pconnect($redis_server,$redis_port,0,$redis_id);
+	$list = unserialize($redis->get('list'));
+}else{
+	$list = json_decode(file_get_contents($json_file_cache),true);
+}
+?><!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>WebArchiveBOT, archived items</title>
+		<meta http-equiv="refresh" content="120" />
+		<style type="text/css">
+			body{
+				font-family:Roboto,droid-sans,Arial,sans-serif;
+			}
+			h1{
+				font-size:16pt;
+			}
+			h2{
+				font-size:14pt;
+			}
+			a {
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<h1>WebArchiveBOT, archived items</h1>
+			<p>This page lists the last 50 files uploaded to <?= $sitename ?> and their links archived at Internet Archive by Wayback Machine.
+			You can download the <a href="<?= $json_file ?>">latest  <?= number_format($json_file_max_size,0,'','.') ?> files listed in JSON format</a>.</p>
+			<p>For more information, see the <a href="doc" target="blank">Documentation</a>.
+			<a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU Affero General Public License v3.</p>
+		</div>
+		<div>
+<?php if(!empty($list)){
+
+	foreach($list as $title=>$item){
+?>
+			<h2><a href="<?= $site_url ?><?= str_replace(array('%3A','%2F','%3F','%26','%3D','%23'),array(':','/','?','&','=','#'),rawurlencode($title)) ?>" target="blank"><?= $title ?></a></h2>
+			<b>Uploaded: </b><?= strftime("%F %T",$item['timestamp']) ?> (UTC)
+			<ul>
+<?php foreach($item['urls'] as $link){ ?>
+				<li><a href="<?= str_replace(array('%3A','%2F','%3F','%26','%3D','%23'),array(':','/','?','&','=','#'),rawurlencode($link)) ?>" target="blank"><?= $link ?></a></li>
+<?php } ?>
+			</ul>
+<?php } ?>
+<?php }else{ ?>
+			<p>No links archived yet</p>
+<?php   } ?>
+		</div>
+	</body>
+</html>
 ?>
