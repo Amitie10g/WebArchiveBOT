@@ -28,11 +28,6 @@ if(php_sapi_name() == "cli") die("\nThis script should be executed from Web.\n")
 
 require_once('.config.php');
 
-if(!defined('IN_WEBARCHIVEBOT')){
-	header('HTTP/1.0 403 Forbidden');
-	die;
-}
-
 if(class_exists('Redis') && is_file('.redis_id')){
 	$redis = new Redis();
 	$redis->pconnect($redis_server,$redis_port,0,$redis_id);
