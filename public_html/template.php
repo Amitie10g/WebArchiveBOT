@@ -36,7 +36,7 @@ if(class_exists('Redis') && is_file('.redis_id')){
 	$list = json_decode(file_get_contents($json_file_cache),true);
 }
 ?><!DOCTYPE HTML>
-<html>
+<html lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>WebArchiveBOT, archived items</title>
