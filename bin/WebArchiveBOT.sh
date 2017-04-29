@@ -32,7 +32,7 @@ $json_file_cache = 'archived.json';
 $json_file_max_size = 1000;
 $email_operator = '';
 $redis_server = '';
-$redis_port = ;
+$redis_port = '6379';
 
 $extlinks_bl[] = '(([\p{P}\p{N}]+\.)*google\.[\p{L}\p{N}]+)';
 $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*openstreetmap\.[\p{L}\p{N}]+)';
