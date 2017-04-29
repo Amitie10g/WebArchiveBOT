@@ -574,9 +574,10 @@ class WebArchiveBOT extends Wiki {
          * @return bool true if success, false if fail.
         **/
         function archive3($data){
-
+var_dump($time);
                 $json_wrote = $this->archive31($data);
                 $json_cache_wrote = $this->archive32($data);
+var_dump($time);
                 if($json_wrote && $json_cache_wrote) return true;
                 else return false;
         }
