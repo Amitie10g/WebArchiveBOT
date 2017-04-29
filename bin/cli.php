@@ -40,13 +40,13 @@ date_default_timezone_set('UTC');
 // be hardcoded (see bellow)
 $shortopts  = "";
 $longopts   = array("user::","password::","project::","help::","license::","quiet::");
-$options    = getopt($shortopts, $longopts);
+$options	= getopt($shortopts, $longopts);
 
-if(empty($user))     $user     = $options['user'];
+if(empty($user))	 $user	 = $options['user'];
 if(empty($password)) $password = $options['password'];
 if(empty($project))  $project  = $options['project'];
-$help                          = $options['help'];
-$license                       = $options['license'];
+$help						  = $options['help'];
+$license					   = $options['license'];
 
 // Declare the Help and License text
 $help_text = <<<EOH
@@ -58,15 +58,15 @@ extract external links and save them at Web Archive by Wayback Machine.
 $bs
 Parameters:
 
-   --user$be     Your Wiki username (hardcoded by default)
+   --user$be	 Your Wiki username (hardcoded by default)
 
    $bs--password$be Your Wiki password (hardcoded by default)
 
    $bs--project$be  Your Wiki projet where you  will upload your file(s),  with the
-              "http(s)://"  prefix.  This parameter is optional;  the default
-              value is "https://commons.wikimedia.org"
+			  "http(s)://"  prefix.  This parameter is optional;  the default
+			  value is "https://commons.wikimedia.org"
 
-   $bs--help$be     Show this help
+   $bs--help$be	 Show this help
 
    $bs--license$be  Show the license of this program
 
@@ -78,18 +78,18 @@ $license_text = <<<EOL
 $bs
 WebArchiveBOT  Copyright (C) 2015-2017  Davod (Amitie 10g)$be
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 EOL;
 
@@ -111,34 +111,34 @@ $interval = $interval*60;
 $result = true;
 $iteration = 0;
 while(true){
-        $time = strftime('%F %T');
-        echo "\n$time\nArchiving... ";
+		$time = strftime('%F %T');
+		echo "\n$time\nArchiving... ";
 
-        try{
-                if($iteration%1000 == 0) $rotate = true;
-                else $rotate = false;
-           
-                $files  = $wiki->getLatestFiles();
-                $links  = $wiki->getPagesExternalLinks($files);
-                $result = $wiki->archive($links,$rotate);
+		try{
+				if($iteration%1000 == 0) $rotate = true;
+				else $rotate = false;
+		   
+				$files  = $wiki->getLatestFiles();
+				$links  = $wiki->getPagesExternalLinks($files);
+				$result = $wiki->archive($links,$rotate);
 
-                if($result !== true) throw new Exception("errors ocurred when trying to archive. See the log for details.\n");
-                echo "everything OK.\n";
-                $memory_peak = memory_get_peak_usage (true);
-                echo "Memory peak: $memory_peak\n";
+				if($result !== true) throw new Exception("errors ocurred when trying to archive. See the log for details.\n");
+				echo "everything OK.\n";
+				$memory_peak = memory_get_peak_usage (true);
+				echo "Memory peak: $memory_peak\n";
 
-        }catch (Exception $e){
-                $message = $e->getMessage();
-                $memory_peak = memory_get_peak_usage (true);
+		}catch (Exception $e){
+				$message = $e->getMessage();
+				$memory_peak = memory_get_peak_usage (true);
 
-                echo "$message\nMemory peak: $memory_peak\n";
+				echo "$message\nMemory peak: $memory_peak\n";
 
-                $date = date("Y-m-d H:i:s");
-                $message .= "\n\nMemory peak: $memory_peak\n\nGenerated: $date";
+				$date = date("Y-m-d H:i:s");
+				$message .= "\n\nMemory peak: $memory_peak\n\nGenerated: $date";
 
-                $wiki->sendMail($message);
-        }
-        $iteration++;
-        sleep($interval);
+				$wiki->sendMail($message);
+		}
+		$iteration++;
+		sleep($interval);
 }
 ?>
