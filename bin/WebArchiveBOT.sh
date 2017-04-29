@@ -20,6 +20,8 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  **/
 
+var_dump(realpath(dirname(__FILE__)));
+
 $config = parse_ini_file('config.ini');
 
 var_dump($config);
