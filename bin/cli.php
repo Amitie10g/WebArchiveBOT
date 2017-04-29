@@ -41,9 +41,9 @@ $shortopts	= "";
 $longopts	= array("help","license","debug");
 $options	= getopt($shortopts,$longopts);
 
-if(isset($options['help']) $help = true;
-if(isset($options['license']) $license = true;
-if(isset($options['debug']) $debug = true;
+if(isset($options['help'])) $help = true;
+if(isset($options['license'])) $license = true;
+if(isset($options['debug'])) $debug = true;
 
 // Declare the Help and License text
 $help_text = <<<EOH
