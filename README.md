@@ -12,18 +12,18 @@ Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
     `git clone https://github.com/Amitie10g/WebArchiveBOT.git`
 
 * Create a directory for the backend script (eg "bin") outside the WWW access, and,
-  * Copy "WebArchiveBOT.sh" and edit it to add credentials and other settings
-  * Symlink "cli.php" and "class.php"
+  * Copy "config.ini" and edit it to add credentials and other settings
+  * Symlink "WebArchiveBOT.sh" and "class.php"
 
 * Create a directory inside the WWW access if you want, and,
-  * Copy "index.php"
-  * Symlink "template.php" and "doc"
+  * Copy ".config.php" and edit it if necessary
+  * Symlink "index.php" and "doc"
   
 ## Running in HHVM
 
 To run the backend script (WebArchiveBOT.sh) under HHVM instead of php-cli, replace the default shebang with the HHVM one:
 
-    #!/usr/bin/hhvm
+    #!/usr/bin/env hhvm
 
 ## Running in Windows
 
