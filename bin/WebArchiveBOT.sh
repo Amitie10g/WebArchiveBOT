@@ -37,7 +37,7 @@ $redis_port = $config['redis_port'];
 $extlinks_bl = $config['extlinks_bl'];
 
 error_reporting(E_ALL ^ E_NOTICE);
-ini_set("memory_limit",'1024M');
+ini_set("memory_limit",$php_memory_limit);
 
 ini_set('xdebug.var_display_max_depth',-1);
 ini_set('xdebug.var_display_max_children',-1);
