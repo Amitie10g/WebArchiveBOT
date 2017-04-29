@@ -130,7 +130,7 @@ while(true){
 		try{
 				if($iteration%1000 == 0) $rotate = true;
 				else $rotate = false;
-		   
+
 				$files  = $wiki->getLatestFiles();
 				$links  = $wiki->getPagesExternalLinks($files);
 				$result = $wiki->archive($links,$rotate);
