@@ -112,13 +112,13 @@ while(true){
 		try{
 				if($iteration%1000 == 0 && $iteration != 0) $rotate = true;
 				else $rotate = false;
-microtime(true);
+var_dump(microtime(true));
 				$files  = $wiki->getLatestFiles();
-microtime(true);
+var_dump(microtime(true));
 				$links  = $wiki->getPagesExternalLinks($files);
-microtime(true);
+var_dump(microtime(true));
 				$result = $wiki->archive($links,$rotate);
-microtime(true);
+var_dump(microtime(true));
 
 				if($result !== true) throw new Exception("errors ocurred when trying to archive. See the log for details.\n");
 				echo "everything OK.\n";
