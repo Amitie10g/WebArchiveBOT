@@ -37,12 +37,11 @@ date_default_timezone_set('UTC');
 // Declare the arguments to be taken from command line. User and Password may be received
 // from the arguments --user and --password for convenience, but them can also
 // be hardcoded (see bellow)
-$shortopts  = "";
-$longopts   = array("help::","license::");
+$shortopts	= "";
+$longopts	= array("help::","license::");
 $options	= getopt($shortopts,$longopts);
-
-$help							= $options['help'];
-$license						= $options['license'];
+$help		= $options['help'];
+$license	= $options['license'];
 
 // Declare the Help and License text
 $help_text = <<<EOH
