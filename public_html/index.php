@@ -1,5 +1,4 @@
 <?php
-
 /**
  * WebArchiveBOT: botclases.php based MediaWiki for archiving external links to Web Archive
  *
@@ -27,14 +26,14 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 if(php_sapi_name() == "cli") die("\nThis script should be executed from Web.\n");
 
-$site_url = 'https://commons.wikimedia.org/wiki/'; // https://commons.wikimedia.org/wiki/
-$sitename = 'Wikimedia Commons'; // Wikimedia Commons
-$json_file = 'archived.json.gz'; // The gzipped JSON file path
-$json_file_cache = 'archived.json'; // The cached, plain JSON file path (to be used by the page)
+$site_url			= 'https://commons.wikimedia.org/wiki/'; // https://commons.wikimedia.org/wiki/
+$sitename			= 'Wikimedia Commons'; // Wikimedia Commons
+$json_file			= 'archived.json.gz'; // The gzipped JSON file path
+$json_file_cache 	= 'archived.json'; // The cached, plain JSON file path (to be used by the page)
 $json_file_max_size = 1000; // Tme maximum size of the JSON file defined at the backend script
-$redis_server = '';
-$redis_port = '6379';
-$redis_id = @file_get_contents('.redis_id');
+$redis_server		= '';
+$redis_port			= '6379';
+$redis_id			= @file_get_contents('.redis_id');
 
 define('IN_WEBARCHIVEBOT',true);
 
