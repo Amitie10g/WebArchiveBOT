@@ -21,6 +21,9 @@
  **/
 
 $config = parse_ini_file('config.ini');
+
+var_dump($config);
+
 $wiki_user = $config['wiki_user'];
 $wiki_password = $config['wiki_password'];
 $wiki_url = $config['wiki_url'];
