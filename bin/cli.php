@@ -42,11 +42,11 @@ $shortopts  = "";
 $longopts   = array("user::","password::","project::","help::","license::","quiet::");
 $options	= getopt($shortopts, $longopts);
 
-if(empty($user))	 $user	 = $options['user'];
-if(empty($password)) $password = $options['password'];
-if(empty($project))  $project  = $options['project'];
-$help						  = $options['help'];
-$license					   = $options['license'];
+if(empty($user))	 $user		= $options['user'];
+if(empty($password)) $password	= $options['password'];
+if(empty($project))  $project	= $options['project'];
+$help							= $options['help'];
+$license						= $options['license'];
 
 // Declare the Help and License text
 $help_text = <<<EOH
