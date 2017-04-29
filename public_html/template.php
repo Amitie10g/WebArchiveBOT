@@ -24,26 +24,21 @@
  // :: This file is intended to be symlinked
 
 if(!defined('IN_WEBARCHIVEBOT')){
-    header('HTTP/1.0 403 Forbidden');
-    die;
+	header('HTTP/1.0 403 Forbidden');
+	die;
 }
 
 if(class_exists('Redis') && is_file('.redis_id')){
-	
 	$redis = new Redis();
 	$redis->pconnect($redis_server,$redis_port,0,$redis_id);
-
 	$list = unserialize($redis->get('list'));
-	
 }else{
 	$list = json_decode(file_get_contents($json_file_cache),true);
 }
-
-?><?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+?><!DOCTYPE HTML>
+<html>
 	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>WebArchiveBOT, archived items</title>
 		<meta http-equiv="refresh" content="120" />
 		<style type="text/css">
@@ -64,26 +59,28 @@ if(class_exists('Redis') && is_file('.redis_id')){
 		</style>
 	</head>
 	<body>
-	<div>
-		<h1>WebArchiveBOT, archived items</h1>
-		<p>This page lists the last 50 files uploaded to <?= $sitename ?> and their links archived at Internet Archive by Wayback Machine. You can download the <a href="<?= $json_file ?>">latest  <?= number_format($json_file_max_size,0,'','.') ?> files listed in JSON format</a>.<br />
-		For more information, see the <a href="doc" target="blank">Documentation</a>. <a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU Affero General Public License v3.</p>
-	</div>
-	<div>
+		<div>
+			<h1>WebArchiveBOT, archived items</h1>
+			<p>This page lists the last 50 files uploaded to <?= $sitename ?> and their links archived at Internet Archive by Wayback Machine.&nbsp;
+			You can download the <a href="<?= $json_file ?>">latest  <?= number_format($json_file_max_size,0,'','.') ?> files listed in JSON format</a>.<br />
+			For more information, see the <a href="doc" target="blank">Documentation</a>.&nbsp;
+			<a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU Affero General Public License v3.</p>
+		</div>
+		<div>
 <?php if(!empty($list)){
 
 	foreach($list as $title=>$item){
 ?>
-		<h2><a href="<?= $site_url ?><?= str_replace(array('%3A','%2F','%3F','%26','%3D','%23'),array(':','/','?','&','=','#'),rawurlencode($title)) ?>" target="blank"><?= $title ?></a></h2>
-		<b>Uploaded: </b><?= strftime("%F %T",$item['timestamp']) ?> (UTC)
-		<ul>
+			<h2><a href="<?= $site_url ?><?= str_replace(array('%3A','%2F','%3F','%26','%3D','%23'),array(':','/','?','&','=','#'),rawurlencode($title)) ?>" target="blank"><?= $title ?></a></h2>
+			<b>Uploaded: </b><?= strftime("%F %T",$item['timestamp']) ?> (UTC)
+			<ul>
 <?php foreach($item['urls'] as $link){ ?>
-			<li><a href="<?= str_replace(array('%3A','%2F','%3F','%26','%3D','%23'),array(':','/','?','&','=','#'),rawurlencode($link)) ?>" target="blank"><?= $link ?></a></li>
+				<li><a href="<?= str_replace(array('%3A','%2F','%3F','%26','%3D','%23'),array(':','/','?','&','=','#'),rawurlencode($link)) ?>" target="blank"><?= $link ?></a></li>
 <?php } ?>
-		</ul>
+			</ul>
 <?php } ?>
 <?php }else{ ?>
-		<p>No links archived yet</p>
+			<p>No links archived yet</p>
 <?php   } ?>
 		</div>
 	</body>
