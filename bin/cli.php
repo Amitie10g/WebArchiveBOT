@@ -38,11 +38,12 @@ date_default_timezone_set('UTC');
 // from the arguments --user and --password for convenience, but them can also
 // be hardcoded (see bellow)
 $shortopts	= "";
-$longopts	= array("debug","help","license");
+$longopts	= array("help","license","debug");
 $options	= getopt($shortopts,$longopts);
-$debug		= $options['debug'];
-$help		= $options['help'];
-$license	= $options['license'];
+
+if(isset($options['help']) $help = true;
+if(isset($options['license']) $license = true;
+if(isset($options['debug']) $debug = true;
 
 // Declare the Help and License text
 $help_text = <<<EOH
@@ -84,8 +85,8 @@ WebArchiveBOT  Copyright (C) 2015-2017  Davod (Amitie 10g)$be
 EOL;
 
 // Output the Help and License as requested with --help and --license
-if(isset($help)) die($help_text);
-if(isset($license)) die($license_text);
+if($help === true) die($help_text);
+if($license === true) die($license_text);
 
 require_once('class.php');
 
@@ -113,7 +114,7 @@ while(true){
 
 				if($result !== true) throw new Exception("errors ocurred when trying to archive. See the log for details.\n");
 				echo "everything OK.\n";
-				if(isset($debug)){
+				if($debug === true){
 					$memory_peak = memory_get_peak_usage (true);
 					echo "Memory peak: $memory_peak\n";
 				}
