@@ -527,7 +527,7 @@ class WebArchiveBOT extends Wiki {
                 $data = $this->archive2($data);
          
                 if($rotate === true){
-                        $num = count(glob(("$this->public_html_path/$this->json_file.*"));
+                        $num = count(glob("$this->public_html_path/$this->json_file.*"));
                         $num++;
                         rename("$this->public_html_path/$this->json_file","$this->public_html_path/$this->json_file.$num");
                 }
