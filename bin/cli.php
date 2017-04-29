@@ -110,7 +110,7 @@ while(true){
 		echo "\n$time\nArchiving... ";
 
 		try{
-				if($iteration%1000 == 0) $rotate = true;
+				if($iteration%1000 == 0 && $iteration != 0) $rotate = true;
 				else $rotate = false;
 
 				$files  = $wiki->getLatestFiles();
