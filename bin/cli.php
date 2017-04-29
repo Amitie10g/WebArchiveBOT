@@ -54,17 +54,11 @@ extract external links and save them at Web Archive by Wayback Machine.
 $bs
 Parameters:
 
-   --user$be	 Your Wiki username (hardcoded by default)
+   $bs--debug$be	If you want to output debug information
 
-   $bs--password$be Your Wiki password (hardcoded by default)
+   $bs--help$be		Show this help
 
-   $bs--project$be  Your Wiki projet where you  will upload your file(s),  with the
-			  "http(s)://"  prefix.  This parameter is optional;  the default
-			  value is "https://commons.wikimedia.org"
-
-   $bs--help$be	 Show this help
-
-   $bs--license$be  Show the license of this program
+   $bs--license$be	Show the license of this program
 
 See README.md for detailed information about its usage.
 
