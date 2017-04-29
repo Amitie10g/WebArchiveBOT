@@ -514,20 +514,23 @@ class WebArchiveBOT extends Wiki {
  
         /**
          * Do the queries to save the given links to Web Archive, and check if them was already archived.
-         * @param array $data The links (with the pagename as key) to save. The array should be composed as:
-         * * key: Canonical pagename
-         * * value: array:
-         *   * 'timestamp': The timestamp of the file uploaded to Wiki.
-         *   * 'urls': The array with the URLs associated with the Pagename.
+         * @param array $data The links (with the pagename as key) to save.
+         * @param bool $rotate Set to true to rotate the JSON file (at certain number of iterations)
          * @return bool true if everything is OK, or false in case of any error.
         **/
-        function archive($data){
+        function archive($data,$rotate){
 
                 if(!is_array($data)) return false;
                 $data = $this->archive1($data);
 
                 if(empty($data)) return false;
                 $data = $this->archive2($data);
+         
+                if($rotate === true){
+                        $num = count(glob(("$this->public_html_path/$this->json_file.*"));
+                        $num++;
+                        rename("$this->public_html_path/$this->json_file","$this->public_html_path/$this->json_file.$num");
+                }
 
                 return $this->archive3($data);
         }
