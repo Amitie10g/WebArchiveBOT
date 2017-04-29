@@ -38,8 +38,9 @@ date_default_timezone_set('UTC');
 // from the arguments --user and --password for convenience, but them can also
 // be hardcoded (see bellow)
 $shortopts	= "";
-$longopts	= array("help::","license::");
+$longopts	= array("debug","help","license");
 $options	= getopt($shortopts,$longopts);
+$debug		= $options['debug'];
 $help		= $options['help'];
 $license	= $options['license'];
 
@@ -112,18 +113,16 @@ while(true){
 		try{
 				if($iteration%1000 == 0 && $iteration != 0) $rotate = true;
 				else $rotate = false;
-var_dump(microtime(true));
 				$files  = $wiki->getLatestFiles();
-var_dump(microtime(true));
 				$links  = $wiki->getPagesExternalLinks($files);
-var_dump(microtime(true));
 				$result = $wiki->archive($links,$rotate);
-var_dump(microtime(true));
 
 				if($result !== true) throw new Exception("errors ocurred when trying to archive. See the log for details.\n");
 				echo "everything OK.\n";
-				$memory_peak = memory_get_peak_usage (true);
-				echo "Memory peak: $memory_peak\n";
+				if(isset($debug)){
+					$memory_peak = memory_get_peak_usage (true);
+					echo "Memory peak: $memory_peak\n";
+				}
 
 		}catch (Exception $e){
 				$message = $e->getMessage();
