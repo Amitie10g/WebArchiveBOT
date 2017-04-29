@@ -1,4 +1,11 @@
 <?php
+//Do not edit this
+if(!defined('IN_WEBARCHIVEBOT')){
+  header('HTTP/1.0 403 Forbidden');
+  die;
+}
+
+// Edit the following as you need
 $site_url           = 'https://commons.wikimedia.org/wiki/'; // https://commons.wikimedia.org/wiki/
 $sitename           = 'Wikimedia Commons'; // Wikimedia Commons
 $json_file          = 'archived.json.gz'; // The gzipped JSON file path
