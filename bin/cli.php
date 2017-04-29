@@ -109,14 +109,18 @@ $wiki->setUserAgent('WebArchiveBOT/1.0 (https://github.com/Amitie10g/WebArchiveB
 if(!is_int($interval)) $interval = 10;
 $interval = $interval*60;
 $result = true;
+$iteration = 0;
 while(true){
         $time = strftime('%F %T');
         echo "\n$time\nArchiving... ";
 
         try{
+                if($iteration%1000 == 0) $rotate = true;
+                else $rotate = false;
+           
                 $files  = $wiki->getLatestFiles();
                 $links  = $wiki->getPagesExternalLinks($files);
-                $result = $wiki->archive($links);
+                $result = $wiki->archive($links,$rotate);
 
                 if($result !== true) throw new Exception("errors ocurred when trying to archive. See the log for details.\n");
                 echo "everything OK.\n";
@@ -134,6 +138,7 @@ while(true){
 
                 $wiki->sendMail($message);
         }
+        $iteration++;
         sleep($interval);
 }
 ?>
