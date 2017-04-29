@@ -87,4 +87,3 @@ if(class_exists('Redis') && is_file('.redis_id')){
 		</div>
 	</body>
 </html>
-?>
