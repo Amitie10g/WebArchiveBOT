@@ -55,11 +55,11 @@ extract external links and save them at Web Archive by Wayback Machine.
 $bs
 Parameters:
 
-   $bs--debug$be	If you want to output debug information
+   $bs--debug$be   If you want to output debug information
 
-   $bs--help$be		Show this help
+   $bs--help$be    Show this help
 
-   $bs--license$be	Show the license of this program
+   $bs--license$be Show the license of this program
 
 See README.md for detailed information about its usage.
 
