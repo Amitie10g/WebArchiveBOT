@@ -26,6 +26,8 @@ error_reporting(E_ALL ^ E_NOTICE);
 
 if(php_sapi_name() == "cli") die("\nThis script should be executed from Web.\n");
 
+define('IN_WEBARCHIVEBOT',true);
+
 require_once('.config.php');
 
 if(class_exists('Redis') && is_file('.redis_id')){
