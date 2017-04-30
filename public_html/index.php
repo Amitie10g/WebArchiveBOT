@@ -65,7 +65,7 @@ if(class_exists('Redis') && is_file('.redis_id')){
 			<h1>WebArchiveBOT, archived items</h1>
 			<p>This page lists the last 50 files uploaded to <?= $sitename ?> and their links archived at Internet Archive by Wayback Machine.
 			You can download the <a href="<?= $json_file ?>">latest  <?= number_format($json_file_max_size,0,'','.') ?> files listed in JSON format</a>.</p>
-			<p>For more information, see the <a href="doc" target="blank">Documentation</a>.
+			<p>For more information, see the <a href="doc/index.html" target="blank">Documentation</a>.
 			<a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU Affero General Public License v3.</p>
 		</div>
 		<div>
