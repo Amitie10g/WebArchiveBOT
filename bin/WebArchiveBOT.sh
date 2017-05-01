@@ -44,6 +44,7 @@ $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*archive\.org)';
 $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*facebook\.com)';
 $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wipo\.int)';
 $extlinks_bl[] = '(validator\.w3\.org)';
+$extlinks_bl[] = '(mailto\:)';
 $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wikipedia\.org)';
 $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wiktionary\.org)';
 $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wikiquote\.org)';
