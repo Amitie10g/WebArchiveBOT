@@ -622,7 +622,7 @@ class WebArchiveBOT extends Wiki {
 		// Store in on-disk JSON file
 		}else{
 			$data = json_encode($data,JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE,8);
-			if(file_put_contents("$this->public_html_path/$this->json_file_cache",$data,LOCK_EX) != false) $wrote true;
+			if(file_put_contents("$this->public_html_path/$this->json_file_cache",$data,LOCK_EX) != false) $wrote = true;
 			else $wrote = false;
 		}
 		
