@@ -1,4 +1,3 @@
-#!/usr/bin/php
 <?php
 /**
  * WebArchiveBOT: botclases.php based MediaWiki script for archiving external links to Internet Archive Wayback Machine.
