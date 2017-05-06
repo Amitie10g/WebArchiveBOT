@@ -9,7 +9,7 @@ MAIN=$DIR/main.php
 #USE_HHVM=true
 
 if [ $USE_HHVM ]; then
-	if [ -f $CONF_FILE ]; then
+	if [ ! -f $CONF_FILE ]; then
 		/bin/cat << EOF > $CONF_FILE
 date.timezone = UTC
 hhvm.enable_obj_destruct_call = true
@@ -22,10 +22,9 @@ hhvm.log.native_stack_trace = false
 hhvm.log.runtime_error_reporting_level = HPHP_ALL
 hhvm.log.use_syslog = false
 hhvm.pcre_cache_type = lru
-hhvm.pid_file =
 hhvm.repo.central.path = /tmp/hhvm-webarchivebot.$USER.hhbc
-hhvm.log.file=$HOME/hhvm-webservice.log
-error_log=$HOME/hhvm-webservice-error.log
+hhvm.log.file=$HOME/hhvm-webarchivebot.log
+error_log=$HOME/hhvm-webarchivebot-error.log
 hhvm.hack.lang.look_for_typechecker = false
 memory_limit = 1024M
 hhvm.log.use_log_file = true
