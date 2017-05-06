@@ -1,10 +1,16 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 set -e
+
+CONF_FILE=$HOME/hhvm-webarchivebot.ini
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+MAIN=$DIR/main.php
 
 # Uncomment if you want to use HHVM
 #USE_HHVM=true
 
-/bin/cat << EOF > ${HOME}/hhvm.ini
+if [ $USE_HHVM ]; then
+	if [ -f $CONF_FILE ]; then
+		/bin/cat << EOF > $CONF_FILE
 date.timezone = UTC
 hhvm.enable_obj_destruct_call = true
 hhvm.enable_zend_compat = true
@@ -17,9 +23,9 @@ hhvm.log.runtime_error_reporting_level = HPHP_ALL
 hhvm.log.use_syslog = false
 hhvm.pcre_cache_type = lru
 hhvm.pid_file =
-hhvm.repo.central.path = /tmp/hhvm.hhbc
-hhvm.log.file=${HOME}/hhvm-webservice.log
-error_log=${HOME}/hhvm-webservice-error.log
+hhvm.repo.central.path = /tmp/hhvm-webarchivebot.$USER.hhbc
+hhvm.log.file=$HOME/hhvm-webservice.log
+error_log=$HOME/hhvm-webservice-error.log
 hhvm.hack.lang.look_for_typechecker = false
 memory_limit = 1024M
 hhvm.log.use_log_file = true
@@ -27,5 +33,7 @@ hhvm.log.level = Warning
 ;hhvm.repo.authoritative = true
 
 EOF
-
-exec /usr/bin/hhvm -m server -c
+		exec /usr/bin/hhvm -c $CONF_FILE $MAIN
+	fi
+else
+	exec /usr/bin/php $MAIN
