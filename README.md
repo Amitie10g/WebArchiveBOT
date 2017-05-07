@@ -23,9 +23,9 @@ Ensure the "WebArchiveBOT.sh" has exec permissions.
   
 ## Running in HHVM
 
-To run the backend script (WebArchiveBOT.sh) under HHVM instead of php-cli, replace the default shebang with the HHVM one:
+Edit "WebArchiveBOT.sh" and uncomment the following:
 
-    #!/usr/bin/hhvm
+    #USE_HHVM=true
 
 ## Running in Windows
 
