@@ -20,8 +20,6 @@
  *
  **/
 
-// :: This file is intended to be copied and edited
-
 error_reporting(E_ALL ^ E_NOTICE);
 
 if(php_sapi_name() == "cli") die("\nThis script should be executed from Web.\n");
