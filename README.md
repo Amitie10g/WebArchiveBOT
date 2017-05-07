@@ -11,13 +11,11 @@ Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
 
     `git clone https://github.com/Amitie10g/WebArchiveBOT.git`
 
-* Create a directory for the backend script (eg "bin") outside the WWW access, and,
-  * Copy "WebArchiveBOT.sh" and edit it to add credentials and other settings,
-  * Symlink "cli.php" and "class.php".
+* Copy "bin/config.php" to your scripts path (inside your home directory)
+* Symlink "bin/WebArchiveBOT.sh", "bin/main.php" and "bin/class.php" to your scripts path
 
-* Create a directory inside the WWW access if you want, and,
-  * Copy ".config.php" and edit it if necessary,
-  * Symlink "index.php" and "doc".
+* Copy "www/.config.php" to your www directory
+* Symlink "www/index.php" and "www/doc" to your www directory
 
 Ensure the "WebArchiveBOT.sh" has exec permissions.
   
