@@ -35,6 +35,5 @@ EOF
 		exec /usr/bin/hhvm -c $CONF_FILE $MAIN
 	fi
 else
-	echo "Using PHP"
 	exec /usr/bin/php $MAIN
 fi
