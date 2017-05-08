@@ -32,8 +32,8 @@ hhvm.log.level = Warning
 ;hhvm.repo.authoritative = true
 
 EOF
-		exec /usr/bin/hhvm -c $CONF_FILE $MAIN
 	fi
+	exec /usr/bin/hhvm -c $CONF_FILE $MAIN
 else
 	exec /usr/bin/php $MAIN
 fi
