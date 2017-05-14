@@ -25,9 +25,7 @@ Ensure the "WebArchiveBOT.sh" has exec permissions.
   
 ## Running in HHVM
 
-Edit "WebArchiveBOT.sh" and uncomment the following:
-
-    #USE_HHVM=true
+Use the Hack version instead.
 
 ## Running in Windows
 
