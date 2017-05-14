@@ -6,8 +6,8 @@
   *
   * Contains parts of the Chris G's Bot classes library - https://www.mediawiki.org/wiki/Manual:Chris_G%27s_botclasses
   *
-  *  (c) 2008-2012	   Chris G http://en.wikipedia.org/wiki/User:Chris_G
-  *  (c) 2009-2010	   Fale	http://en.wikipedia.org/wiki/User:Fale
+  *  (c) 2008-2012	Chris G http://en.wikipedia.org/wiki/User:Chris_G
+  *  (c) 2009-2010	Fale	http://en.wikipedia.org/wiki/User:Fale
   *  (c) 2010		Kaldari http://en.wikipedia.org/wiki/User:Kaldari
   *  (c) 2011		Gutza   http://en.wikipedia.org/wiki/User:Gutza
   *  (c) 2012		Sean	http://en.wikipedia.org/wiki/User:SColombo
@@ -77,7 +77,7 @@ class http {
 	  * @param $keypost
 	  * @return array
 	 **/
-	function data_encode($data,$keyprefix = "",$keypostfix = ""){
+	public function data_encode($data,$keyprefix = "",$keypostfix = ""){
 		assert(is_array($data));
 		$vars=null;
 		foreach($data as $key=>$value){
@@ -91,7 +91,7 @@ class http {
 	  * This is the Construct.
 	  * @return void
 	 **/
-	function __construct(){
+	public function __construct(){
 		$this->ch = curl_init();
 		$this->uid = dechex(rand(0,99999999));
 		curl_setopt($this->ch,CURLOPT_COOKIEJAR,TEMP_PATH.'cluewikibot.cookies.'.$this->uid.'.dat');
@@ -108,7 +108,7 @@ class http {
 	  * @param $data The POST data.
 	  * @return mixed The response from Server.
 	 **/
-	function post($url,$data){
+	public function post($url,$data){
 		$time = microtime(1);
 		curl_setopt($this->ch,CURLOPT_URL,$url);
 		curl_setopt($this->ch,CURLOPT_USERAGENT,$this->userAgent);
@@ -136,7 +136,7 @@ class http {
 	  * @param $url The target URL.
 	  * @return mixed The response from Server.
 	 **/
-	function get($url){
+	public function get($url){
 		$time = microtime(1);
 		curl_setopt($this->ch,CURLOPT_URL,$url);
 		curl_setopt($this->ch,CURLOPT_USERAGENT,$this->userAgent);
@@ -166,7 +166,7 @@ class http {
 	  * @param $pwd
 	  * @return void
 	 **/
-	function setHTTPcreds($uname,$pwd){
+	public function setHTTPcreds($uname,$pwd){
 		curl_setopt($this->ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 		curl_setopt($this->ch, CURLOPT_USERPWD, $uname.":".$pwd);
 	}
@@ -175,7 +175,7 @@ class http {
 	  * This is the destruct.
 	  * @return void
 	 **/
-	function __destruct (){
+	public function __destruct (){
 		curl_close($this->ch);
 		@unlink('/tmp/cluewikibot.cookies.'.$this->uid.'.dat');
 	}
@@ -201,8 +201,8 @@ class Wiki {
 	  * @param $hp
 	  * @return void
 	 **/
-	function __construct ($url='https://commons.wikimedia.org/w/api.php',$hu=null,$hp=null){
-		$this->http = new http;
+	public function __construct ($url='https://commons.wikimedia.org/w/api.php',$hu=null,$hp=null){
+		$this->http = new http();
 		$this->token = null;
 		$this->url = $url;
 		$this->ecTimestamp = null;
@@ -215,7 +215,7 @@ class Wiki {
 	  * @param $val
 	  * @return void
 	 **/
-	function __set($var,$val){
+	public function __set($var,$val){
 		switch($var){
 		case 'quiet':
 			$this->http->quiet=$val;
@@ -229,7 +229,7 @@ class Wiki {
 	 * Set/change the user agent.
 	 * @param $userAgent The user agent string.
 	**/
-	function setUserAgent($userAgent){
+	public function setUserAgent($userAgent){
 		$this->http->userAgent = $userAgent;
 	}
 
@@ -237,7 +237,7 @@ class Wiki {
 	  * Set/change the http header.
 	  * @param $httpHeader The http header.
 	 **/
-	function setHttpHeader ( $httpHeader ){
+	public function setHttpHeader ( $httpHeader ){
 		$this->http->httpHeader = $httpHeader;
 	}
 
@@ -245,7 +245,7 @@ class Wiki {
 	  * Set/change the http headers.
 	  * @param $httpHeader The http header.
 	 **/
-	function useDefaultHttpHeader (){
+	public function useDefaultHttpHeader (){
 		$this->http->httpHeader = $this->http->defaultHttpHeader;
 	}
 
@@ -257,7 +257,7 @@ class Wiki {
 	 * @param $url The URL where we want to work (for external services API).
 	 * @return mixed The response from server (API result).
 	 **/
-	function query($query,$post=null,$repeat=null,$url=null){
+	public function query($query,$post=null,$repeat=null,$url=null){
 
 		if(empty($url)) $url = $this->url;
 
@@ -283,7 +283,7 @@ class Wiki {
 	 * @param $$detectEditConflict
 	 * @return string The wikitext for the given page.
 	 **/
-	function getpage($page,$revid=null,$detectEditConflict=false){
+	public function getpage($page,$revid=null,$detectEditConflict=false){
 		$append = '';
 		if ($revid!=null)
 		$append = '&rvstartid='.$revid;
@@ -303,7 +303,7 @@ class Wiki {
 	 * @param $pass Password that belongs to the username.
 	 * @return array The API result
 	 **/
-	function login($user,$pass){
+	public function login($user,$pass){
 		$post = array('lgname' => $user, 'lgpassword' => $pass);
 		$ret = $this->query('?action=login&format=php',$post);
 		/* This is now required - see https://phabricator.wikimedia.org/T25076 */
@@ -325,7 +325,7 @@ class Wiki {
 	 * @param $data The data to be parsed.
 	 * @return void
 	 **/
-	function setLogin($data){
+	public function setLogin($data){
 		$this->http->cookie_jar = array(
 		$data['cookieprefix'].'UserName' => $data['lgusername'],
 		$data['cookieprefix'].'UserID' => $data['lguserid'],
@@ -343,47 +343,28 @@ class Wiki {
  * @property string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error.
  * @property array $extlinks_bl The blacklisted URLs to exclude for archiving.
  * @property int $pages_per_query The maximum pages retrived per query (iteration) (100 by default).
- * @property string $public_html_path The path to the public_html directory, where the JSONs will be stored.
- * @property string $json_file The compressed JSON file.
- * @property string $json_file_cache the plain JSON file to be used for the Page.
- * @property int $json_file_max_size The maximum ammount files stored in the JSON file (1000 by default).
- * @property $redis_server The Redis server address, if used.
- * @property $redis_port The Redis server port.
- * @property $redis_id The Redis session ID (generated with random characters in __construct())
- **/
+ * @property string $db_path The path to the database file.
+**/
 class WebArchiveBOT extends Wiki {
 	public $url;
 	private $site_url;
 	private $email_operator;
 	private $extlinks_bl;
 	private $pages_per_query;
-	private $public_html_path;
-	private $json_file;
-	private $json_file_cache;
-	private $json_file_max_size;
-	private $redis_server;
-	private $redis_port;
-	private $redis_id;
+	private $db_path;
 
 	/**
-	  * This is the constructor.
-	  * @param string $url The Project URL (API path).
-	  * @param string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error.
-	  * @param array $extlinks_bl The blacklisted URLs to exclude for archiving.
-	  * @param int $pages_per_query The maximum pages retrived per query (iteration) (100 by default).
-	  * @param string $public_html_path The path to the public_html directory, where the JSONs will be stored.
-	  * @param string $json_file The compressed JSON file.
-	  * @param string $json_file_cache the plain JSON file to be used for the Page.
-	  * @param int $json_file_max_size The maximum ammount files stored in the JSON file (1000 by default).
-	  * @param string $redis_server The Redis server if used.
-	  * @param string $redis_port The Redis server port.
-	  * @return void
-	 **/
-	function __construct($url,$email_operator,$extlinks_bl,$pages_per_query=100,$public_html_path,$json_file,$json_file_cache,$json_file_max_size=1000,$redis_server=null,$redis_port=null){
-		
+	 * This is the constructor.
+	 * @param string $url The Project URL (API path).
+	 * @param string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error.
+	 * @param array $extlinks_bl The blacklisted URLs to exclude for archiving.
+	 * @param int $pages_per_query The maximum pages retrived per query (iteration) (100 by default).
+	 * @param string $db_path The path to the database file.
+	 * @return void
+	**/
+	public function __construct($url,$email_operator,$extlinks_bl,$pages_per_query,$db_path){
+
 		if(!is_array($extlinks_bl)) $extlinks_bl = null;
-		if(!is_int($pages_per_query)) $pages_per_query = 100;
-		if(!is_int($json_file_max_size)) $json_file_max_size = 1000;
 
 		Wiki::__construct($url); // Pass main parameter to parent Class' __construct()
 		$this->site_url = parse_url($this->url);
@@ -391,16 +372,7 @@ class WebArchiveBOT extends Wiki {
 		$this->email_operator = $email_operator;
 		$this->extlinks_bl = '/('.implode('|',$extlinks_bl).')/';
 		$this->pages_per_query = $pages_per_query;
-		$this->public_html_path = $public_html_path;
-		$this->json_file = $json_file;
-		$this->json_file_cache = $json_file_cache;
-		$this->json_file_max_size = $json_file_max_size;
-		$this->redis_server = $redis_server;
-		$this->redis_port = $redis_port;
-		$this->redis_id = 'WebArchiveBOT_'.hash('sha512',get_current_user().bin2hex(openssl_random_pseudo_bytes(30)));
-
-		// Put the $redis_id in an external file readable by the Frontend
-		file_put_contents($this->public_html_path.'/.redis_id',$this->redis_id);
+		$this->db_path = $db_path;
 	}
 
 	/**
@@ -409,7 +381,7 @@ class WebArchiveBOT extends Wiki {
 	 * @param $props The properties that we want to obtain from the query (string or array).
 	 * @return array The API result (page contents and metadata in the desired format).
 	**/
-	function getPageContents($page,$props=null){
+	public function getPageContents($page,$props=null){
 
 		if(is_array($props)) $props = implode('|',$props);
 
@@ -428,7 +400,7 @@ class WebArchiveBOT extends Wiki {
 	 * @param void
 	 * @return array The API result (the list of the latest files uploaded).
 	**/
-	function getLatestFiles(){
+	public function getLatestFiles(){
 		$query = "?action=query&list=allimages&format=php&aisort=timestamp&aidir=older&aiprop=timestamp%7Ccanonicaltitle&ailimit=$this->pages_per_query";
 		$query = $this->query($query);
 		return $query['query']['allimages'];
@@ -443,7 +415,7 @@ class WebArchiveBOT extends Wiki {
 	 * @param bool $inverse To match or not the regex (no match is done with '?!').
 	 * @return bool true if value were found in the array, false if not.
 	**/
-	function inArray($needle,$haystack,$regex=false,$inverse=false){
+	public function inArray($needle,$haystack,$regex=false,$inverse=false){
 		if(empty($needle)) return false;
 		if($regex === true){
 			$regex = implode('|',$haystack);
@@ -456,37 +428,14 @@ class WebArchiveBOT extends Wiki {
 		return $found;
 	}
 
-	/**
-	 * List the Pagenames list with the Timestamp and external links in an array, suitable for archive().
-	 * @param array $query The query result from getLatestFiles(), $files['query']['allimages'].
-	 * @param array $haystack The array where find in.
-	 * @return array The desired data ordered.
-	**/
-	function getPagesExternalLinks($query){
-		foreach($query as $page){
-
-			$canonicaltitle = $page['canonicaltitle'];
-			$timestamp = strtotime($page['timestamp']);
-
-			$links_g = $this->GetPageContents($canonicaltitle,'externallinks');
-			$links_g = $links_g['parse']['externallinks'];
-
-			if(!empty($links_g)){
-				$links_g = array_filter($links_g);
-				$links[$canonicaltitle] = array('timestamp'=>$timestamp,'urls'=>$links_g);
-			}
-		}
-		return $links;
-	}
-
 	 /**
 	 * Parse URLs and retrive the Archived version at Wayback Machine.
 	 * @param array $urls the URLs to be parsed.
 	 * @return array the Wayback Machine URLs retrived.
 	**/
-	function urls2archive_urls($urls){
+	public function urls2archive_urls($urls){
 		foreach($urls as $url){
-		 
+
 			if(preg_match($this->extlinks_bl,$url)) continue;
 
 			$archive_g = file_get_contents('http://archive.org/wayback/available?url='.urlencode($url));
@@ -501,7 +450,7 @@ class WebArchiveBOT extends Wiki {
 
 			if($window_time >= 172800){
 				$headers = @get_headers("https://web.archive.org/save/$url",1);
-			 
+
 				if($headers[0] == "HTTP/1.1 403 FORBIDDEN") continue;
 
 				$location = $headers['Content-Location'];
@@ -513,120 +462,53 @@ class WebArchiveBOT extends Wiki {
 				}
 			}
 		}
-	 
+
 		if(!empty($archive_urls)) return array_unique($archive_urls);
 	}
- 
-	/**
-	 * Do the queries to save the given links to Web Archive, and check if them was already archived.
-	 * @param array $data The links (with the pagename as key) to save.
-	 * @param bool $rotate Set to true to rotate the JSON file (at certain number of iterations)
-	 * @return bool true if everything is OK, or false in case of any error.
+
+	 /**
+	 * Do the archive process: Query to Internet Archive and store the results in a local DB
+	 * @param array $pages The pages retrived by getLatestFiles()
+	 * @return bool The final results.
 	**/
-	function archive($data,$rotate){
+	public function archive($pages){
 
-		if(!is_array($data)) return false;
-		$data = $this->archive1($data);
+		if(!is_array($pages) || empty($pages)) return false;
 
-		if(empty($data)) return false;
-		$data = $this->archive2($data);
-	 
-		if($rotate === true){
-			$num = count(glob("$this->public_html_path/$this->json_file.*"));
-			$num++;
-			rename("$this->public_html_path/$this->json_file","$this->public_html_path/$this->json_file.$num");
+		$db = new SQLite3($this->db_path);
+
+		$db->query('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
+
+		$query = "INSERT INTO data(title,timestamp,urls) VALUES ";
+		$count = 0;
+
+		foreach($pages as $page){
+
+			$title = $page['canonicaltitle'];
+			$timestamp = strtotime($page['timestamp']);
+
+			$urls = $this->GetPageContents($title,'externallinks');
+			$urls = $urls['parse']['externallinks'];
+			if(empty($urls)) continue;
+
+			$urls = array_filter($urls);
+
+			$title = base64_encode($title);
+
+			$urls = base64_encode(serialize($this->urls2archive_urls($urls)));
+			if($urls == "Tjs=") continue;
+
+			if($count != 0) $query .= ",";
+			$query .= "('$title','$timestamp','$urls')";
+			$count++;
 		}
 
-		return $this->archive3($data);
-	}
+		$query .= ";";
 
-	/**
-	 * Step one of the Archive process: Query to Wayback Machine to archive the links and get the Archived URLs.
-	 * @param array $data_g the array containing the filenames and URLs.
-	 * @return array the data given with $data_g, with the Wayback Machine URLs instead.
-	**/
-	function archive1($data_g){
+		$result = $db->exec($query);
+		$db->close();
 
-		if(empty($data_g)) return false;
-
-		foreach($data_g as $title=>$item){
-
-			$timestamp = $item['timestamp'];
-			$urls = $this->urls2archive_urls($item['urls']);
-			if(!empty($urls)) $data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
-		}
-
-		return $data;
-	}
-
-	/**
-	 * Step two of the Archive process: Get the archived pages stored in the local JSON file, if exists, and append the new pages uploaded.
-	 * @param array $data Then incomming data (retrived from the first step) to be added to the previous data (the existing JSON file).
-	 * @return array the contents from the local JSON.
-	**/
-	function archive2($data){
-		if(!is_array($data)) return false;
-		if(is_file("$this->public_html_path/$this->json_file")) $json_data = json_decode(gzdecode(file_get_contents("$this->public_html_path/$this->json_file")),true);
-		if(is_array($json_data)) $data = $data + $json_data;
-		if(!empty($data)) array_multisort($data,SORT_DESC);
-
-		return $data;
-	}
-
-	/**
-	 * Step three of the Archive process: Write the data retrived from the new files uploaded and the previous local JSON to the local JSON.
-	 * @param array $data the data to be writen.
-	 * @return bool true if success, false if fail.
-	**/
-	function archive3($data){
-		$json_wrote = $this->archive31($data);
-		$json_cache_wrote = $this->archive32($data);
-		if($json_wrote && $json_cache_wrote) return true;
-		else return false;
-	}
-
-	/**
-	 * Step 3.1 of the Archive process: Write the JSON file.
-	 * @param array $data the data to be writen.
-	 * @return bool true if success, false if error.
-	**/
-	function archive31($data){
-
-		if(!is_array($data)) return false;
-		if(!is_int($this->json_file_max_size)) $this->json_file_max_size = 1000;
-		$data = array_slice($data,0,$this->json_file_max_size,true);
-		$data = gzencode(json_encode($data,JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE,8),9);
-
-		if(file_put_contents("$this->public_html_path/$this->json_file",$data,LOCK_EX) != false) return true;
-		else return false;
-	}
-
-	/**
-	 * Step 3.2 of the Archive process: Write the JSON cache file.
-	 * @param array $data the data to be writen.
-	 * @return bool true if success, false if error.
-	**/
-	function archive32($data){
-
-		if(!is_array($data)) return false;
-		$data = array_slice($data,0,50,true);
-	 
-		// Store in Redis
-		if(class_exists('Redis') && !empty($this->redis_server) && !empty($this->redis_port) && !empty($this->redis_id)){
-			$redis = new Redis();
-			$redis->pconnect($this->redis_server,$this->redis_port,0,$this->redis_id);
-			if($redis->set('list',serialize($data))) $wrote = true;
-			else $wrote = false;
-			$redis->close();
-		
-		// Store in on-disk JSON file
-		}else{
-			$data = json_encode($data,JSON_BIGINT_AS_STRING | JSON_PRETTY_PRINT | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE,8);
-			if(file_put_contents("$this->public_html_path/$this->json_file_cache",$data,LOCK_EX) != false) $wrote = true;
-			else $wrote = false;
-		}
-		
-		return $wrote;
+		return $result;
 	}
 
 	/**
@@ -635,7 +517,7 @@ class WebArchiveBOT extends Wiki {
 	 * @param string $subject the subject ("Errors with WebArchiveBOT" by default).
 	 * @return void
 	**/
-	function sendMail($message,$subject=null){
+	public function sendMail($message,$subject=null){
 		if($subject == null) $subject = "Errors with WebArchiveBOT";
 		$from = "webarchivebot-noreply@wmflabs.org";
 		$to = $this->mail_operator;

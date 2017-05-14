@@ -20,23 +20,76 @@
  *
  **/
 
-error_reporting(E_ALL ^ E_NOTICE);
-
-if(php_sapi_name() == "cli") die("\nThis script should be executed from Web.\n");
-
-define('IN_WEBARCHIVEBOT',true);
-
 require_once('.config.php');
 
-if(class_exists('Redis') && is_file('.redis_id')){
-	$redis = new Redis();
-	$redis->pconnect($redis_server,$redis_port,0,$redis_id);
-	$list = unserialize($redis->get('list'));
-}else{
-	$list = json_decode(file_get_contents($json_file_cache),true);
-}
-?><!DOCTYPE HTML>
+class WebArchiveBOT_WWW{
+
+	public string $site_url;
+	public string $sitename;
+	public string $db_path;
+
+	public function __construct(string $site_url,string $sitename,string $db_path){
+
+		$this->site_url = $site_url;
+		$this->sitename = $sitename;
+		$this->db_path = $db_path;
+	}
+
+	public function get_archive(int $limit,bool $json=false): mixed{
+
+		if(!is_int($limit)) return false;
+
+		if($limit === 0) $query = "SELECT * FROM `data`";
+		else $query = "SELECT * FROM `data` ORDER BY `id` DESC LIMIT $limit";
+
+		$db = new SQLite3($this->db_path);
+
+		$result = $db->query($query);
+
+		if($result !== false){
+
+			$data = array();
+			while($row = $result->fetchArray(SQLITE3_ASSOC)){
+				$title = base64_decode($row['title']);
+				$timestamp = $row['timestamp'];
+				$urls = unserialize(base64_decode($row['urls']));
+				$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
+			}
+		}
+
+		$db->close();
+
+		if($json === true) $data = json_encode($data,JSON_PRETTY_PRINT);
+
+		return $data;
+	}
+
+	public function print_main():void {
+
+		$db = new SQLite3($this->db_path);
+
+		$query = "SELECT * FROM `data` ORDER BY `id` DESC LIMIT 50";
+
+		$result = $db->query($query);
+
+		if($result !== false){
+
+			$data = array();
+			while($row = $result->fetchArray(SQLITE3_ASSOC)){
+				$title = base64_decode($row['title']);
+				$timestamp = $row['timestamp'];
+				$urls = unserialize(base64_decode($row['urls']));
+				$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
+			}
+		}
+
+		echo <<<EOC
+<!DOCTYPE HTML>
 <html lang="en">
+
+EOC;
+
+		echo <<<EOC
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>WebArchiveBOT, archived items</title>
@@ -58,30 +111,74 @@ if(class_exists('Redis') && is_file('.redis_id')){
 			}
 		</style>
 	</head>
+
+EOC;
+
+		echo <<<EOC
 	<body>
+
+EOC;
+
+		echo <<<EOC
 		<div>
 			<h1>WebArchiveBOT, archived items</h1>
-			<p>This page lists the last 50 files uploaded to <?= $sitename ?> and their links archived at Internet Archive by Wayback Machine.
-			You can download the <a href="<?= $json_file ?>">latest  <?= number_format($json_file_max_size,0,'','.') ?> files listed in JSON format</a>.</p>
+			<p>This page lists the last 50 files uploaded to $this->sitename and their links archived at Internet Archive by Wayback Machine.
+			You can download the <a href="?json_output">whole list</a> [<a href="?json_output=100">100</a>] [<a href="?json_output=1000">1.000</a>] [<a href="?json_output=10000">10.000</a>] [<a href="/webarchivebot/archived-history.json.gz">History</a>] in JSON format.</p>
 			<p>For more information, see the <a href="doc/index.html" target="blank">Documentation</a>.
 			<a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU Affero General Public License v3.</p>
 		</div>
 		<div>
-<?php if(!empty($list)){
 
-	foreach($list as $title=>$item){
-?>
-			<h2><a href="<?= $site_url ?><?= str_replace(array('%3A','%2F','%3F','%26','%3D','%23'),array(':','/','?','&','=','#'),rawurlencode($title)) ?>" target="blank"><?= $title ?></a></h2>
-			<b>Uploaded: </b><?= strftime("%F %T",$item['timestamp']) ?> (UTC)
+EOC;
+		foreach($data as $title=>$item){
+
+			$url = $this->site_url . str_replace(array('%3A','%2F','%3F','%26','%3D','%23'),array(':','/','?','&','=','#'),rawurlencode($title));
+			$date = strftime("%F %T",$item['timestamp']);
+
+			echo <<<EOC
+			<h2><a href="$url" target="blank">$title</a></h2>
+			<b>Uploaded: </b>$date (UTC)
 			<ul>
-<?php foreach($item['urls'] as $link){ ?>
-				<li><a href="<?= str_replace(array('%3A','%2F','%3F','%26','%3D','%23'),array(':','/','?','&','=','#'),rawurlencode($link)) ?>" target="blank"><?= $link ?></a></li>
-<?php } ?>
+
+EOC;
+			foreach($item['urls'] as $link){
+				$escaped_link = str_replace(array('%3A','%2F','%3F','%26','%3D','%23'),array(':','/','?','&','=','#'),rawurlencode($link));
+				echo <<<EOC
+				<li><a href="$escaped_link" target="blank">$link</a></li>
+
+EOC;
+
+			}
+		echo <<<EOC
 			</ul>
-<?php } ?>
-<?php }else{ ?>
-			<p>No links archived yet</p>
-<?php   } ?>
+
+EOC;
+		}
+		echo <<<EOC
 		</div>
 	</body>
 </html>
+
+EOC;
+	}
+}
+
+$web = new WebArchiveBOT_WWW($site_url,$sitename,$db_path);
+
+$json_output = $_GET['json_output'] + 0;
+
+if(isset($_GET['json_output'])){
+	header('Content-Type: application/x-gzip');
+	header('Content-Disposition: attachment; filename="archive.json.gz"');
+	header('Content-Transfer-Encoding: binary');
+	header('Accept-Ranges: bytes');
+
+	header('Cache-Control: private');
+	header('Pragma: private');
+	header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+
+	echo gzencode($web->get_archive($json_output,true));
+}else{
+	$web->print_main();
+}
+?>

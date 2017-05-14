@@ -25,17 +25,7 @@ require_once('class.php');
 // Check if SAPI is CLI
 if(php_sapi_name() != "cli") die("\nThis script should be executed from CLI.\n");
 
-error_reporting(E_ALL ^ E_NOTICE);
-ini_set("memory_limit",$php_memory_limit);
-
-ini_set('xdebug.var_display_max_depth',-1);
-ini_set('xdebug.var_display_max_children',-1);
-ini_set('xdebug.var_display_max_data',-1);
-
 define('TEMP_PATH',realpath(sys_get_temp_dir()));
-
-// Set the timezone to UTC
-date_default_timezone_set('UTC');
 
 // Declare the arguments to be taken from command line. User and Password may be received
 // from the arguments --user and --password for convenience, but them can also
@@ -60,7 +50,7 @@ Parameters:
 
    $bs--debug$be   If you want to output debug information
 
-   $bs--help$be    Show this help
+   $bs--help$be	Show this help
 
    $bs--license$be Show the license of this program
 
@@ -91,10 +81,25 @@ EOL;
 if($help === true) die($help_text);
 if($license === true) die($license_text);
 
-$wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl,$pages_per_query,$public_html_path,$json_file,$json_file_cache,$json_file_max_size,$redis_server,$redis_port);
+$wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl,$pages_per_query,$db_path);
 
 $login = $wiki->login($wiki_user,$wiki_password);
-if($login['login']['result'] != 'Success') die('Not logged in!');
+
+try{
+	if($login['login']['result']) != 'Success') throw new Exception("unable to login. Check your credentials.\n");
+}catch (Exception $e){
+	$message = $e->getMessage();
+	$memory_peak = memory_get_peak_usage (true);
+
+	echo "$message\nMemory peak: $memory_peak\n";
+
+	$date = date("Y-m-d H:i:s");
+	$message .= "\n\nMemory peak: $memory_peak\n\nGenerated: $date";
+
+	$wiki->sendMail($message);
+
+	die;
+}
 
 $wiki->setUserAgent('WebArchiveBOT/1.0 (https://github.com/Amitie10g/WebArchiveBOT; davidkingnt@gmail.com) Botclasses.php/1.0');
 
@@ -103,35 +108,34 @@ $interval = $interval*60;
 $result = true;
 $iteration = 0;
 while(true){
-		$time = strftime('%F %T');
-		echo "\n$time\nArchiving... ";
+	$time = strftime('%F %T');
+	echo "\n$time\nArchiving... ";
 
-		try{
-				if($iteration%1000 == 0 && $iteration != 0) $rotate = true;
-				else $rotate = false;
-				$files  = $wiki->getLatestFiles();
-				$links  = $wiki->getPagesExternalLinks($files);
-				$result = $wiki->archive($links,$rotate);
+	try{
+		if($iteration%1000 == 0 && $iteration != 0) $rotate = true;
+		else $rotate = false;
+		$files  = $wiki->getLatestFiles();
+		$result = $wiki->archive($files);
 
-				if($result !== true) throw new Exception("errors ocurred when trying to archive. See the log for details.\n");
-				echo "everything OK.\n";
-				if($debug === true){
-					$memory_peak = memory_get_peak_usage (true);
-					echo "Memory peak: $memory_peak\n";
-				}
-
-		}catch (Exception $e){
-				$message = $e->getMessage();
-				$memory_peak = memory_get_peak_usage (true);
-
-				echo "$message\nMemory peak: $memory_peak\n";
-
-				$date = date("Y-m-d H:i:s");
-				$message .= "\n\nMemory peak: $memory_peak\n\nGenerated: $date";
-
-				$wiki->sendMail($message);
+		if($result !== true) throw new Exception("errors ocurred when trying to archive. See the log for details.\n");
+		echo "everything OK.\n";
+		if($debug === true){
+			$memory_peak = memory_get_peak_usage (true);
+			echo "Memory peak: $memory_peak\n";
 		}
-		$iteration++;
-		sleep($interval);
+
+	}catch (Exception $e){
+		$message = $e->getMessage();
+		$memory_peak = memory_get_peak_usage (true);
+
+		echo "$message\nMemory peak: $memory_peak\n";
+
+		$date = date("Y-m-d H:i:s");
+		$message .= "\n\nMemory peak: $memory_peak\n\nGenerated: $date";
+
+		$wiki->sendMail($message);
+	}
+	$iteration++;
+	sleep($interval);
 }
 ?>
