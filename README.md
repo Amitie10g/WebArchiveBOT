@@ -15,19 +15,26 @@ Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
 
     `git clone -Hack https://github.com/Amitie10g/WebArchiveBOT.git`
 
-* Copy "bin/WebArchiveBOT.sh" and "bin/config.php" to your scripts path (inside your home directory, usually $HOME/bin) and edit it.
+* "bin/config.php" to your scripts path (inside your home directory, usually $HOME/bin) and edit it.
+* Copy "bin/WebArchiveBOT.sh" to your scripts path and edit it if necessary 
 * Symlink "bin/main.php" and "bin/class.php" to your scripts path.
 
 * Copy "www/.config.php" to your www directory and edit it.
 * Symlink "www/index.php" and "www/doc" (optional) to your www directory.
 
-Ensure the "WebArchiveBOT.sh" has exec permissions.
+* Ensure the `WebArchiveBOT.sh` has exec permissions.
+
+* Ensure the DB path is properly set in both the frontend and backedn configuration (absolute path!!!)
   
-## Running in HHVM
+## Running
+
+Just execute `WebArchiveBOT.sh`.
+
+### Running in HHVM
 
 Use the Hack version instead.
 
-## Running in Windows
+### Running in Windows
 
 To run the backend script in Windows, create a batch script to execute php-cli calling the script:
 
