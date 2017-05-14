@@ -15,11 +15,11 @@ Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
 
     `git clone -Hack https://github.com/Amitie10g/WebArchiveBOT.git`
 
-* Copy "bin/WebArchiveBOT.sh" and "bin/config.php" to your scripts path (inside your home directory, usually $HOME/bin)
-* Symlink "bin/main.php" and "bin/class.php" to your scripts path
+* Copy "bin/WebArchiveBOT.sh" and "bin/config.php" to your scripts path (inside your home directory, usually $HOME/bin) and edit it.
+* Symlink "bin/main.php" and "bin/class.php" to your scripts path.
 
-* Copy "www/.config.php" to your www directory
-* Symlink "www/index.php" and "www/doc" (optional) to your www directory
+* Copy "www/.config.php" to your www directory and edit it.
+* Symlink "www/index.php" and "www/doc" (optional) to your www directory.
 
 Ensure the "WebArchiveBOT.sh" has exec permissions.
   
