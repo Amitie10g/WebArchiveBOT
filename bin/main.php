@@ -86,7 +86,7 @@ $wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl,$pages_per_quer
 $login = $wiki->login($wiki_user,$wiki_password);
 
 try{
-	if($login['login']['result']) != 'Success') throw new Exception("unable to login. Check your credentials.\n");
+	if($login['login']['result'] != 'Success') throw new Exception("unable to login. Check your credentials.\n");
 }catch (Exception $e){
 	$message = $e->getMessage();
 	$memory_peak = memory_get_peak_usage (true);

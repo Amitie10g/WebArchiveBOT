@@ -24,9 +24,9 @@ require_once('.config.php');
 
 class WebArchiveBOT_WWW{
 
-	public string $site_url;
-	public string $sitename;
-	public string $db_path;
+	public $site_url;
+	public $sitename;
+	public $db_path;
 
 	public function __construct(string $site_url,string $sitename,string $db_path){
 
@@ -35,7 +35,7 @@ class WebArchiveBOT_WWW{
 		$this->db_path = $db_path;
 	}
 
-	public function get_archive(int $limit,bool $json=false): mixed{
+	public function get_archive($limit,$json){
 
 		if(!is_int($limit)) return false;
 
@@ -64,7 +64,7 @@ class WebArchiveBOT_WWW{
 		return $data;
 	}
 
-	public function print_main():void {
+	public function print_main(){
 
 		$db = new SQLite3($this->db_path);
 
