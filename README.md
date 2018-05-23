@@ -39,7 +39,11 @@ Use the Hack version instead.
 To run the backend script in Windows, create a batch script to execute php-cli calling the script:
 
     @echo off
-    php main.php
+    php main.php
+## TODO
+
+Add support for MySQL and Postgres
+Add a search bar
 
 ## License
 
