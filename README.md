@@ -24,7 +24,7 @@ Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
 
 * Ensure the `WebArchiveBOT.sh` has exec permissions.
 
-* Ensure the DB path is properly set in both the frontend and backend go checkconfiguration (absolute path!!!)
+* Ensure the DB path is properly set in both the frontend and backend configuration (absolute path!!!)
   
 ## Running
 
