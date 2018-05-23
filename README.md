@@ -43,8 +43,8 @@ To run the backend script in Windows, create a batch script to execute php-cli c
 
 ## TODO
 
-Add support for MySQL and Postgres
-Add a search bar
+* Add support for MySQL and Postgres
+* Add a search bar
 
 ## License
 
