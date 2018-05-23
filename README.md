@@ -40,6 +40,7 @@ To run the backend script in Windows, create a batch script to execute php-cli c
 
     @echo off
     php main.php
+
 ## TODO
 
 Add support for MySQL and Postgres
