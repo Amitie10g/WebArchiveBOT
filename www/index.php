@@ -26,60 +26,85 @@ class WebArchiveBOT_WWW{
 
 	public $site_url;
 	public $sitename;
+	public $db_type;
 	public $db_path;
 
-	public function __construct(string $site_url,string $sitename,string $db_path){
+	public function __construct(string $site_url,string $sitename,string $db_type,string $db_path){
 
 		$this->site_url = $site_url;
 		$this->sitename = $sitename;
-		$this->db_path = $db_path;
+		$this->db_type  = $db_type;
+		$this->db_path  = $db_path;
 	}
 
-	public function get_archive($limit,$json){
+	public function get_archive($limit){
 
 		if(!is_int($limit)) return false;
 
-		if($limit === 0) $query = "SELECT * FROM `data`";
-		else $query = "SELECT * FROM `data` ORDER BY `id` DESC LIMIT $limit";
+		if($limit === 0) $query = "SELECT * FROM data ORDER BY id DESC";
+		else $query = "SELECT * FROM data ORDER BY id DESC LIMIT $limit";
+		
+		if($this->db_type == "mysql"){
+			
+			return void; // Placeholder
+			
+		}elseif($this->db_type == "postgres"){
+			
+			return void; // Placeholder
 
-		$db = new SQLite3($this->db_path);
+		}else{
 
-		$result = $db->query($query);
+			$db = new SQLite3($this->db_path);
 
-		if($result !== false){
+			$result = $db->query($query);
 
-			$data = array();
-			while($row = $result->fetchArray(SQLITE3_ASSOC)){
-				$title = base64_decode($row['title']);
-				$timestamp = $row['timestamp'];
-				$urls = unserialize(base64_decode($row['urls']));
-				$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
+			if($result !== false){
+
+				$data = array();
+				while($row = $result->fetchArray(SQLITE3_ASSOC)){
+					$title = base64_decode($row['title']);
+					$timestamp = $row['timestamp'];
+					$urls = unserialize(base64_decode($row['urls']));
+					$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
+				}
 			}
+
+			$db->close();
+
+			return $data;
 		}
-
-		$db->close();
-
-		if($json === true) $data = json_encode($data,JSON_PRETTY_PRINT);
-
-		return $data;
 	}
 
 	public function print_main(){
 
-		$db = new SQLite3($this->db_path);
+		$file = $_GET['file'];
+		
+		if(!empty($file) $query = "SELECT * FROM data WHERE title = '".base64_encode($file)."' LIMIT 1";
+		else $query = "SELECT * FROM data ORDER BY id DESC LIMIT 50";
+		
+		if($this->db_type == "mysql"){
+			
+			return void; // Placeholder
+			
+		}elseif($this->db_type == "postgres"){
+			
+			return void; // Placeholder
 
-		$query = "SELECT * FROM `data` ORDER BY `id` DESC LIMIT 50";
+		}else{
+		
+			$db = new SQLite3($this->db_path);
 
-		$result = $db->query($query);
+			$result = $db->query($query);
 
-		if($result !== false){
+			if($result !== false){
 
-			$data = array();
-			while($row = $result->fetchArray(SQLITE3_ASSOC)){
-				$title = base64_decode($row['title']);
-				$timestamp = $row['timestamp'];
-				$urls = unserialize(base64_decode($row['urls']));
-				$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
+				$data = array();
+				while($row = $result->fetchArray(SQLITE3_ASSOC)){
+					$title = base64_decode($row['title']);
+					$timestamp = $row['timestamp'];
+					$urls = unserialize(base64_decode($row['urls']));
+					$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
+				}
 			}
 		}
 
