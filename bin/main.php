@@ -81,7 +81,7 @@ EOL;
 if($help === true) die($help_text);
 if($license === true) die($license_text);
 
-$wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl,$pages_per_query,$db_path);
+$wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl,$pages_per_query,$db_path,$sql_user,$sql_password,$sql_db,$sql_server);
 
 $login = $wiki->login($wiki_user,$wiki_password);
 
@@ -101,7 +101,7 @@ try{
 	die;
 }
 
-$wiki->setUserAgent('WebArchiveBOT/1.0 (https://github.com/Amitie10g/WebArchiveBOT; davidkingnt@gmail.com) Botclasses.php/1.0');
+$wiki->setUserAgent('WebArchiveBOT/1.0 (https://github.com/Amitie10g/WebArchiveBOT; davidkingnt@gmail.com) Botclasses.php/1.1');
 
 if(!is_int($interval)) $interval = 10;
 $interval = $interval*60;
