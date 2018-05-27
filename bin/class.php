@@ -2,7 +2,7 @@
 /**
   * WebArchiveBOT: botclases.php based MediaWiki script for archiving external links to Internet Archive Wayback Machine.
   *
-  * @copyright (c) 2015-2017  Davod - https://commons.wikimedia.org/wiki/User:Amitie_10g
+  * @copyright (c) 2015-2018  Davod - https://commons.wikimedia.org/wiki/User:Amitie_10g
   *
   * Contains parts of the Chris G's Bot classes library - https://www.mediawiki.org/wiki/Manual:Chris_G%27s_botclasses
   *
@@ -352,6 +352,10 @@ class WebArchiveBOT extends Wiki {
 	private $extlinks_bl;
 	private $pages_per_query;
 	private $db_path;
+	private $sql_user;
+	private $sql_password;
+	private $sql_db;
+	private $sql_server;
 
 	/**
 	 * This is the constructor.
@@ -359,10 +363,15 @@ class WebArchiveBOT extends Wiki {
 	 * @param string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error.
 	 * @param array $extlinks_bl The blacklisted URLs to exclude for archiving.
 	 * @param int $pages_per_query The maximum pages retrived per query (iteration) (100 by default).
+	 * @param string $db_type The database brand (MySQL/MariaDB, Postgres or SQLite).
 	 * @param string $db_path The path to the database file.
+	 * @param string $sql_user The MySQL/Postgres username.
+	 * @param string $sql_password The MySQL/Postgres password.
+	 * @param string $sql_db The MySQL/Postgres database.
+	 * @param string $sql_server The MySQL/Postgres server instance
 	 * @return void
 	**/
-	public function __construct($url,$email_operator,$extlinks_bl,$pages_per_query,$db_path){
+	public function __construct($url,$email_operator,$extlinks_bl,$pages_per_query,$db_type,$db_path,$sql_user,$sql_password,$sql_db,$sql_server){
 
 		if(!is_array($extlinks_bl)) $extlinks_bl = null;
 
@@ -372,7 +381,12 @@ class WebArchiveBOT extends Wiki {
 		$this->email_operator = $email_operator;
 		$this->extlinks_bl = '/('.implode('|',$extlinks_bl).')/';
 		$this->pages_per_query = $pages_per_query;
+		$this->db_type = $sql_type;
 		$this->db_path = $db_path;
+		$this->sql_user = $sql_server;
+		$this->sql_password = $sql_password;
+		$this->sql_db = $sql_db;
+		$this->sql_server = $sql_server;
 	}
 
 	/**
@@ -475,10 +489,21 @@ class WebArchiveBOT extends Wiki {
 
 		if(!is_array($pages) || empty($pages)) return false;
 
-		$db = new SQLite3($this->db_path);
+		if($this->db_type == 'mysql'){
 
-		$db->query('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
+			return void // Placeholder
 
+		}elseif($this->db_type == 'postgres'){
+
+			return void // Placeholder
+
+		}else{
+		
+			$db = new SQLite3($this->db_path);
+			$db->query('CREATE TABLE IF NOT EXISTS data (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
+
+		}
+			
 		$query = "INSERT INTO data(title,timestamp,urls) VALUES ";
 		$count = 0;
 
@@ -506,7 +531,8 @@ class WebArchiveBOT extends Wiki {
 		$query .= ";";
 
 		$result = $db->exec($query);
-		$db->close();
+		
+		if($this->db_type != 'mysql' && $this->db_type != 'postgres') $db->close();
 
 		return $result;
 	}
