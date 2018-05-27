@@ -4,8 +4,12 @@ $wiki_password = '';
 $wiki_url = '';
 $pages_per_query = 100;
 $interval = 5;
-$db_path = 'webarchivebot.sqlite3'; // Absolute path!!!
 $email_operator = '';
+$db_path = 'webarchivebot.sqlite3'; // Absolute path!!!
+$sql_user = '';
+$sql_password = '';
+$sql_db = '';
+$sql_server = '';
 
 $extlinks_bl[] = '(([\p{P}\p{N}]+\.)*google\.[\p{L}\p{N}]+)';
 $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*openstreetmap\.[\p{L}\p{N}]+)';
