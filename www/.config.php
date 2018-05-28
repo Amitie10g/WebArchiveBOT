@@ -7,8 +7,8 @@ $ts_mycnf = parse_ini_file($ts_pw['dir'] . "/replica.my.cnf");
 $site_url           = '';
 $sitename           = '';
 $db_type            = ''; // mysql, postgres or sqlite (default)
-$sql_user           = '';
-$sql_password       = '';
-$sql_server         = '';
-$db                 = ''; // The DB name. For SQLite, the absolute path
+$db_server          = ''; // The DB server. For SQLite use the absolute path to the DB file
+$db_name            = ''; // For SQLite, leave empty
+$db_user            = '';
+$db_password        = '';
 ?>
