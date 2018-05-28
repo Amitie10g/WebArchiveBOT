@@ -383,7 +383,7 @@ class WebArchiveBOT extends Wiki {
 		$this->pages_per_query = $pages_per_query;
 		$this->db_type = $sql_type;
 		$this->db_path = $db_path;
-		$this->sql_user = $sql_server;
+		$this->sql_user = $sql_user;
 		$this->sql_password = $sql_password;
 		$this->sql_db = $sql_db;
 		$this->sql_server = $sql_server;
