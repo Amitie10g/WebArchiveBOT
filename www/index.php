@@ -28,13 +28,21 @@ class WebArchiveBOT_WWW{
 	public $sitename;
 	public $db_type;
 	public $db_path;
+	public $sql_user;
+	public $sql_password;
+	public $sql_db;
+	public $sql_server;
 
-	public function __construct(string $site_url,string $sitename,string $db_type,string $db_path){
+	public function __construct($site_url,$sitename,$db_type,$db_path,$sql_user,$sql_password,$sql_db,$sql_server){
 
 		$this->site_url = $site_url;
 		$this->sitename = $sitename;
 		$this->db_type  = $db_type;
 		$this->db_path  = $db_path;
+		$this->sql_user = $sql_user;
+		$this->sql_password = $sql_password;
+		$this->sql_db = $sql_db;
+		$this->sql_server = $sql_server;
 	}
 
 	public function get_archive($limit){
@@ -46,33 +54,36 @@ class WebArchiveBOT_WWW{
 		
 		if($this->db_type == "mysql"){
 			
-			return void; // Placeholder
+			$dsn = "mysql:dbname=$this->sql_db;host=$this->sql_server";
+			$db = new PDO($dsn,$user,$password);
 			
 		}elseif($this->db_type == "postgres"){
-			
-			return void; // Placeholder
+
+			$dsn = "pgsql:dbname=$this->sql_db;host=$this->sql_server";
+			$db = new PDO($dsn,$user,$password);
 
 		}else{
 
-			$db = new SQLite3($this->db_path);
-
-			$result = $db->query($query);
-
-			if($result !== false){
-
-				$data = array();
-				while($row = $result->fetchArray(SQLITE3_ASSOC)){
-					$title = base64_decode($row['title']);
-					$timestamp = $row['timestamp'];
-					$urls = unserialize(base64_decode($row['urls']));
-					$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
-				}
-			}
-
-			$db->close();
-
-			return $data;
+			$dsn = "sqlite:$this->db_path";
+			$db = new PDO($dsn);
+			
 		}
+
+		$result = $db->query($query);
+
+		if($result !== false){
+
+			data = array();
+			foreach($result as $row){
+
+				$title = base64_decode($row['title']);
+				$timestamp = $row['timestamp'];
+				$urls = unserialize(base64_decode($row['urls']));
+				$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
+			}
+		}
+
+		return $data;
 	}
 
 	public function print_main(){
@@ -84,27 +95,31 @@ class WebArchiveBOT_WWW{
 		
 		if($this->db_type == "mysql"){
 			
-			return void; // Placeholder
+			$dsn = "mysql:dbname=$this->sql_db;host=$this->sql_server";
+			$db = new PDO($dsn,$user,$password);
 			
 		}elseif($this->db_type == "postgres"){
-			
-			return void; // Placeholder
+
+			$dsn = "pgsql:dbname=$this->sql_db;host=$this->sql_server";
+			$db = new PDO($dsn,$user,$password);
 
 		}else{
-		
-			$db = new SQLite3($this->db_path);
 
-			$result = $db->query($query);
+			$dsn = "sqlite:$this->db_path";
+			$db = new PDO($dsn);
+			
+		}
 
-			if($result !== false){
+		$result = $db->query($query);
 
-				$data = array();
-				while($row = $result->fetchArray(SQLITE3_ASSOC)){
-					$title = base64_decode($row['title']);
-					$timestamp = $row['timestamp'];
-					$urls = unserialize(base64_decode($row['urls']));
-					$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
-				}
+		if($result !== false){
+
+			$data = array();
+			while($row = $result->fetchArray(SQLITE3_ASSOC)){
+				$title = base64_decode($row['title']);
+				$timestamp = $row['timestamp'];
+				$urls = unserialize(base64_decode($row['urls']));
+				$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
 			}
 		}
 
@@ -188,7 +203,7 @@ EOC;
 	}
 }
 
-$web = new WebArchiveBOT_WWW($site_url,$sitename,$db_path);
+$web = new WebArchiveBOT_WWW($site_url,$sitename,$db_type,$db_path,$sql_user,$sql_password,$sql_db,$sql_server);
 
 $json_output = $_GET['json_output'] + 0;
 
