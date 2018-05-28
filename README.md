@@ -11,7 +11,7 @@ Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
 
     `git clone https://github.com/Amitie10g/WebArchiveBOT.git`
 
-  For Hack version:
+  For Hack version (experimental, outdated):
 
     `git clone -Hack https://github.com/Amitie10g/WebArchiveBOT.git`
 
@@ -28,15 +28,7 @@ Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
   
 ## Running
 
-Just execute `WebArchiveBOT.sh`.
-
-In ToolForge tool account:
-
-    webservice --backend=gridengine generic start $HOME/bin/hhvm-webservice.sh
-
-### Running in HHVM
-
-Use the Hack version instead.
+Just run `WebArchiveBOT.sh`.
 
 ### Running in Windows
 
