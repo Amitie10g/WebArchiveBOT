@@ -27,23 +27,21 @@ class WebArchiveBOT_WWW{
 	public $site_url;
 	public $sitename;
 	public $db_type;
-	public $db_path;
-	public $sql_user;
-	public $sql_password;
-	public $sql_db;
-	public $sql_server;
+	public $db_server;
+	public $db_name;
+	public $db_user;
+	public $db_password;
 	public $limit;
 
-	public function __construct($site_url,$sitename,$db_type,$db_path,$sql_user,$sql_password,$sql_db,$sql_server,$limit){
+	public function __construct($site_url,$sitename,$db_type,$db_server,$db_name,$db_user,$db_password,$limit){
 
 		$this->site_url = $site_url;
 		$this->sitename = $sitename;
 		$this->db_type  = $db_type;
-		$this->db_path  = $db_path;
-		$this->sql_user = $sql_user;
-		$this->sql_password = $sql_password;
-		$this->sql_db = $sql_db;
-		$this->sql_server = $sql_server;
+		$this->db_server = $db_server;
+		$this->db_name = $db_name;
+		$this->db_user = $db_user;
+		$this->db_password = $db_password;
 		$this->limit = $limit;
 	}
 
@@ -56,17 +54,17 @@ class WebArchiveBOT_WWW{
 		
 		if($this->db_type == "mysql"){
 			
-			$dsn = "mysql:dbname=$this->sql_db;host=$this->sql_server";
+			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
 			$db = new PDO($dsn,$user,$password);
 			
 		}elseif($this->db_type == "postgres"){
 
-			$dsn = "pgsql:dbname=$this->sql_db;host=$this->sql_server";
+			$dsn = "pgsql:dbname=$this->db_name;host=$this->db_server";
 			$db = new PDO($dsn,$user,$password);
 
 		}else{
 
-			$dsn = "sqlite:$this->db_path";
+			$dsn = "sqlite:$this->db_server";
 			$db = new PDO($dsn);
 			
 		}
@@ -97,17 +95,17 @@ class WebArchiveBOT_WWW{
 		
 		if($this->db_type == "mysql"){
 			
-			$dsn = "mysql:dbname=$this->sql_db;host=$this->sql_server";
+			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
 			$db = new PDO($dsn,$user,$password);
 			
 		}elseif($this->db_type == "postgres"){
 
-			$dsn = "pgsql:dbname=$this->sql_db;host=$this->sql_server";
+			$dsn = "pgsql:dbname=$this->db_name;host=$this->db_server";
 			$db = new PDO($dsn,$user,$password);
 
 		}else{
 
-			$dsn = "sqlite:$this->db_path";
+			$dsn = "sqlite:$this->db_server";
 			$db = new PDO($dsn);
 			
 		}
@@ -207,7 +205,7 @@ EOC;
 
 $json_output = $_GET['json_output'] + 0;	   
 		   
-$web = new WebArchiveBOT_WWW($site_url,$sitename,$db_type,$db_path,$sql_user,$sql_password,$sql_db,$sql_server,$json_output);
+$web = new WebArchiveBOT_WWW($site_url,$sitename,$db_type,$db_server,$db_name,$db_user,$db_password,$json_output);
 
 if(isset($_GET['json_output'])){
 	header('Content-Type: application/x-gzip');
