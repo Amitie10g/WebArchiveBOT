@@ -32,7 +32,7 @@ Just execute `WebArchiveBOT.sh`.
 
 In ToolForge tool account:
 
- webservice --backend=gridengine generic start $HOME/hhvm-webservice.sh
+    webservice --backend=gridengine generic start $HOME/bin/hhvm-webservice.sh
 
 ### Running in HHVM
 
