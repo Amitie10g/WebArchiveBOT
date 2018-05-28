@@ -32,8 +32,9 @@ class WebArchiveBOT_WWW{
 	public $sql_password;
 	public $sql_db;
 	public $sql_server;
+	public $limit;
 
-	public function __construct($site_url,$sitename,$db_type,$db_path,$sql_user,$sql_password,$sql_db,$sql_server){
+	public function __construct($site_url,$sitename,$db_type,$db_path,$sql_user,$sql_password,$sql_db,$sql_server,$limit){
 
 		$this->site_url = $site_url;
 		$this->sitename = $sitename;
@@ -43,14 +44,15 @@ class WebArchiveBOT_WWW{
 		$this->sql_password = $sql_password;
 		$this->sql_db = $sql_db;
 		$this->sql_server = $sql_server;
+		$this->limit = $limit;
 	}
 
-	public function get_archive($limit){
+	public function get_archive($this->limit){
 
-		if(!is_int($limit)) return false;
+		if(!is_int($this->limit)) return false;
 
 		if($limit === 0) $query = "SELECT * FROM data ORDER BY id DESC";
-		else $query = "SELECT * FROM data ORDER BY id DESC LIMIT $limit";
+		else $query = "SELECT * FROM data ORDER BY id DESC LIMIT $this->limit";
 		
 		if($this->db_type == "mysql"){
 			
@@ -203,9 +205,9 @@ EOC;
 	}
 }
 
-$web = new WebArchiveBOT_WWW($site_url,$sitename,$db_type,$db_path,$sql_user,$sql_password,$sql_db,$sql_server);
-
-$json_output = $_GET['json_output'] + 0;
+$json_output = $_GET['json_output'] + 0;	   
+		   
+$web = new WebArchiveBOT_WWW($site_url,$sitename,$db_type,$db_path,$sql_user,$sql_password,$sql_db,$sql_server,$json_output);
 
 if(isset($_GET['json_output'])){
 	header('Content-Type: application/x-gzip');
