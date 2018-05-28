@@ -30,6 +30,10 @@ Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
 
 Just execute `WebArchiveBOT.sh`.
 
+In ToolForge tool account:
+
+ webservice --backend=gridengine generic start $HOME/hhvm-webservice.sh
+
 ### Running in HHVM
 
 Use the Hack version instead.
@@ -43,8 +47,8 @@ To run the backend script in Windows, create a batch script to execute php-cli c
 
 ## TODO
 
-* Add support for MySQL and Postgres
-* Add a search bar
+* Add support for MySQL and Postgres (done, needs testing).
+* Add a search bar.
 
 ## License
 
