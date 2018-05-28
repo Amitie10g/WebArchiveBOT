@@ -491,19 +491,25 @@ class WebArchiveBOT extends Wiki {
 
 		if($this->db_type == 'mysql'){
 
-			return void // Placeholder
+			$dsn = "mysql:dbname=$this->sql_db;host=$this->sql_server";
+			$db = new PDO($dsn,$user,$password);
+			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTO_INCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
+
 
 		}elseif($this->db_type == 'postgres'){
 
-			return void // Placeholder
+			$dsn = "pgsql:dbname=$this->sql_db;host=$this->sql_server";
+			$db = new PDO($dsn,$user,$password);
+			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTO_INCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
 
 		}else{
-		
-			$db = new SQLite3($this->db_path);
-			$db->query('CREATE TABLE IF NOT EXISTS data (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
+
+			$dsn = "sqlite:$this->db_path";
+			$db = new PDO($dsn);
+			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
 
 		}
-			
+
 		$query = "INSERT INTO data(title,timestamp,urls) VALUES ";
 		$count = 0;
 
@@ -530,9 +536,7 @@ class WebArchiveBOT extends Wiki {
 
 		$query .= ";";
 
-		$result = $db->exec($query);
-		
-		if($this->db_type != 'mysql' && $this->db_type != 'postgres') $db->close();
+		$result = $db->exec($db->quote($query));
 
 		return $result;
 	}
@@ -546,7 +550,7 @@ class WebArchiveBOT extends Wiki {
 	public function sendMail($message,$subject=null){
 		if($subject == null) $subject = "Errors with WebArchiveBOT";
 		$from = "webarchivebot-noreply@wmflabs.org";
-		$to = $this->mail_operator;
+		$to = $this->email_operator;
 		$headers = "From: WebArchiveBOT <$from>\r\n";
 		mail($to,$subject,$message,$headers);
 	}
