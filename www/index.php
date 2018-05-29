@@ -111,7 +111,9 @@ class WebArchiveBOT_WWW{
 			
 		}
 		
+		echo "\n\n\n\n";
 		var_dump($query);
+		echo "\n\n\n\n";
 
 		$result = $db->query($query);
 
