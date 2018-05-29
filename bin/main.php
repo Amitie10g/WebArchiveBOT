@@ -19,6 +19,8 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  **/
 
+$ts_pw = posix_getpwuid(posix_getuid());
+
 require_once('config.php');
 require_once('class.php');
 
