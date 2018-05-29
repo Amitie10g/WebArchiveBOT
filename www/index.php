@@ -114,7 +114,7 @@ class WebArchiveBOT_WWW{
 		$result = $db->query($query);
 
 		if($result !== false){
-
+/*
 			$data = array();
 			while($row = $result->fetchArray(SQLITE3_ASSOC)){
 				$title = base64_decode($row['title']);
@@ -122,6 +122,7 @@ class WebArchiveBOT_WWW{
 				$urls = unserialize(base64_decode($row['urls']));
 				$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
 			}
+*/
 		}
 
 		echo <<<EOC
