@@ -490,20 +490,20 @@ class WebArchiveBOT extends Wiki {
 
 		if($this->db_type == 'mysql'){
 
-			$dsn = "mysql:dbname=$this->sql_db;host=$this->sql_server";
-			$db = new PDO($dsn,$user,$password);
+			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
+			$db = new PDO($dsn,$this->db_user,$this->db_password);
 			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTO_INCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
 
 
 		}elseif($this->db_type == 'postgres'){
 
-			$dsn = "pgsql:dbname=$this->sql_db;host=$this->sql_server";
-			$db = new PDO($dsn,$user,$password);
+			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
+			$db = new PDO($dsn,$this->db_user,$this->db_password);
 			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTO_INCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
 
 		}else{
 
-			$dsn = "sqlite:$this->db_path";
+			$dsn = "sqlite:$this->db_server";
 			$db = new PDO($dsn);
 			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
 
