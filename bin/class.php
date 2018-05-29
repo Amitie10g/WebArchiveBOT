@@ -488,8 +488,6 @@ class WebArchiveBOT extends Wiki {
 
 		if(!is_array($pages) || empty($pages)) return false;
 		
-		var_dump($this->db_server);
-
 		if($this->db_type == 'mysql'){
 
 			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
