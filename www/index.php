@@ -45,12 +45,13 @@ class WebArchiveBOT_WWW{
 		$this->limit = $limit;
 	}
 
-	public function get_archive($limit){
+	public function get_archive($limit,$file){
 		
-		if(empty($limit)) $limit = 50;
+		if(empty($limit)) $limit = 1000;
 		if(!is_int($limit)) return false;
 
 		if($limit === 0) $query = "SELECT * FROM data ORDER BY id DESC";
+		elseif(isset($file)) $query = "SELECT * FROM data WHERE title = '". base64_encode($file) . "';";
 		else $query = "SELECT * FROM data ORDER BY id DESC LIMIT $this->limit";
 		
 		if($this->db_type == "mysql"){
@@ -76,7 +77,6 @@ class WebArchiveBOT_WWW{
 
 			$data = array();
 			foreach($result as $row){
-
 				$title = base64_decode($row['title']);
 				$timestamp = $row['timestamp'];
 				$urls = unserialize(base64_decode($row['urls']));
@@ -87,47 +87,9 @@ class WebArchiveBOT_WWW{
 		return $data;
 	}
 
-	public function print_main(){
-
-		$file = $_GET['file'];
+	public function print_main($limit,$file){
 		
-		if(!empty($file)) $query = "SELECT * FROM data WHERE title = '".base64_encode($file)."' LIMIT 1";
-		else $query = "SELECT * FROM data ORDER BY id DESC LIMIT 50";
-		
-		if($this->db_type == "mysql"){
-			
-			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
-			$db = new PDO($dsn,$user,$password);
-			
-		}elseif($this->db_type == "postgres"){
-
-			$dsn = "pgsql:dbname=$this->db_name;host=$this->db_server";
-			$db = new PDO($dsn,$user,$password);
-
-		}else{
-
-			$dsn = "sqlite:$this->db_server";
-			$db = new PDO($dsn);
-			
-		}
-		
-		$result = $db->query($query);
-		
-		if($result !== false){
-
-			$data = array();
-			foreach ($result as $row) {
-				$title = base64_decode($row['title']);
-				$timestamp = $row['timestamp'];
-				$urls = unserialize(base64_decode($row['urls']));
-				$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
-			}
-
-		}
-		
-		echo "\n\n\n\n";
-		var_dump($data);
-		echo "\n\n\n\n";
+		$data = $this->getArchive($limit,$file);
 
 		echo <<<EOC
 <!DOCTYPE HTML>
@@ -209,6 +171,7 @@ EOC;
 	}
 }
 
+$file = $_GET['file'];
 $json_output = $_GET['json_output'] + 0;	   
 		   
 $web = new WebArchiveBOT_WWW($site_url,$sitename,$db_type,$db_server,$db_name,$db_user,$db_password,$json_output);
@@ -223,8 +186,8 @@ if(isset($_GET['json_output'])){
 	header('Pragma: private');
 	header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 
-	echo gzencode($web->get_archive($json_output,true));
+	echo gzencode(json_encode($web->get_archive($json_output)));
 }else{
-	$web->print_main();
+	$web->print_main(50,$file);
 }
 ?>
