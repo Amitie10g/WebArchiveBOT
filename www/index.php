@@ -96,6 +96,8 @@ class WebArchiveBOT_WWW{
 
 	public function printMain($limit,$file){
 		
+		var_dump($limit);
+		
 		$data = $this->getArchive($limit,$file);
 		
 		var_dump($data);
