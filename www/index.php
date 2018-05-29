@@ -52,10 +52,6 @@ class WebArchiveBOT_WWW{
 		else $query = "SELECT * FROM data ORDER BY id DESC";
 
 		if(isset($file)) $query = "SELECT * FROM data WHERE title = '". base64_encode($file) . "' LIMIT 1;";
-		
-		var_dump($query);
-		
-		die;
 
 		if($this->db_type == "mysql"){
 			
