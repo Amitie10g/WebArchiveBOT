@@ -85,6 +85,8 @@ class WebArchiveBOT_WWW{
 				$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
 			}
 		}
+		
+		var_dump($data);
 
 		return $data;
 	}
