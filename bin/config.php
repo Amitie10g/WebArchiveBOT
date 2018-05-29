@@ -9,11 +9,11 @@ $wiki_url = '';
 $pages_per_query = 100;
 $interval = 5;
 $email_operator = '';
-$db_path = 'webarchivebot.sqlite3'; // Absolute path!!!
-$sql_user = '';
-$sql_password = '';
-$sql_db = '';
-$sql_server = '';
+$db_type            = ''; // mysql, postgres or sqlite (default)
+$db_server          = ''; // The DB server. For SQLite use the absolute path to the DB file
+$db_name            = ''; // For SQLite, leave empty
+$db_user            = '';
+$db_password        = '';
 
 $extlinks_bl[] = '(([\p{P}\p{N}]+\.)*google\.[\p{L}\p{N}]+)';
 $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*openstreetmap\.[\p{L}\p{N}]+)';
