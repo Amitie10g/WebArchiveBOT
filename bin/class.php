@@ -487,6 +487,8 @@ class WebArchiveBOT extends Wiki {
 	public function archive($pages){
 
 		if(!is_array($pages) || empty($pages)) return false;
+		
+		var_dump($this->db_server);
 
 		if($this->db_type == 'mysql'){
 
@@ -508,8 +510,6 @@ class WebArchiveBOT extends Wiki {
 			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
 
 		}
-		
-		var_dump($db);
 
 		$query = "INSERT INTO data(title,timestamp,urls) VALUES ";
 		$count = 0;
