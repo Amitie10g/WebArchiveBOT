@@ -113,21 +113,21 @@ class WebArchiveBOT_WWW{
 		
 		$result = $db->query($query);
 		
-		echo "\n\n\n\n";
-		var_dump($result);
-		echo "\n\n\n\n";
-
 		if($result !== false){
-/*
+
 			$data = array();
-			while($row = $result->fetchArray(SQLITE3_ASSOC)){
+			foreach ($result as $row) {
 				$title = base64_decode($row['title']);
 				$timestamp = $row['timestamp'];
 				$urls = unserialize(base64_decode($row['urls']));
 				$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
 			}
-*/
+
 		}
+		
+		echo "\n\n\n\n";
+		var_dump($data);
+		echo "\n\n\n\n";
 
 		echo <<<EOC
 <!DOCTYPE HTML>
