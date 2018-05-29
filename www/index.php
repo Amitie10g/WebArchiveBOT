@@ -69,6 +69,8 @@ class WebArchiveBOT_WWW{
 			$db = new PDO($dsn);
 			
 		}
+		
+		var_dump($query);
 	
 		$result = $db->query($query);
 
