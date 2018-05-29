@@ -51,9 +51,10 @@ class WebArchiveBOT_WWW{
 		else $query = "SELECT * FROM data ORDER BY id DESC LIMIT $limit";
 
 		if(isset($file)) $query = "SELECT * FROM data WHERE title = '". base64_encode($file) . "';";
-
-		var_dump($query);
 		
+		var_dump($query);
+		die();
+
 		if($this->db_type == "mysql"){
 			
 			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
@@ -73,8 +74,6 @@ class WebArchiveBOT_WWW{
 		
 		$result = $db->query($query);
 		
-		var_dump($result);
-
 		if($result !== false){
 
 			$data = array();
@@ -86,8 +85,6 @@ class WebArchiveBOT_WWW{
 			}
 		}
 		
-		var_dump($data);
-
 		return $data;
 	}
 
@@ -95,8 +92,6 @@ class WebArchiveBOT_WWW{
 		
 		$data = $this->getArchive($limit,$file);
 		
-		var_dump($data);
-
 		echo <<<EOC
 <!DOCTYPE HTML>
 <html lang="en">
