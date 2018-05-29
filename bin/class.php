@@ -536,6 +536,8 @@ class WebArchiveBOT extends Wiki {
 		}
 
 		$query .= ";";
+		
+		$var_dump($query);
 
 		$result = $db->exec($db->quote($query));
 
