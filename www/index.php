@@ -51,7 +51,11 @@ class WebArchiveBOT_WWW{
 		if(is_int($limit)) $query = "SELECT * FROM data ORDER BY id DESC LIMIT $limit";
 		else $query = "SELECT * FROM data ORDER BY id DESC";
 
-		if(isset($file)) $query = "SELECT * FROM data WHERE title = '". base64_encode($file) . "';";
+		if(isset($file)) $query = "SELECT * FROM data WHERE title = '". base64_encode($file) . "' LIMIT 1;";
+		
+		var_dump($query);
+		
+		die;
 
 		if($this->db_type == "mysql"){
 			
@@ -174,7 +178,6 @@ $file = $_GET['file'];
 $json_output = $_GET['json_output'] + 0;
 
 var_dump($_GET['file']);
-die();
 
 $web = new WebArchiveBOT_WWW($site_url,$sitename,$db_type,$db_server,$db_name,$db_user,$db_password);
 
