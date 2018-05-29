@@ -20,6 +20,8 @@
  *
  **/
 
+$ts_pw = posix_getpwuid(posix_getuid());
+
 require_once('.config.php');
 
 class WebArchiveBOT_WWW{
