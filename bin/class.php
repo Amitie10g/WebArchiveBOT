@@ -351,11 +351,11 @@ class WebArchiveBOT extends Wiki {
 	private $email_operator;
 	private $extlinks_bl;
 	private $pages_per_query;
-	private $db_path;
-	private $sql_user;
-	private $sql_password;
-	private $sql_db;
-	private $sql_server;
+	private $db_type;
+	private $db_server;
+	private $db_name;
+	private $db_user;
+	private $db_password;
 
 	/**
 	 * This is the constructor.
@@ -371,7 +371,7 @@ class WebArchiveBOT extends Wiki {
 	 * @param string $sql_server The MySQL/Postgres server instance
 	 * @return void
 	**/
-	public function __construct($url,$email_operator,$extlinks_bl,$pages_per_query,$db_type,$db_path,$sql_user,$sql_password,$sql_db,$sql_server){
+	public function __construct($url,$email_operator,$extlinks_bl,$pages_per_query,$db_type,$db_server,$db_name,$db_user,$db_password){
 
 		if(!is_array($extlinks_bl)) $extlinks_bl = null;
 
@@ -381,12 +381,11 @@ class WebArchiveBOT extends Wiki {
 		$this->email_operator = $email_operator;
 		$this->extlinks_bl = '/('.implode('|',$extlinks_bl).')/';
 		$this->pages_per_query = $pages_per_query;
-		$this->db_type = $sql_type;
-		$this->db_path = $db_path;
-		$this->sql_user = $sql_user;
-		$this->sql_password = $sql_password;
-		$this->sql_db = $sql_db;
-		$this->sql_server = $sql_server;
+		$this->db_type = $db_type;
+		$this->db_server = $db_server;
+		$this->db_name = $db_name;
+		$this->db_user = $db_user;
+		$this->db_password = $db_password;
 	}
 
 	/**
