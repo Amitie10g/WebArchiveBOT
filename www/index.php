@@ -53,8 +53,6 @@ class WebArchiveBOT_WWW{
 
 		if(isset($file)) $query = "SELECT * FROM data WHERE title = '". base64_encode($file) . "';";
 		
-		die();
-
 		if($this->db_type == "mysql"){
 			
 			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
