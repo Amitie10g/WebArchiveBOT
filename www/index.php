@@ -45,7 +45,7 @@ class WebArchiveBOT_WWW{
 		$this->limit = $limit;
 	}
 
-	public function get_archive($limit,$file){
+	public function getArchive($limit,$file){
 		
 		if(empty($limit)) $limit = 1000;
 		if(!is_int($limit)) return false;
@@ -87,7 +87,7 @@ class WebArchiveBOT_WWW{
 		return $data;
 	}
 
-	public function print_main($limit,$file){
+	public function printMain($limit,$file){
 		
 		$data = $this->getArchive($limit,$file);
 
@@ -188,6 +188,6 @@ if(isset($_GET['json_output'])){
 
 	echo gzencode(json_encode($web->get_archive($json_output)));
 }else{
-	$web->print_main(50,$file);
+	$web->printMain(50,$file);
 }
 ?>
