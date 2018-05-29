@@ -72,6 +72,8 @@ class WebArchiveBOT_WWW{
 		}
 		
 		$result = $db->query($query);
+		
+		var_dump($result);
 
 		if($result !== false){
 
