@@ -44,7 +44,6 @@ class WebArchiveBOT_WWW{
 	}
 
 	public function getArchive($limit,$file){
-		
 
 		if(empty($limit)) $limit = 1000;
 
