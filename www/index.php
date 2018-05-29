@@ -51,8 +51,11 @@ class WebArchiveBOT_WWW{
 		if(!is_int($limit)) return false;
 
 		if($limit === 0) $query = "SELECT * FROM data ORDER BY id DESC";
-		elseif(isset($file)) $query = "SELECT * FROM data WHERE title = '". base64_encode($file) . "';";
 		else $query = "SELECT * FROM data ORDER BY id DESC LIMIT $this->limit";
+
+		if(isset($file)) $query = "SELECT * FROM data WHERE title = '". base64_encode($file) . "';";
+
+		var_dump($query);
 		
 		if($this->db_type == "mysql"){
 			
