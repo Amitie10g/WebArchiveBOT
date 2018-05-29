@@ -191,7 +191,4 @@ if(isset($_GET['json_output'])){
 	$web->printMain(50,$file);
 }
 
-echo "----\n";
-echo memory_get_usage(true);
-
 ?>
