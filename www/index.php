@@ -45,6 +45,8 @@ class WebArchiveBOT_WWW{
 
 	public function getArchive($limit,$file){
 		
+		var_dump($limit);
+		
 		if(empty($limit)) $limit = 1000;
 
 		if(is_int($limit)) $query = "SELECT * FROM data ORDER BY id DESC";
@@ -52,7 +54,6 @@ class WebArchiveBOT_WWW{
 
 		if(isset($file)) $query = "SELECT * FROM data WHERE title = '". base64_encode($file) . "';";
 		
-		var_dump($query);
 		die();
 
 		if($this->db_type == "mysql"){
