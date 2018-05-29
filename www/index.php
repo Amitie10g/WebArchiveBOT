@@ -45,9 +45,10 @@ class WebArchiveBOT_WWW{
 		$this->limit = $limit;
 	}
 
-	public function get_archive($this->limit){
-
-		if(!is_int($this->limit)) return false;
+	public function get_archive($limit){
+		
+		if(empty($limit)) $limit = 50;
+		if(!is_int($limit)) return false;
 
 		if($limit === 0) $query = "SELECT * FROM data ORDER BY id DESC";
 		else $query = "SELECT * FROM data ORDER BY id DESC LIMIT $this->limit";
@@ -73,7 +74,7 @@ class WebArchiveBOT_WWW{
 
 		if($result !== false){
 
-			data = array();
+			$data = array();
 			foreach($result as $row){
 
 				$title = base64_decode($row['title']);
@@ -90,7 +91,7 @@ class WebArchiveBOT_WWW{
 
 		$file = $_GET['file'];
 		
-		if(!empty($file) $query = "SELECT * FROM data WHERE title = '".base64_encode($file)."' LIMIT 1";
+		if(!empty($file)) $query = "SELECT * FROM data WHERE title = '".base64_encode($file)."' LIMIT 1";
 		else $query = "SELECT * FROM data ORDER BY id DESC LIMIT 50";
 		
 		if($this->db_type == "mysql"){
