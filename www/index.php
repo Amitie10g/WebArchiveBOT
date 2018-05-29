@@ -171,8 +171,8 @@ EOC;
 }
 
 $file = $_GET['file'];
-$json_output = $_GET['json_output'] + 0;	   
-		   
+$json_output = $_GET['json_output'] + 0;
+
 $web = new WebArchiveBOT_WWW($site_url,$sitename,$db_type,$db_server,$db_name,$db_user,$db_password);
 
 if(isset($_GET['json_output'])){
