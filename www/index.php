@@ -111,11 +111,11 @@ class WebArchiveBOT_WWW{
 			
 		}
 		
-		echo "\n\n\n\n";
-		var_dump($query);
-		echo "\n\n\n\n";
-
 		$result = $db->query($query);
+		
+		echo "\n\n\n\n";
+		var_dump($result);
+		echo "\n\n\n\n";
 
 		if($result !== false){
 /*
