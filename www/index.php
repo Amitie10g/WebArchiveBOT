@@ -69,7 +69,7 @@ class WebArchiveBOT_WWW{
 			$db = new PDO($dsn);
 			
 		}
-
+	
 		$result = $db->query($query);
 
 		if($result !== false){
