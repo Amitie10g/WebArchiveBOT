@@ -186,7 +186,7 @@ if(isset($_GET['json_output'])){
 	header('Pragma: private');
 	header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 
-	echo gzencode(json_encode($web->get_archive($json_output)));
+	echo gzencode(json_encode($web->getArchive($json_output)));
 }else{
 	$web->printMain(50,$file);
 }
