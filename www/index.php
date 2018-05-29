@@ -70,8 +70,6 @@ class WebArchiveBOT_WWW{
 			
 		}
 		
-		var_dump($query);
-	
 		$result = $db->query($query);
 
 		if($result !== false){
@@ -112,6 +110,8 @@ class WebArchiveBOT_WWW{
 			$db = new PDO($dsn);
 			
 		}
+		
+		var_dump($query);
 
 		$result = $db->query($query);
 
