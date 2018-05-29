@@ -83,7 +83,7 @@ EOL;
 if($help === true) die($help_text);
 if($license === true) die($license_text);
 
-$wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl,$pages_per_query,$db_path,$sql_user,$sql_password,$sql_db,$sql_server);
+$wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl,$pages_per_query,$db_type,$db_server,$db_name,$db_user,$db_password);
 
 $login = $wiki->login($wiki_user,$wiki_password);
 
