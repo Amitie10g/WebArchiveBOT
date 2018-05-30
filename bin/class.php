@@ -491,20 +491,47 @@ class WebArchiveBOT extends Wiki {
 		if($this->db_type == 'mysql'){
 
 			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
-			$db = new PDO($dsn,$this->db_user,$this->db_password);
+			
+			try{
+				$db = new PDO($dsn,$this->db_user,$this->db_password);
+			}catch (PDOException $e){
+   				$message = 'Connection to the DB failed';
+				echo "$message.";
+				$this->sendMail("$message: " . $e->getMessage());
+				die();
+			}
+			
 			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTO_INCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
-
 
 		}elseif($this->db_type == 'postgres'){
 
-			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
-			$db = new PDO($dsn,$this->db_user,$this->db_password);
+			$dsn = "pgsql:dbname=$this->db_name;host=$this->db_server";
+
+			try{
+				$db = new PDO($dsn,$this->db_user,$this->db_password);
+
+			}catch (PDOException $e){
+   				$message = 'Connection to the DB failed';
+				echo "$message.";
+				$this->sendMail("$message: " . $e->getMessage());
+				die();
+			}
+
 			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTO_INCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
 
 		}else{
 
 			$dsn = "sqlite:$this->db_server";
-			$db = new PDO($dsn);
+			
+			try{
+				$db = new PDO($dsn);
+			}catch (PDOException $e){
+   				$message = 'Connection to the DB failed';
+				echo "$message.";
+				$this->sendMail("$message: " . $e->getMessage());
+				die();
+			}
+			
 			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
 
 		}
