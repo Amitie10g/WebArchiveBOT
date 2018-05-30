@@ -128,7 +128,7 @@ class WebArchiveBOT_WWW{
 	 * Prints the main page to the browser.
 	 * @param init $limit The maximum results queried to the DB
 	 * @param $file The filename to search
-	 * @return array
+	 * @return void
 	**/
 	public function printMain($limit,$file){
 		
