@@ -34,8 +34,10 @@ Just run `WebArchiveBOT.sh`.
 
 To run the backend script in Windows, create a batch script to execute php-cli calling the script:
 
-    @echo off
-    php main.php
+```
+@echo off
+php main.php
+```
 
 ## License
 
