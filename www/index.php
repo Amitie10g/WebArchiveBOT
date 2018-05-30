@@ -47,29 +47,43 @@ class WebArchiveBOT_WWW{
 
 	public function getArchive($limit,$file){
 
+		if($this->db_type == "mysql"){
+
+			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
+
+			try{
+				$db = new PDO($dsn,$this->db_user,$this->db_password);
+			}catch (PDOException $e){
+				die('Connection to the DB failed.');
+			}	
+	
+		}elseif($this->db_type == "postgres"){
+
+			$dsn = "pgsql:dbname=$this->db_name;host=$this->db_server";
+			
+			try{
+				$db = new PDO($dsn,$user,$password);
+			}catch (PDOException $e){
+				die('Connection to the DB failed.');
+			}
+		}else{
+
+			$dsn = "sqlite:$this->db_server";
+			
+			try{
+				$db = new PDO($dsn);
+			}catch (PDOException $e){
+				die('Connection to the DB failed.');
+			}
+			
+		}
+		
 		if(empty($limit)) $limit = 1000;
 
 		if(is_int($limit)) $query = "SELECT * FROM data ORDER BY id DESC LIMIT $limit";
 		else $query = "SELECT * FROM data ORDER BY id DESC";
 
 		if(isset($file)) $query = "SELECT * FROM data WHERE title = '". base64_encode($file) . "' LIMIT 1;";
-
-		if($this->db_type == "mysql"){
-			
-			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
-			$db = new PDO($dsn,$this->db_user,$this->db_password);
-			
-		}elseif($this->db_type == "postgres"){
-
-			$dsn = "pgsql:dbname=$this->db_name;host=$this->db_server";
-			$db = new PDO($dsn,$user,$password);
-
-		}else{
-
-			$dsn = "sqlite:$this->db_server";
-			$db = new PDO($dsn);
-			
-		}
 		
 		$result = $db->query($query);
 		
@@ -94,10 +108,6 @@ class WebArchiveBOT_WWW{
 		echo <<<EOC
 <!DOCTYPE HTML>
 <html lang="en">
-
-EOC;
-
-		echo <<<EOC
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>WebArchiveBOT, archived items</title>
@@ -119,15 +129,7 @@ EOC;
 			}
 		</style>
 	</head>
-
-EOC;
-
-		echo <<<EOC
 	<body>
-
-EOC;
-
-		echo <<<EOC
 		<div>
 			<h1>WebArchiveBOT, archived items</h1>
 			<p>This page lists the last 50 files uploaded to $this->sitename and their links archived at Internet Archive by Wayback Machine.
@@ -146,6 +148,7 @@ EOC;
 		
 		</div>
 		<div>
+			<ul>
 
 EOC;
 		foreach($data as $title=>$item){
@@ -154,25 +157,26 @@ EOC;
 			$date = strftime("%F %T",$item['timestamp']);
 
 			echo <<<EOC
-			<h2><a href="$url" target="blank">$title</a></h2>
-			<b>Uploaded: </b>$date (UTC)
-			<ul>
+				<h2><a href="$url" target="blank">$title</a></h2>
+				<b>Uploaded: </b>$date (UTC)
+				<ul>
 
 EOC;
 			foreach($item['urls'] as $link){
 				$escaped_link = str_replace(array('%3A','%2F','%3F','%26','%3D','%23'),array(':','/','?','&','=','#'),rawurlencode($link));
 				echo <<<EOC
-				<li><a href="$escaped_link" target="blank">$link</a></li>
+					<li><a href="$escaped_link" target="blank">$link</a></li>
 
 EOC;
 
 			}
 		echo <<<EOC
-			</ul>
+				</ul>
 
 EOC;
 		}
 		echo <<<EOC
+			</ul>
 		</div>
 	</body>
 </html>
