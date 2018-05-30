@@ -37,11 +37,6 @@ To run the backend script in Windows, create a batch script to execute php-cli c
     @echo off
     php main.php
 
-## TODO
-
-* Add support for MySQL and Postgres (done, needs testing).
-* Add a search bar.
-
 ## License
 
 This program is licensed under the GNU Affero General Public License version 3. Contains parts of the Chris G's Bot classes library, licensed originally under the GNU General Public License version 2.
