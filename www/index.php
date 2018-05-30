@@ -134,6 +134,18 @@ EOC;
 			You can download the <a href="?json_output">whole list</a> [<a href="?json_output=100">100</a>] [<a href="?json_output=1000">1.000</a>] [<a href="?json_output=10000">10.000</a>] [<a href="/webarchivebot/archived-history.json.gz">History</a>] in JSON format.</p>
 			<p>For more information, see the <a href="doc/index.html" target="blank">Documentation</a>.
 			<a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU Affero General Public License v3.</p>
+		
+			<div>
+			
+				<form method="get" action="index.php">
+				
+					<input type="text" name="file">
+					<input type="submit">
+				
+				</form>
+			
+			</div>
+		
 		</div>
 		<div>
 
