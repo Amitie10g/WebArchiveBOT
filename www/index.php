@@ -56,7 +56,7 @@ class WebArchiveBOT_WWW{
 
 		if($this->db_type == "mysql"){
 			
-			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
+			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server"; var_dump(dsn); die();
 			$db = new PDO($dsn,$user,$password);
 			
 		}elseif($this->db_type == "postgres"){
