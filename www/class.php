@@ -64,8 +64,8 @@ class WebArchiveBOT_WWW{
 
 	/**
 	 * Retrive the data.
-	 * @param init $limit The maximum results queried to the DB
-	 * @param $file The filename to search
+	 * @param int $limit The maximum results queried to the DB
+	 * @param string $file The filename to search
 	 * @return array
 	**/
 	public function getArchive($limit,$file){
@@ -126,8 +126,8 @@ class WebArchiveBOT_WWW{
 
 	/**
 	 * Prints the main page to the browser.
-	 * @param init $limit The maximum results queried to the DB
-	 * @param $file The filename to search
+	 * @param int $limit The maximum results queried to the DB
+	 * @param string $file The filename to search
 	 * @return void
 	**/
 	public function printMain($limit,$file){
