@@ -63,6 +63,21 @@ class http {
 	public $defaultHttpHeader = array('Expect:');
 
 	/**
+	  * This is the Construct.
+	  * @return void
+	 **/
+	public function __construct(){
+		$this->ch = curl_init();
+		$this->uid = dechex(rand(0,99999999));
+		curl_setopt($this->ch,CURLOPT_COOKIEJAR,TEMP_PATH.'cluewikibot.cookies.'.$this->uid.'.dat');
+		curl_setopt($this->ch,CURLOPT_COOKIEFILE,TEMP_PATH.'cluewikibot.cookies.'.$this->uid.'.dat');
+		curl_setopt($this->ch,CURLOPT_MAXCONNECTS,100);
+		$this->postfollowredirs = 0;
+		$this->getfollowredirs = 1;
+		$this->cookie_jar = array();
+	}
+
+	/**
 	  * Get the HTTP code from cURL.
 	  * @return array
 	 **/
@@ -85,21 +100,6 @@ class http {
 			else $vars .= $keyprefix.$key.$keypostfix."=".urlencode($value)."&";
 		}
 		return $vars;
-	}
-
-	/**
-	  * This is the Construct.
-	  * @return void
-	 **/
-	public function __construct(){
-		$this->ch = curl_init();
-		$this->uid = dechex(rand(0,99999999));
-		curl_setopt($this->ch,CURLOPT_COOKIEJAR,TEMP_PATH.'cluewikibot.cookies.'.$this->uid.'.dat');
-		curl_setopt($this->ch,CURLOPT_COOKIEFILE,TEMP_PATH.'cluewikibot.cookies.'.$this->uid.'.dat');
-		curl_setopt($this->ch,CURLOPT_MAXCONNECTS,100);
-		$this->postfollowredirs = 0;
-		$this->getfollowredirs = 1;
-		$this->cookie_jar = array();
 	}
 
 	/**
