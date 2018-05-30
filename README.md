@@ -5,7 +5,7 @@ This experimental tool looks for New Files uploaded to Wikimedia Commons (or any
 
 Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
 
-## Instalaltion: 
+## Installation: 
 
 * Run `git clone` to download the files:
 
