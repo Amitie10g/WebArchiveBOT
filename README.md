@@ -1,7 +1,7 @@
 # WebArchiveBOT
 PHP script to save external links to Internet Archive using the MediaWiki and Internet Archive Wayback Machine API.
 
-This experimental tool looks for New Files uploaded to Wikimedia Commons (or any Wiki), extract the external links, and queries to Internet Archive by Wayback Machine to save them. This tools runs continuously as a daemon, and is monitored by Bigbrother.
+This experimental tool looks for New Files uploaded to Wikimedia Commons (or any Wiki), extract the external links, and queries to Internet Archive by Wayback Machine to save them. This tool runs continuously as a daemon, and is monitored by Bigbrother in ToolForge.
 
 Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
 
