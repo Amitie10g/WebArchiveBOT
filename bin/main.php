@@ -108,14 +108,11 @@ $wiki->setUserAgent('WebArchiveBOT/1.0 (https://github.com/Amitie10g/WebArchiveB
 if(!is_int($interval)) $interval = 10;
 $interval = $interval*60;
 $result = true;
-$iteration = 0;
 while(true){
 	$time = strftime('%F %T');
 	echo "\n$time\nArchiving... ";
 
 	try{
-		if($iteration%1000 == 0 && $iteration != 0) $rotate = true;
-		else $rotate = false;
 		$files  = $wiki->getLatestFiles();
 		$result = $wiki->archive($files);
 
@@ -133,11 +130,10 @@ while(true){
 		echo "$message\nMemory peak: $memory_peak\n";
 
 		$date = date("Y-m-d H:i:s");
-		$message .= "\n\nMemory peak: $memory_peak\n\nGenerated: $date";
+		$message .= "\n\nMemory peak: $memory_peak\n\nGenerated: $date (UTC)";
 
 		$wiki->sendMail($message);
 	}
-	$iteration++;
 	sleep($interval);
 }
 ?>
