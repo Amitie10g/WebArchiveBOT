@@ -41,12 +41,12 @@
 /**
   * This class is designed to provide a simplified interface to cURL which maintains cookies.
   * @author Cobi
-  * @property $ch The cURL class reference
-  * @property $uid The cURL UID object
-  * @property $cookie_jar The cURL cookie_jar object
+  * @property class $ch The cURL class reference
+  * @property object $uid The cURL UID object
+  * @property object $cookie_jar The cURL cookie_jar object
   * @property $postfollowredirs
   * @property $getfollowredirs
-  * @property $quiet
+  * @property bool $quiet
   * @property $userAgent The default User agent
   * @property $httpHeader
   * @property $defaultHttpHeader
@@ -368,12 +368,11 @@ class WebArchiveBOT extends Wiki {
 	 * @param string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error.
 	 * @param array $extlinks_bl The blacklisted URLs to exclude for archiving.
 	 * @param int $pages_per_query The maximum pages retrived per query (iteration) (100 by default).
-	 * @param string $db_type The database brand (MySQL/MariaDB, Postgres or SQLite).
-	 * @param string $db_path The path to the database file.
-	 * @param string $sql_user The MySQL/Postgres username.
-	 * @param string $sql_password The MySQL/Postgres password.
-	 * @param string $sql_db The MySQL/Postgres database.
-	 * @param string $sql_server The MySQL/Postgres server instance
+	 * @param string $db_type The database brand used.
+	 * @param string $db_server The database server address (absolute path for SQLite).
+	 * @param string $db_name The database name.
+	 * @param string $db_user The database access username.
+	 * @param string $db_password The database access password.
 	 * @return void
 	**/
 	public function __construct($url,$email_operator,$extlinks_bl,$pages_per_query,$db_type,$db_server,$db_name,$db_user,$db_password){
