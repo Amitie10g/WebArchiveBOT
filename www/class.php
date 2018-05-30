@@ -20,6 +20,16 @@
  *
  **/
 
+/**
+  * This class does the data retrival and printing.
+  * @property string $site_url The Wiki site URL
+  * @property $sitename The Wiki site name
+  * @property string string $db_type The database brand used.
+  * @property string $db_server The database server address (absolute path for SQLite).
+  * @property string $db_name The database name.
+  * @property string $db_user The database access username.
+ * @property string $db_password The database access password.
+**/
 class WebArchiveBOT_WWW{
 
 	public $site_url;
@@ -29,7 +39,18 @@ class WebArchiveBOT_WWW{
 	public $db_name;
 	public $db_user;
 	public $db_password;
-
+	
+	/**
+	 * This is the constructor.
+	 * @param string $site_url The Wiki site URL
+	 * @param $sitename The Wiki site name
+	 * @param string $db_type The database brand used.
+	 * @param string $db_server The database server address (absolute path for SQLite).
+	 * @param string $db_name The database name.
+	 * @param string $db_user The database access username.
+	 * @param string $db_password The database access password.
+	 * @return void
+	**/
 	public function __construct($site_url,$sitename,$db_type,$db_server,$db_name,$db_user,$db_password){
 
 		$this->site_url = $site_url;
@@ -41,6 +62,12 @@ class WebArchiveBOT_WWW{
 		$this->db_password = $db_password;
 	}
 
+	/**
+	 * Retrive the data.
+	 * @param init $limit The maximum results queried to the DB
+	 * @param $file The filename to search
+	 * @return array
+	**/
 	public function getArchive($limit,$file){
 
 		if($this->db_type == "mysql"){
@@ -97,6 +124,12 @@ class WebArchiveBOT_WWW{
 		return $data;
 	}
 
+	/**
+	 * Prints the main page to the browser.
+	 * @param init $limit The maximum results queried to the DB
+	 * @param $file The filename to search
+	 * @return array
+	**/
 	public function printMain($limit,$file){
 		
 		$data = $this->getArchive($limit,$file);
