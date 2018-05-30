@@ -343,7 +343,12 @@ class Wiki {
  * @property string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error.
  * @property array $extlinks_bl The blacklisted URLs to exclude for archiving.
  * @property int $pages_per_query The maximum pages retrived per query (iteration) (100 by default).
- * @property string $db_path The path to the database file.
+ * @property string $db_type The database brand used.
+ * @property string $db_server The database server address (absolute path for SQLite).
+ * @property string $db_name The database name.
+ * @property string $db_user The database access username.
+ * @property string $db_password The database access password.
+ 
 **/
 class WebArchiveBOT extends Wiki {
 	public $url;
