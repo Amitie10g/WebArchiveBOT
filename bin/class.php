@@ -41,12 +41,12 @@
 /**
   * This class is designed to provide a simplified interface to cURL which maintains cookies.
   * @author Cobi
-  * @property class $ch The cURL class reference
-  * @property object $uid The cURL UID object
-  * @property object $cookie_jar The cURL cookie_jar object
+  * @property $ch The cURL class reference
+  * @property $uid The cURL UID object
+  * @property $cookie_jar The cURL cookie_jar object
   * @property $postfollowredirs
   * @property $getfollowredirs
-  * @property bool $quiet
+  * @property $quiet
   * @property $userAgent The default User agent
   * @property $httpHeader
   * @property $defaultHttpHeader
