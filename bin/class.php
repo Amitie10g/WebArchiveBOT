@@ -490,7 +490,7 @@ class WebArchiveBOT extends Wiki {
 		
 		if($this->db_type == 'mysql'){
 
-			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server"; var_dump(dsn);
+			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server"; var_dump(dsn); die();
 			$db = new PDO($dsn,$this->db_user,$this->db_password);
 			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTO_INCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
 
