@@ -136,7 +136,7 @@ EOC;
 			<a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU Affero General Public License v3.</p>
 		
 			<div>
-				Find a file (with the prefix <code>File:</code>&nbsp;
+				Find a file (with the prefix <code>File</code>):&nbsp;
 				<form method="get" action="index.php">
 					<input type="text" name="file">
 					<input type="submit">
