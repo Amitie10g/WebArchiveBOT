@@ -25,14 +25,14 @@ hhvm.log.file=$HOME/hhvm-webarchivebot.log
 error_log=$HOME/hhvm-webarchivebot-error.log
 hhvm.hack.lang.look_for_typechecker = 0
 memory_limit = 256M
-;hhvm.log.use_log_file = true
+hhvm.log.use_log_file = true
 hhvm.log.level = Warning
 ;hhvm.repo.authoritative = true
 
 EOF
 
-// Comment this when using HHVM
+// Comment/remove the following when using HHVM
 exec /usr/bin/php $MAIN
 
-// Uncomment this when using HHVM
+// And uncomment the following
 //exec /usr/bin/hhvm -c $CONF_FILE $MAIN
