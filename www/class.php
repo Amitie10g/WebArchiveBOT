@@ -78,7 +78,7 @@ class WebArchiveBOT_WWW{
 				$db = new PDO($dsn,$this->db_user,$this->db_password);
 			}catch (PDOException $e){
 				die('Connection to the DB failed.');
-			}	
+			}
 
 		}elseif($this->db_type == "postgres"){
 
