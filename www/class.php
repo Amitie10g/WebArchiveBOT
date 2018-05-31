@@ -101,7 +101,7 @@ class WebArchiveBOT_WWW{
 			
 		}
 		
-		if(empty($limit)) $limit = 1000;
+		if(!is_int($limit)&&!empty($limit)) return false;
 
 		if(is_int($limit)) $query = "SELECT * FROM data ORDER BY id DESC LIMIT $limit";
 		else $query = "SELECT * FROM data ORDER BY id DESC";
