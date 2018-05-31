@@ -39,7 +39,7 @@ class WebArchiveBOT_WWW{
 	public $db_name;
 	public $db_user;
 	public $db_password;
-	
+
 	/**
 	 * This is the constructor.
 	 * @param string $site_url The Wiki site URL
@@ -79,7 +79,7 @@ class WebArchiveBOT_WWW{
 			}catch (PDOException $e){
 				die('Connection to the DB failed.');
 			}	
-	
+
 		}elseif($this->db_type == "postgres"){
 
 			$dsn = "pgsql:dbname=$this->db_name;host=$this->db_server";
@@ -131,9 +131,9 @@ class WebArchiveBOT_WWW{
 	 * @return void
 	**/
 	public function printMain($limit,$file){
-		
+
 		$data = $this->getArchive($limit,$file);
-		
+
 		echo <<<EOC
 <!DOCTYPE HTML>
 <html lang="en">
@@ -165,7 +165,7 @@ class WebArchiveBOT_WWW{
 			You can download the <a href="?json_output">whole list</a> [<a href="?json_output=100">100</a>] [<a href="?json_output=1000">1.000</a>] [<a href="?json_output=10000">10.000</a>] [<a href="/webarchivebot/archived-history.json.gz">History</a>] in JSON format.</p>
 			<p>For more information, see the <a href="doc/index.html" target="blank">Documentation</a>.
 			<a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU Affero General Public License v3.</p>
-		
+
 			<div>
 				Find a file (with the prefix <code>File:</code>)&nbsp;
 				<form method="get" action="index.php">
