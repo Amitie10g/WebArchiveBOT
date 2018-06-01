@@ -26,7 +26,6 @@ require_once('.config.php');
 require_once('class.php');
 
 $file = $_GET['file'];
-$json_output = $_GET['json_output'] + 0;
 
 $web = new WebArchiveBOT_WWW($site_url,$sitename,$db_type,$db_server,$db_name,$db_user,$db_password);
 
@@ -39,8 +38,10 @@ if(isset($_GET['json_output'])){
 	header('Cache-Control: private');
 	header('Pragma: private');
 	header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+	
+	$limit = $_GET['json_output'] + 0;
 
-	echo gzencode(json_encode($web->getArchive($json_output),JSON_PRETTY_PRINT));
+	echo gzencode(json_encode($web->getArchive($limit),JSON_PRETTY_PRINT));
 }else{
 	$web->printMain(50,$file);
 }
