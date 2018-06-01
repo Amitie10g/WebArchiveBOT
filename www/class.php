@@ -69,6 +69,8 @@ class WebArchiveBOT_WWW{
 	 * @return array
 	**/
 	public function getArchive($limit,$file){
+		
+		if(!is_int($limit) || $limit > 100000) return false;
 
 		if($this->db_type == "mysql"){
 
@@ -80,7 +82,7 @@ class WebArchiveBOT_WWW{
 				die('Connection to the DB failed.');
 			}
 
-		}elseif($this->db_type == "postgres"){
+		}elseif($this->db_type == "pgsql"){
 
 			$dsn = "pgsql:dbname=$this->db_name;host=$this->db_server";
 			
@@ -100,11 +102,8 @@ class WebArchiveBOT_WWW{
 			}
 			
 		}
-		
-		if(!is_int($limit)&&!empty($limit)) return false;
 
-		if(is_int($limit)) $query = "SELECT * FROM data ORDER BY id DESC LIMIT $limit";
-		else $query = "SELECT * FROM data ORDER BY id DESC";
+		$query = "SELECT * FROM data ORDER BY id DESC LIMIT $limit";
 
 		if(isset($file)) $query = "SELECT * FROM data WHERE title = '". base64_encode($file) . "' LIMIT 1;";
 		
