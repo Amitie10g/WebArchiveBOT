@@ -12,8 +12,8 @@ $email_operator = '';
 $db_type            = ''; // mysql, postgres or sqlite (default)
 $db_server          = ''; // The DB server. For SQLite use the absolute path to the DB file
 $db_name            = ''; // For SQLite, leave empty
-$db_user            = '';
-$db_password        = '';
+$db_user            = ''; // This too
+$db_password        = ''; // This also too
 
 $extlinks_bl[] = '(([\p{P}\p{N}]+\.)*google\.[\p{L}\p{N}]+)';
 $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*openstreetmap\.[\p{L}\p{N}]+)';
