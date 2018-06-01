@@ -70,7 +70,7 @@ class WebArchiveBOT_WWW{
 	**/
 	public function getArchive($limit,$file){
 		
-		if(!is_int($limit) || $limit > 100000) return false;
+		if(empty($limit) || !is_int($limit) || $limit > 100000) return false;
 
 		if($this->db_type == "mysql"){
 
