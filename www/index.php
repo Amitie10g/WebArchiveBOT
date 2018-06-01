@@ -22,7 +22,7 @@
 
 $ts_pw = posix_getpwuid(posix_getuid());
 
-require_once('.config.php');
+require_once('config.php');
 require_once('class.php');
 
 $file = $_GET['file'];
