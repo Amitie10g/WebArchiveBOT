@@ -1,5 +1,6 @@
 <?php
 
+$ts_mycnf           = ''; // Set only if you want to use the replica file and cannot be set automatically
 $site_url           = ''; // The MediaWiki URL
 $sitename           = ''; // The wiki name
 $db_type            = ''; // mysql, pgsql or sqlite (default)
