@@ -69,8 +69,8 @@ class http {
 	public function __construct(){
 		$this->ch = curl_init();
 		$this->uid = dechex(rand(0,99999999));
-		curl_setopt($this->ch,CURLOPT_COOKIEJAR,TEMP_PATH.'cluewikibot.cookies.'.$this->uid.'.dat');
-		curl_setopt($this->ch,CURLOPT_COOKIEFILE,TEMP_PATH.'cluewikibot.cookies.'.$this->uid.'.dat');
+		curl_setopt($this->ch,CURLOPT_COOKIEJAR,TEMP_PATH.'/cluewikibot.cookies.'.$this->uid.'.dat');
+		curl_setopt($this->ch,CURLOPT_COOKIEFILE,TEMP_PATH.'/cluewikibot.cookies.'.$this->uid.'.dat');
 		curl_setopt($this->ch,CURLOPT_MAXCONNECTS,100);
 		$this->postfollowredirs = 0;
 		$this->getfollowredirs = 1;
@@ -177,7 +177,7 @@ class http {
 	 **/
 	public function __destruct (){
 		curl_close($this->ch);
-		@unlink('/tmp/cluewikibot.cookies.'.$this->uid.'.dat');
+		@unlink(TEMP_PATH.'/cluewikibot.cookies.'.$this->uid.'.dat');
 	}
 }
 
