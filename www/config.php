@@ -1,8 +1,5 @@
 <?php
 
-//This, when running under ToolForge tool account
-$ts_mycnf = parse_ini_file($ts_pw['dir'] . "/replica.my.cnf");
-
 $site_url           = ''; // The MediaWiki URL
 $sitename           = ''; // The wiki name
 $db_type            = ''; // mysql, pgsql or sqlite (default)
