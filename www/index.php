@@ -21,8 +21,10 @@
  **/
 
 //This, when running under ToolForge tool account using the 'replica.my.cnf' file
-$ts_pw = posix_getpwuid(posix_getuid());
-$ts_mycnf = parse_ini_file($ts_pw['dir'] . "/replica.my.cnf");
+if(is_callable('posix_getpwuid') && is_callable(posix_getuid)){
+	$ts_pw = posix_getpwuid(posix_getuid());
+	$ts_mycnf = parse_ini_file($ts_pw['dir'] . "/replica.my.cnf");
+}
 
 require_once('config.php');
 require_once('class.php');
