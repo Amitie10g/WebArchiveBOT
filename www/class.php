@@ -22,13 +22,13 @@
 
 /**
   * This class does the data retrival and printing.
-  * @property string $site_url The Wiki site URL
-  * @property string $sitename The Wiki site name
+  * @property string $site_url The Wiki site URL.
+  * @property string $sitename The Wiki site name.
   * @property string string $db_type The database brand used.
   * @property string $db_server The database server address (absolute path for SQLite).
   * @property string $db_name The database name.
   * @property string $db_user The database access username.
- * @property string $db_password The database access password.
+  * @property string $db_password The database access password.
 **/
 class WebArchiveBOT_WWW{
 
@@ -42,8 +42,8 @@ class WebArchiveBOT_WWW{
 
 	/**
 	 * This is the constructor.
-	 * @param string $site_url The Wiki site URL
-	 * @param $sitename The Wiki site name
+	 * @param string $site_url The Wiki site URL.
+	 * @param $sitename The Wiki site name.
 	 * @param string $db_type The database brand used.
 	 * @param string $db_server The database server address (absolute path for SQLite).
 	 * @param string $db_name The database name.
@@ -64,12 +64,13 @@ class WebArchiveBOT_WWW{
 
 	/**
 	 * Retrive the data.
-	 * @param int $limit The maximum results queried to the DB
-	 * @param string $file The filename to search
+	 * @param int $limit The maximum results queried to the DB.
+	 * @param string $file The filename to search.
 	 * @return array
 	**/
 	public function getArchive($limit,$file){
 		
+		// Max limit is hardcoded to 100.000
 		if(empty($limit) || !is_int($limit) || $limit > 100000) return false;
 
 		if($this->db_type == "mysql"){
@@ -125,8 +126,8 @@ class WebArchiveBOT_WWW{
 
 	/**
 	 * Prints the main page to the browser.
-	 * @param int $limit The maximum results queried to the DB
-	 * @param string $file The filename to search
+	 * @param int $limit The maximum results queried to the DB.
+	 * @param string $file The filename to search.
 	 * @return void
 	**/
 	public function printMain($limit,$file){
