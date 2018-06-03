@@ -26,7 +26,9 @@ if(is_callable('posix_getpwuid') && is_callable('posix_getuid')){
 	$ts_mycnf = parse_ini_file($ts_pw['dir'] . "/replica.my.cnf");
 }
 
+echo "\n\n";
 var_dump($ts_mycnf);
+echo "\n\n";
 
 require_once('config.php');
 require_once('class.php');
