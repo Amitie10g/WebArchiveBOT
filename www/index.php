@@ -26,14 +26,13 @@ if(is_callable('posix_getpwuid') && is_callable('posix_getuid')){
 	$ts_mycnf = parse_ini_file($ts_pw['dir'] . "/replica.my.cnf");
 }
 
-echo "\n\n";
-var_dump($ts_mycnf);
-echo "\n\n";
-
 require_once('config.php');
 require_once('class.php');
 
 $file = $_GET['file'];
+
+var_dump($db_user);
+var_dump($db_password);
 
 $web = new WebArchiveBOT_WWW($site_url,$sitename,$db_type,$db_server,$db_name,$db_user,$db_password);
 
