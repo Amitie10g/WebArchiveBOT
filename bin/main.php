@@ -134,6 +134,9 @@ while(true){
 
 		$wiki->sendMail($message);
 	}
+	
+	unset($files,$result);
+	
 	sleep($interval);
 }
 ?>
