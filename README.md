@@ -5,6 +5,10 @@ This experimental tool looks for New Files uploaded to Wikimedia Commons (or any
 
 Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
 
+## Requirements
+
+* PHP7 or HHVM 3.11.0 (and above) with PDO enabled, including the drivers to be used.
+
 ## Installation: 
 
 * Run `git clone` to download the files:
