@@ -31,9 +31,6 @@ require_once('class.php');
 
 $file = $_GET['file'];
 
-var_dump($db_user);
-var_dump($db_password);
-
 $web = new WebArchiveBOT_WWW($site_url,$sitename,$db_type,$db_server,$db_name,$db_user,$db_password);
 
 if(!empty($_GET['json_output'])){
