@@ -465,7 +465,7 @@ class WebArchiveBOT extends Wiki {
 			if(!is_int($archive_timestamp)) $archive_timestamp = 0;
 			$window_time = $timestamp-$archive_timestamp;
 
-			// Do the archive
+			// Do the archive, if last archive has been created >2 days
 			if($window_time >= 172800){
 				$headers = @get_headers("https://web.archive.org/save/$url",1);
 
@@ -510,7 +510,7 @@ class WebArchiveBOT extends Wiki {
 			
 			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTO_INCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
 
-		}elseif($this->db_type == 'postgres'){
+		}elseif($this->db_type == 'pgsql'){
 
 			$dsn = "pgsql:dbname=$this->db_name;host=$this->db_server";
 
