@@ -425,7 +425,7 @@ class WebArchiveBOT extends Wiki {
 	/**
 	 * Wraper for in_array() that also parse regex.
 	 * @param mixed $needle The value to find.
-	 * @param array $haystack The array where find in.
+	 * @param mixed $haystack The string/array where find in.
 	 * @param bool $regex To allow or not regex (contents in $haystack should be string and valid regex).
 	 * If false, then, in_array() will be used. Used only for regex, does not matter for non-regex search.
 	 * @param bool $inverse To match or not the regex (no match is done with '?!').
@@ -445,7 +445,7 @@ class WebArchiveBOT extends Wiki {
 	}
 
 	 /**
-	 * Parse URLs and retrive the Archived version at Wayback Machine.
+	 * Query the Internet Archive API to get the latest archived version (or archive if not available yet).
 	 * @param array $urls the URLs to be parsed.
 	 * @return array the Wayback Machine URLs retrived.
 	**/
@@ -454,16 +454,18 @@ class WebArchiveBOT extends Wiki {
 
 			if(preg_match($this->extlinks_bl,$url)) continue;
 
+			// Get the latest archive, if available
 			$archive_g = file_get_contents('http://archive.org/wayback/available?url='.urlencode($url));
 			if($archive_g != '{"archived_snapshots":{}}'){
-				$archive = json_decode($archive_g,true);
-				$archive_timestamp = strtotime($archive['archived_snapshots']['closest']['timestamp']);
+				$latest_archive = json_decode($archive_g,true);
+				$archive_timestamp = strtotime($latest_archive['archived_snapshots']['closest']['timestamp']);
 			}
 
 			$timestamp = time();
 			if(!is_int($archive_timestamp)) $archive_timestamp = 0;
 			$window_time = $timestamp-$archive_timestamp;
 
+			// Do the archive
 			if($window_time >= 172800){
 				$headers = @get_headers("https://web.archive.org/save/$url",1);
 
@@ -476,6 +478,8 @@ class WebArchiveBOT extends Wiki {
 					if(preg_match("/^\/web\/[0-9]{14}\/[\p{L}\p{N}\p{S}\p{P}\p{M}\p{Zs}]+$/",$location) === 1) $archive_urls[] = "https://web.archive.org$location";
 					else echo "Wrong location: $location\n";
 				}
+			}else{
+				$archive_urls[] = $latest_archive['archived_snapshots']['closest']['url'];
 			}
 		}
 
