@@ -70,7 +70,7 @@ class WebArchiveBOT_WWW{
 	**/
 	public function getArchive($limit,$file){
 		
-		// Max limit is hardcoded to 100.000
+		// Max limit is hardcoded to 100.000 to prevent memory exhaustion
 		if(empty($limit) || !is_int($limit) || $limit > 100000) return false;
 
 		if($this->db_type == "mysql"){
