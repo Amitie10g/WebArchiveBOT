@@ -160,7 +160,7 @@ class WebArchiveBOT_WWW{
 	</head>
 	<body>
 		<div>
-			<h1>WebArchiveBOT, archived items</h1>
+			<h1><a href="$_SERVER['PHP_SELF']">WebArchiveBOT, archived items</a></h1>
 			<p>This page lists the last 50 files uploaded to $this->sitename and their links archived at Internet Archive by Wayback Machine.
 			You can download the latest [<a href="?json_output=100">100</a>] [<a href="?json_output=1000">1.000</a>] [<a href="?json_output=10000">10.000</a>] files list in JSON format.</p>
 			<p>For more information, see the <a href="doc/index.html" target="blank">Documentation</a>.
@@ -186,7 +186,7 @@ EOC;
 			$date = strftime("%F %T",$item['timestamp']);
 
 			echo <<<EOC
-				<h2><a href="$url" target="blank">$title</a></h2>
+				<h2><a href="$_SERVER['PHP_SELF']$url" target="blank">$title</a></h2>
 				<b>Uploaded: </b>$date (UTC)
 				<ul>
 
