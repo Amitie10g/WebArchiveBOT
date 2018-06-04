@@ -169,7 +169,7 @@ class WebArchiveBOT_WWW{
 
 			<div>
 				Find a file (with the prefix <code>File:</code>)&nbsp;
-				<form method="get" action="index.php">
+				<form method="get" action="$this->tool_url">
 					<input type="text" name="file">
 					<input type="submit">
 				</form>
