@@ -178,7 +178,6 @@ class WebArchiveBOT_WWW{
 		
 		</div>
 		<div>
-			<ul>
 
 EOC;
 		foreach($data as $title=>$item){
@@ -187,26 +186,25 @@ EOC;
 			$date = strftime("%F %T",$item['timestamp']);
 
 			echo <<<EOC
-				<h2><a href="$this->tool_url$url" target="blank">$title</a></h2>
-				<b>Uploaded: </b>$date (UTC)
-				<ul>
+			<h2><a href="$this->tool_url$url" target="blank">$title</a></h2>
+			<b>Uploaded: </b>$date (UTC)
+			<ul>
 
 EOC;
 			foreach($item['urls'] as $link){
 				$escaped_link = str_replace(array('%3A','%2F','%3F','%26','%3D','%23'),array(':','/','?','&','=','#'),rawurlencode($link));
 				echo <<<EOC
-					<li><a href="$escaped_link" target="blank">$link</a></li>
+				<li><a href="$escaped_link" target="blank">$link</a></li>
 
 EOC;
 
 			}
 		echo <<<EOC
-				</ul>
+			</ul>
 
 EOC;
 		}
 		echo <<<EOC
-			</ul>
 		</div>
 	</body>
 </html>
