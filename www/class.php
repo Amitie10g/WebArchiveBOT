@@ -186,7 +186,7 @@ EOC;
 			$date = strftime("%F %T",$item['timestamp']);
 
 			echo <<<EOC
-			<h2><a href="$this->tool_url$url" target="blank">$title</a></h2>
+			<h2><a href="$url" target="blank">$title</a></h2>
 			<b>Uploaded: </b>$date (UTC)
 			<ul>
 
