@@ -31,8 +31,11 @@ hhvm.log.level = Warning
 
 EOF
 
-// Comment/remove the following when using HHVM
-exec /usr/bin/php $MAIN
+# Uncomment the following if you want to use HHVM
+#USE_HHVM=true
 
-// And uncomment the following
-//exec /usr/bin/hhvm -c $CONF_FILE $MAIN
+if [ "$USE_HHVM" ]; then
+  exec /usr/bin/php $MAIN
+else
+  exec /usr/bin/hhvm -c $CONF_FILE $MAIN
+fi
