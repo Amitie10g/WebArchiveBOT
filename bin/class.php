@@ -543,9 +543,6 @@ class WebArchiveBOT extends Wiki {
 
 		}
 
-		$query = "INSERT INTO data(title,timestamp,urls) VALUES ";
-		$count = 0;
-
 		foreach($pages as $page){
 
 			$title = $page['canonicaltitle'];
@@ -562,18 +559,14 @@ class WebArchiveBOT extends Wiki {
 			$urls = base64_encode(serialize($this->urls2archive_urls($urls)));
 			if($urls == "Tjs=") continue;
 
-			if($count != 0) $query .= ",";
-			$query .= "('$title','$timestamp','$urls')";
-			$count++;
+			$query .= "INSERT INTO data(title,timestamp,urls) VALUES ('$title','$timestamp','$urls');";
+			
+			$db->exec($query);
 		}
-
-		$query .= ";";
-		
-		$result = $db->exec($query);
 		
 		unset($db);
 
-		return $result;
+		return true;
 	}
 
 	/**
