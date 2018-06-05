@@ -3,8 +3,8 @@
 // Uncomment and set only if the 'replica.my.cnf' file cannot be set automatically (absolute path!!!)
 //$ts_mycnf = '';
 
-$wiki_user = '';
-$wiki_password = '';
+$wiki_user = ''; // Set as $ts_mycnf['user'] when using the replica file
+$wiki_password = ''; // Set as $ts_mycnf['password'] when using the replica file
 $wiki_url = '';
 $pages_per_query = 100;
 $interval = 5;
