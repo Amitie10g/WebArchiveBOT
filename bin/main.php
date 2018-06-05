@@ -143,4 +143,3 @@ while(true){
 	
 	sleep($interval);
 }
-?>
