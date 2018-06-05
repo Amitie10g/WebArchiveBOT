@@ -19,7 +19,11 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  **/
 
-$ts_pw = posix_getpwuid(posix_getuid());
+//This, when running under ToolForge tool account using the 'replica.my.cnf' file
+if(is_callable('posix_getpwuid') && is_callable('posix_getuid')){
+	$ts_pw = posix_getpwuid(posix_getuid());
+	$ts_mycnf = parse_ini_file($ts_pw['dir'] . "/replica.my.cnf");
+}
 
 require_once('config.php');
 require_once('class.php');
