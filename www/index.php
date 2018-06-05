@@ -49,5 +49,3 @@ if(!empty($_GET['json_output'])){
 }else{
 	$web->printMain(50,$file);
 }
-
-?>
