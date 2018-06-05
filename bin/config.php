@@ -35,5 +35,4 @@ $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wikiversity\.org)';
 $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wikimedia\.org)';
 $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wikidata\.org)';
 $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*wmflabs\.org)';
-$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*mediawiki\.org)'; 
-?>
+$extlinks_bl[] = '(([\p{L}\p{N}]+\.)*mediawiki\.org)';
