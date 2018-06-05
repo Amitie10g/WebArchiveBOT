@@ -583,4 +583,3 @@ class WebArchiveBOT extends Wiki {
 		mail($to,$subject,$message,$headers);
 	}
 }
-?>
