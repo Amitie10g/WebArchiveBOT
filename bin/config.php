@@ -1,5 +1,8 @@
 <?php
 
+// Uncomment and set only if the 'replica.my.cnf' file cannot be set automatically (absolute path!!!)
+//$ts_mycnf = '';
+
 $wiki_user = '';
 $wiki_password = '';
 $wiki_url = '';
