@@ -1,8 +1,5 @@
 <?php
 
-//This, when running under ToolForge tool account
-$ts_mycnf = parse_ini_file($ts_pw['dir'] . "/replica.my.cnf");
-
 $wiki_user = '';
 $wiki_password = '';
 $wiki_url = '';
