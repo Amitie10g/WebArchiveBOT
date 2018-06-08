@@ -7,7 +7,7 @@ Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
 
 ## Requirements
 
-* PHP7 or HHVM 3.11.0 (and above) with PDO enabled, including the drivers to be used.
+* PHP 5.5 or HHVM 3.11.0 (and above) with PDO enabled, including the drivers to be used.
 
 ## Installation: 
 
