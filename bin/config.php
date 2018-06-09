@@ -15,6 +15,7 @@ $db_name            = ''; // For SQLite, leave empty
 $db_user            = ''; // This too
 $db_password        = ''; // This also too
 
+$extlinks_bl[] = "^(\$schemes:)[\p{L}\p{N}]+";
 $extlinks_bl[] = '(([\p{P}\p{N}]+\.)*google\.[\p{L}\p{N}]+)';
 $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*openstreetmap\.[\p{L}\p{N}]+)';
 $extlinks_bl[] = '(([\p{L}\p{N}]+\.)*creativecommons\.[\p{L}\p{N}]+)';
