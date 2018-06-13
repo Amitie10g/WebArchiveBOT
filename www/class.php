@@ -135,7 +135,7 @@ class WebArchiveBOT_WWW{
 
 		$data = $this->getArchive($limit,$file);
 		
-		var_dump($this->tool_url);
+		var_dump(parse_url());
 		
 		echo <<<EOC
 <!DOCTYPE HTML>
