@@ -60,7 +60,7 @@ class WebArchiveBOT_WWW{
 		$this->db_name = $db_name;
 		$this->db_user = $db_user;
 		$this->db_password = $db_password;
-		$this->tool_url = dirname($_SERVER['REQUEST_URI']);
+		$this->tool_url = $_SERVER['PHP_SELF'];
 	}
 
 	/**
@@ -134,6 +134,8 @@ class WebArchiveBOT_WWW{
 	public function printMain($limit,$file){
 
 		$data = $this->getArchive($limit,$file);
+		
+		var_dump($this->tool_url);
 		
 		echo <<<EOC
 <!DOCTYPE HTML>
