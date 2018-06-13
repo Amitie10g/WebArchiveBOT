@@ -60,7 +60,7 @@ class WebArchiveBOT_WWW{
 		$this->db_name = $db_name;
 		$this->db_user = $db_user;
 		$this->db_password = $db_password;
-		$this->tool_url = dirname($_SERVER['PHP_SELF']);
+		$this->tool_url = dirname($_SERVER['REQUEST_URI']);
 	}
 
 	/**
