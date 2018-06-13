@@ -53,14 +53,13 @@ class WebArchiveBOT_WWW{
 	**/
 	public function __construct($site_url,$sitename,$db_type,$db_server,$db_name,$db_user,$db_password){
 
-		$this->site_url = $site_url;
-		$this->sitename = $sitename;
-		$this->db_type  = $db_type;
-		$this->db_server = $db_server;
-		$this->db_name = $db_name;
-		$this->db_user = $db_user;
-		$this->db_password = $db_password;
-		$this->tool_url = $_SERVER['PHP_SELF'];
+		$this->site_url		= $site_url;
+		$this->sitename		= $sitename;
+		$this->db_type		= $db_type;
+		$this->db_server	= $db_server;
+		$this->db_name		= $db_name;
+		$this->db_user		= $db_user;
+		$this->db_password	= $db_password;
 	}
 
 	/**
@@ -135,6 +134,9 @@ class WebArchiveBOT_WWW{
 
 		$data = $this->getArchive($limit,$file);
 		
+		$tool_url = parse_url($_SERVER['PHP_SELF']);
+		$tool_url = $tool_url['path'];
+		
 		var_dump(parse_url($this->tool_url));
 		
 		echo <<<EOC
@@ -163,15 +165,15 @@ class WebArchiveBOT_WWW{
 	</head>
 	<body>
 		<div>
-			<h1><a href="$this->tool_url">WebArchiveBOT, archived items</a></h1>
+			<h1><a href="$tool_url">WebArchiveBOT, archived items</a></h1>
 			<p>This page lists the last 50 files uploaded to $this->sitename and their links archived at Internet Archive by Wayback Machine.
 			You can download the latest [<a href="?json_output=100">100</a>] [<a href="?json_output=1000">1.000</a>] [<a href="?json_output=10000">10.000</a>] files list in JSON format.</p>
-			<p>For more information, see the <a href="$this->tool_url/doc/index.html" target="blank">Documentation</a>.
+			<p>For more information, see the <a href="$tool_url/doc/index.html" target="blank">Documentation</a>.
 			<a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU Affero General Public License v3.</p>
 
 			<div>
 				Find a file (with the prefix <code>File:</code>)&nbsp;
-				<form method="get" action="$this->tool_url">
+				<form method="get" action="$tool_url">
 					<input type="text" name="file">
 					<input type="submit">
 				</form>
