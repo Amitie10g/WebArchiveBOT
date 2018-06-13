@@ -43,7 +43,7 @@ class WebArchiveBOT_WWW{
 	/**
 	 * This is the constructor.
 	 * @param string $site_url The Wiki site URL.
-	 * @param $sitename The Wiki site name.
+	 * @param string $sitename The Wiki site name.
 	 * @param string $db_type The database brand used.
 	 * @param string $db_server The database server address (absolute path for SQLite).
 	 * @param string $db_name The database name.
