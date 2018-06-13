@@ -24,7 +24,7 @@
   * This class does the data retrival and printing.
   * @property string $site_url The Wiki site URL.
   * @property string $sitename The Wiki site name.
-  * @property string string $db_type The database brand used.
+  * @property string $db_type The database brand used.
   * @property string $db_server The database server address (absolute path for SQLite).
   * @property string $db_name The database name.
   * @property string $db_user The database access username.
