@@ -134,7 +134,7 @@ class WebArchiveBOT_WWW{
 
 		$data = $this->getArchive($limit,$file);
 		
-		$tool_url = parse_url($_SERVER['PHP_SELF'],PHP_URL_PATH);
+		$tool_url = dirname(parse_url($_SERVER['PHP_SELF'],PHP_URL_PATH));
 		//$tool_url = $tool_url['path'];
 		
 		var_dump($tool_url);
