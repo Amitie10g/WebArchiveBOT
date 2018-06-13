@@ -137,7 +137,7 @@ class WebArchiveBOT_WWW{
 		$tool_url = parse_url($_SERVER['PHP_SELF']);
 		$tool_url = $tool_url['path'];
 		
-		var_dump(parse_url($this->tool_url));
+		var_dump(parse_url($tool_url));
 		
 		echo <<<EOC
 <!DOCTYPE HTML>
