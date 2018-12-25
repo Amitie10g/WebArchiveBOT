@@ -49,4 +49,4 @@ spec:
           hostPath:
             path: $HOME
 
-EOL
+EOF
