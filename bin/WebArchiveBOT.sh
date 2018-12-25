@@ -21,7 +21,6 @@ error_log=$HOME/log/webarchivebot-error.log
 EOF
 
 /bin/cat << EOF > $DEPLOYMENT
-# Run stashbot on kubernetes
 kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
@@ -36,7 +35,7 @@ spec:
         name: $TOOL_NAME
     spec:
       containers:
-        - name: bot
+        - name: $TOOL_NAME
           image: docker-registry.tools.wmflabs.org/toollabs-php7.2-base:latest
           command: [ "php -c $CONF_FILE" ]
           workingDir: $HOME
