@@ -38,7 +38,7 @@ spec:
       containers:
         - name: bot
           image: docker-registry.tools.wmflabs.org/toollabs-php7.2-base:latest
-          command: [ "php -c $CONF_FILE", "run" ]
+          command: [ "php -c $CONF_FILE" ]
           workingDir: $HOME
           env:
             - name: HOME
