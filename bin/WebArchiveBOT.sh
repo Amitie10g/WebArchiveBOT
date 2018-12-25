@@ -50,3 +50,5 @@ spec:
             path: $HOME
 
 EOF
+
+kubectl create -f $DEPLOYMENT
