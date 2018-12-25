@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-TOOL_NAME=WebArchiveBOT
-TOOL_NAME_DIRNAME=$(basename "$HOME")
+TOOL_NAME=$(basename "$HOME")
 CONF_FILE=$HOME/bin/webarchivebot.ini
 DEPLOYMENT=$HOME/bin/deployment.yaml
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -24,7 +23,8 @@ kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
   name: $TOOL_NAME
-  namespace: $TOOL_NAME_DIRNAME
+  namespace: $TOOL_NAME
+
 spec:
   replicas: 1
   template:
