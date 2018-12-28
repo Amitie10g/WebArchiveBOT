@@ -6,6 +6,8 @@ CONF_FILE=$HOME/bin/webarchivebot.ini
 DEPLOYMENT=$HOME/bin/deployment.yaml
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 MAIN=$DIR/main.php
+DOCKER_IMAGE=""
+PHP_PATH="/usr/bin/php"
 
 cd $DIR
 
@@ -29,7 +31,7 @@ EOF
 kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
-  name: $TOOL_NAME
+  name: $TOOL_NAME-backend
   namespace: $TOOL_NAME
 
 spec:
@@ -37,12 +39,12 @@ spec:
   template:
     metadata:
       labels:
-        name: $TOOL_NAME
+        name: $TOOL_NAME-backend
     spec:
       containers:
-        - name: $TOOL_NAME
-          image: docker-registry.tools.wmflabs.org/toollabs-php7.2-base:latest
-          command: [ "php -c $CONF_FILE" ]
+        - name: $TOOL_NAME-backend
+          image: $DOCKER_IMAGE
+          command: [ "$PHP_PATH", "-c", "$CONF_FILE", "-f", "$DIR/main.php" ]
           workingDir: $HOME
           env:
             - name: HOME
