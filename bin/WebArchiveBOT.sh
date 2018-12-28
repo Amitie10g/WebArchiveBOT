@@ -44,7 +44,7 @@ spec:
       containers:
         - name: $TOOL_NAME-backend
           image: $DOCKER_IMAGE
-          command: [ "$PHP_PATH", "-c", "$CONF_FILE", "-f", "$DIR/main.php" ]
+          command: [ "$PHP_PATH", "-c", "$CONF_FILE", "-f", "$MAIN" ]
           workingDir: $HOME
           env:
             - name: HOME
