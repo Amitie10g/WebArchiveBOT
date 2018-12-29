@@ -27,7 +27,7 @@ if [ -n $DOCKER_IMAGE ]; then
   date_default_timezone_set = UTC
   error_reporting = "E_ALL ^ E_NOTICE"
   error_log=$HOME/log/webarchivebot-error.log
-  EOF
+EOF
 
   /bin/cat << EOF > $DEPLOYMENT
   kind: Deployment
@@ -58,7 +58,7 @@ if [ -n $DOCKER_IMAGE ]; then
           - name: home
             hostPath:
               path: $HOME
-  EOF
+EOF
 
   kubectl create -f $DEPLOYMENT
 
