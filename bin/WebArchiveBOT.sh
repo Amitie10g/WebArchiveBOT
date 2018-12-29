@@ -5,7 +5,6 @@ HOME_BASENAME=$(basename "$HOME")
 TOOL_NAME="$HOME_BASENAME-backend"
 CONF_FILE=$HOME/bin/webarchivebot.ini
 DEPLOYMENT=$HOME/bin/deployment.yaml
-SELF="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MAIN=$DIR/main.php
 DOCKER_IMAGE="docker-registry.tools.wmflabs.org/toollabs-php72-web:latest"
@@ -44,7 +43,7 @@ spec:
       containers:
         - name: $TOOL_NAME
           image: $DOCKER_IMAGE
-          command: [ "$SELF" ]
+          command: [ "/usr/bin/php -c $CONF_FILE -f $MAIN" ]
           workingDir: $HOME
           env:
             - name: HOME
