@@ -8,12 +8,13 @@ DEPLOYMENT=$HOME/bin/deployment.yaml
 SELF="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$(basename "${BASH_SOURCE[0]}")"
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MAIN=$DIR/main.php
-DOCKER_IMAGE=$1
-PHP_PATH="/usr/bin/php"
 
 cd $DIR
 
-if [ -n $DOCKER_IMAGE ]; then
+if [ -n "$1" ]; then
+
+  DOCKER_IMAGE=$1
+
   if [ -f $CONF_FILE ]; then
     rm $CONF_FILE
   fi
@@ -29,39 +30,39 @@ if [ -n $DOCKER_IMAGE ]; then
   error_log=$HOME/log/webarchivebot-error.log
 EOF
 
-  /bin/cat << EOF > $DEPLOYMENT
-  kind: Deployment
-  apiVersion: extensions/v1beta1
-  metadata:
-    name: $TOOL_NAME
-    namespace: $HOME_BASENAME
-  spec:
-    replicas: 1
-    template:
-      metadata:
-        labels:
-          name: $TOOL_NAME
-      spec:
-        containers:
-          - name: $TOOL_NAME
-            image: $DOCKER_IMAGE
-            command: [ "$SELF" ]
-            workingDir: $HOME
-            env:
-              - name: HOME
-                value: $HOME
-            imagePullPolicy: Always
-            volumeMounts:
-              - name: home
-                mountPath: $HOME
-        volumes:
-          - name: home
-            hostPath:
-              path: $HOME
+/bin/cat << EOF > $DEPLOYMENT
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: $TOOL_NAME
+  namespace: $HOME_BASENAME
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: $TOOL_NAME
+    spec:
+      containers:
+        - name: $TOOL_NAME
+          image: $DOCKER_IMAGE
+          command: [ "$SELF" ]
+          workingDir: $HOME
+          env:
+            - name: HOME
+              value: $HOME
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: home
+              mountPath: $HOME
+      volumes:
+        - name: home
+          hostPath:
+            path: $HOME
 EOF
 
   kubectl create -f $DEPLOYMENT
 
 else
-  /usr/bin/php -c $CONF_FILE -f $MAIN
+  php -c $CONF_FILE -f $MAIN
 fi
