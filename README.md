@@ -7,7 +7,7 @@ Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
 
 ## Requirements
 
-* PHP 5.5 or HHVM 3.11.0 (and above) with PDO enabled, including the drivers to be used.
+* PHP 7.0 with PDO enabled, including the drivers to be used.
 
 ## Installation: 
 
@@ -15,13 +15,8 @@ Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
 
     `git clone https://github.com/Amitie10g/WebArchiveBOT.git`
 
-  For Hack version (experimental, outdated):
-
-    `git clone -Hack https://github.com/Amitie10g/WebArchiveBOT.git`
-
 * Copy "bin/config.php" to your scripts path (inside your home directory, usually $HOME/bin) and edit it.
-* Copy "bin/WebArchiveBOT.sh" to your scripts path and edit it if necessary (when using HHVM).
-* Symlink "bin/main.php" and "bin/class.php" to your scripts path.
+* Symlink "bin/main.php", "bin/class.php" and "bin/WebArchiveBOT.sh" to your scripts path.
 
 * Copy "www/.config.php" to your www directory and edit it.
 * Symlink "www/index.php" and "www/doc" (optional) to your www directory.
@@ -32,16 +27,9 @@ Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
   
 ## Running
 
-Just run `WebArchiveBOT.sh`.
+To run the bot (for testing): `./WebArchiveBOT.sh`
 
-### Running in Windows
-
-To run the backend script in Windows, create a batch script to execute php-cli calling the script:
-
-```
-@echo off
-php main.php
-```
+To deploy the container and run inside it: `./WebArchiveBOT.sh <docker_image_location>` 
 
 ## License
 
