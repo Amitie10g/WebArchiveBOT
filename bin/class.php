@@ -502,13 +502,11 @@ class WebArchiveBOT extends Wiki {
 		$this->db->exec("CREATE TABLE IF NOT EXISTS `data`(`id` INT NOT NULL AUTO_INCREMENT,`pageid` INT NOT NULL,`title` VARCHAR CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,`timestamp` TIMESTAMP NOT NULL,`urls` TEXT CHARACTER SET utf8 COLLATE utf8_bin,UNIQUE KEY `id` (`id`) USING BTREE,UNIQUE KEY `page_title` (`page_id`) USING BTREE,PRIMARY KEY (`id`,`page_id`)) ENGINE=InnoDB;");
 
 		foreach($pages as $page){
-			
-			echo "\n\n";
-			var_dump($page);
-			echo "\n\n";
 
-			$urls = $this->GetPageContents($title,'externallinks|pageid');
-			$urls = $urls['parse']['externallinks'];
+			$metadata = $this->GetPageContents($title,'externallinks|pageid');
+			
+			$pageid = $metadata['parse']['pageid'];
+			$urls = $metadata['parse']['externallinks'];
 			if(empty($urls)) continue;
 			
 			$pageid = $page['pageid'];
