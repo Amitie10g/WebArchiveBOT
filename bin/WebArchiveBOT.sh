@@ -12,13 +12,10 @@ MAIN=$DIR/main.php
 cd $DIR
 
 if [ -n "$1" ]; then
-
   DOCKER_IMAGE=$1
-
   if [ -f $CONF_FILE ]; then
     rm $CONF_FILE
   fi
-
   if [ -f $DEPLOYMENT ]; then
     rm $DEPLOYMENT
   fi
