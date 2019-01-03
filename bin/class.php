@@ -495,13 +495,11 @@ class WebArchiveBOT extends Wiki {
 		if(!is_array($pages) || empty($pages)) return false;
 		
 		$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
+		
+		var_dump($dsn);
 			
 		try{
 			$db = new PDO($dsn,$this->db_user,$this->db_password);
-			
-					echo "\n\n\n";
-		var_dump($db);
-		echo "\n\n\n";
 		}catch (PDOException $e){
    			$message = 'Connection to the DB failed';
 			echo "$message.";
