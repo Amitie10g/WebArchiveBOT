@@ -503,7 +503,9 @@ class WebArchiveBOT extends Wiki {
 
 		foreach($pages as $page){
 			
+			echo "\n\n";
 			var_dump($page);
+			echo "\n\n";
 
 			$urls = $this->GetPageContents($title,'externallinks');
 			$urls = $urls['parse']['externallinks'];
