@@ -118,9 +118,7 @@ while(true){
 
 	try{
 		$files  = $wiki->getLatestFiles();
-		
-		var_dump($files);
-		
+
 		$result = $wiki->archive($files);
 
 		if($result !== true) throw new Exception("errors ocurred when trying to archive. See the log for details.\n");
