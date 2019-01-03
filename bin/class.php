@@ -513,6 +513,8 @@ class WebArchiveBOT extends Wiki {
 			$urls = array_filter($urls);
 			$urls = json_encode($this->urls2archive_urls($urls));
 			
+			var_dump("INSERT INTO data(pageid,title,timestamp,urls) VALUES ('$pageid','$title','$timestamp','$urls');");
+			
 			$stmt = $this->db->prepare("INSERT INTO data(pageid,title,timestamp,urls) VALUES ('$pageid','$title','$timestamp','$urls');");
 			$stmt->execute();
 		}
