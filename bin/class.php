@@ -506,7 +506,7 @@ class WebArchiveBOT extends Wiki {
 			$metadata = $this->GetPageContents($title,'externallinks');
 			
 			$urls = $metadata['parse']['externallinks'];
-			if(empty($urls)) continue;
+			//if(empty($urls)) continue;
 			
 			$pageid = $metadata['parse']['pageid'];
 			
