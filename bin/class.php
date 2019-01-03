@@ -421,7 +421,7 @@ class WebArchiveBOT extends Wiki {
 	 * @return array The API result (the list of the latest files uploaded).
 	**/
 	public function getLatestFiles(){
-		$query = "?action=query&list=allimages&format=php&aisort=timestamp&aidir=older&aiprop=timestamp%7Ccanonicaltitle&ailimit=$this->pages_per_query";
+		$query = "?action=query&list=allimages&format=php&aisort=timestamp&aidir=older&aiprop=timestamp%7Ccanonicaltitle%7Cpageid&ailimit=$this->pages_per_query";
 		$query = $this->query($query);
 		return $query['query']['allimages'];
 	}
