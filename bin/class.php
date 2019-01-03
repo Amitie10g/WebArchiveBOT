@@ -355,7 +355,6 @@ class WebArchiveBOT extends Wiki {
 	private $email_operator;
 	private $extlinks_bl;
 	private $pages_per_query;
-	private $db_type;
 	private $db_server;
 	private $db_name;
 	private $db_user;
