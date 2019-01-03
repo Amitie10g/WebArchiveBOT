@@ -374,7 +374,7 @@ class WebArchiveBOT extends Wiki {
 	 * @param string $db_password The database access password.
 	 * @return void
 	**/
-	public function __construct($url,$email_operator,$extlinks_bl,$pages_per_query,$db_type,$db_server,$db_name,$db_user,$db_password){
+	public function __construct($url,$email_operator,$extlinks_bl,$pages_per_query,$db_server,$db_name,$db_user,$db_password){
 
 		if(!is_array($extlinks_bl)) $extlinks_bl = null;
 
@@ -384,7 +384,6 @@ class WebArchiveBOT extends Wiki {
 		$this->email_operator = $email_operator;
 		$this->extlinks_bl = '/('.implode('|',$extlinks_bl).')/';
 		$this->pages_per_query = $pages_per_query;
-		$this->db_type = $db_type;
 		$this->db_server = $db_server;
 		$this->db_name = $db_name;
 		$this->db_user = $db_user;
@@ -495,57 +494,23 @@ class WebArchiveBOT extends Wiki {
 
 		if(!is_array($pages) || empty($pages)) return false;
 		
-		if($this->db_type == 'mysql'){
-
-			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
+		$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
 			
-			try{
-				$db = new PDO($dsn,$this->db_user,$this->db_password);
-			}catch (PDOException $e){
-   				$message = 'Connection to the DB failed';
-				echo "$message.";
-				$this->sendMail("$message: " . $e->getMessage());
-				die();
-			}
-			
-			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTO_INCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
-
-		}elseif($this->db_type == 'pgsql'){
-
-			$dsn = "pgsql:dbname=$this->db_name;host=$this->db_server";
-
-			try{
-				$db = new PDO($dsn,$this->db_user,$this->db_password);
-
-			}catch (PDOException $e){
-   				$message = 'Connection to the DB failed';
-				echo "$message.";
-				$this->sendMail("$message: " . $e->getMessage());
-				die();
-			}
-
-			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTO_INCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
-
-		}else{
-
-			$dsn = "sqlite:$this->db_server";
-			
-			try{
-				$db = new PDO($dsn);
-			}catch (PDOException $e){
-   				$message = 'Connection to the DB failed';
-				echo "$message.";
-				$this->sendMail("$message: " . $e->getMessage());
-				die();
-			}
-			
-			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
-
+		try{
+			$db = new PDO($dsn,$this->db_user,$this->db_password);
+		}catch (PDOException $e){
+   			$message = 'Connection to the DB failed';
+			echo "$message.";
+			$this->sendMail("$message: " . $e->getMessage());
+			die();
 		}
+			
+		$db->exec("CREATE TABLE IF NOT EXISTS `data`(`id` INT NOT NULL AUTO_INCREMENT,`pageid` INT NOT NULL,`title` VARCHAR CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,`timestamp` TIMESTAMP NOT NULL,`urls` TEXT CHARACTER SET utf8 COLLATE utf8_bin,UNIQUE KEY `id` (`id`) USING BTREE,UNIQUE KEY `page_title` (`page_id`) USING BTREE,PRIMARY KEY (`id`,`page_id`)) ENGINE=InnoDB;");
 
 		foreach($pages as $page){
 
-			$title = $page['canonicaltitle'];
+			$pageid = $page['pageid'];
+			$title = urlencode($page['canonicaltitle']);
 			$timestamp = strtotime($page['timestamp']);
 
 			$urls = $this->GetPageContents($title,'externallinks');
@@ -554,12 +519,15 @@ class WebArchiveBOT extends Wiki {
 
 			$urls = array_filter($urls);
 
-			$title = base64_encode($title);
+			$urls = json_encode($this->urls2archive_urls($urls)));
 
-			$urls = base64_encode(serialize($this->urls2archive_urls($urls)));
-			if($urls == "Tjs=") continue;
+			$query .= "INSERT INTO data(pageid,title,timestamp,urls) VALUES ('$pageid','$title','$timestamp','$urls');";
 
-			$query .= "INSERT INTO data(title,timestamp,urls) VALUES ('$title','$timestamp','$urls');";
+			//debug
+			var_dump($urls);
+			var_dump($query);
+			continue;
+			//end debug
 			
 			$db->exec($query);
 		}
