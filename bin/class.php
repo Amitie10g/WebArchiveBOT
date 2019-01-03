@@ -383,15 +383,20 @@ class WebArchiveBOT extends Wiki {
 		$this->email_operator = $email_operator;
 		$this->extlinks_bl = '/('.implode('|',$extlinks_bl).')/';
 		$this->pages_per_query = $pages_per_query;
+		$this->db_name = $db_name;
+		$this->db_user = $db_user;
+		$this->db_password = $db_password;
 
+		// Opening the DB as persistent connection
 		try{
 			$dsn = "mysql:dbname=$db_name;host=$db_server";
 			$this->db = new PDO($dsn,$db_user,$db_password);
 		}catch (PDOException $e){
    			$message = 'Connection to the DB failed';
-			echo "$message.";
+			echo "$message: " . $e->getMessage();
 			$this->sendMail("$message: " . $e->getMessage());
-			die();
+			echo "\n";
+			die;
 		}	
 	}
 
