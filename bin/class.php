@@ -343,7 +343,6 @@ class Wiki {
  * @property string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error.
  * @property array $extlinks_bl The blacklisted URLs to exclude for archiving.
  * @property int $pages_per_query The maximum pages retrived per query (iteration) (100 by default).
- * @property string $db_type The database brand used.
  * @property string $db_server The database server address (absolute path for SQLite).
  * @property string $db_name The database name.
  * @property string $db_user The database access username.
@@ -359,6 +358,7 @@ class WebArchiveBOT extends Wiki {
 	private $db_name;
 	private $db_user;
 	private $db_password;
+	private $db;
 
 	/**
 	 * This is the constructor.
@@ -375,18 +375,24 @@ class WebArchiveBOT extends Wiki {
 	**/
 	public function __construct($url,$email_operator,$extlinks_bl,$pages_per_query,$db_server,$db_name,$db_user,$db_password){
 
-		if(!is_array($extlinks_bl)) $extlinks_bl = null;
-
+		if(!is_array($extlinks_bl)) $extlinks_bl = null
+		
 		Wiki::__construct($url); // Pass main parameter to parent Class' __construct()
 		$this->site_url = parse_url($this->url);
 		$this->site_url = $this->site_url['scheme'].'://'.$this->site_url['host'].'/wiki/';
 		$this->email_operator = $email_operator;
 		$this->extlinks_bl = '/('.implode('|',$extlinks_bl).')/';
 		$this->pages_per_query = $pages_per_query;
-		$this->db_server = $db_server;
-		$this->db_name = $db_name;
-		$this->db_user = $db_user;
-		$this->db_password = $db_password;
+
+		try{
+			$dsn = "mysql:dbname=$db_name;host=$db_server";
+			$this->db = new PDO($dsn,$db_user,$db_password);
+		}catch (PDOException $e){
+   			$message = 'Connection to the DB failed';
+			echo "$message.";
+			$this->sendMail("$message: " . $e->getMessage());
+			die();
+		}	
 	}
 
 	/**
@@ -492,49 +498,25 @@ class WebArchiveBOT extends Wiki {
 	public function archive($pages){
 
 		if(!is_array($pages) || empty($pages)) return false;
-		
-		$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
-		
-		var_dump($dsn);
-			
-		try{
-			$db = new PDO($dsn,$this->db_user,$this->db_password);
-		}catch (PDOException $e){
-   			$message = 'Connection to the DB failed';
-			echo "$message.";
-			$this->sendMail("$message: " . $e->getMessage());
-			die();
-		}
-	
-		$db->exec("CREATE TABLE IF NOT EXISTS `data`(`id` INT NOT NULL AUTO_INCREMENT,`pageid` INT NOT NULL,`title` VARCHAR CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,`timestamp` TIMESTAMP NOT NULL,`urls` TEXT CHARACTER SET utf8 COLLATE utf8_bin,UNIQUE KEY `id` (`id`) USING BTREE,UNIQUE KEY `page_title` (`page_id`) USING BTREE,PRIMARY KEY (`id`,`page_id`)) ENGINE=InnoDB;");
+
+		$this->db->exec("CREATE TABLE IF NOT EXISTS `data`(`id` INT NOT NULL AUTO_INCREMENT,`pageid` INT NOT NULL,`title` VARCHAR CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,`timestamp` TIMESTAMP NOT NULL,`urls` TEXT CHARACTER SET utf8 COLLATE utf8_bin,UNIQUE KEY `id` (`id`) USING BTREE,UNIQUE KEY `page_title` (`page_id`) USING BTREE,PRIMARY KEY (`id`,`page_id`)) ENGINE=InnoDB;");
 
 		foreach($pages as $page){
 
 			$pageid = $page['pageid'];
-			$title = urlencode($page['canonicaltitle']);
-			$timestamp = strtotime($page['timestamp']);
+			$title = mysql_real_escape_string($page['canonicaltitle']);
+			$timestamp = $page['timestamp'];
 
 			$urls = $this->GetPageContents($title,'externallinks');
 			$urls = $urls['parse']['externallinks'];
 			if(empty($urls)) continue;
-
 			$urls = array_filter($urls);
-
-			$urls = json_encode($this->urls2archive_urls($urls));
+			$urls = mysql_real_escape_string(json_encode($this->urls2archive_urls($urls)));
 
 			$query .= "INSERT INTO data(pageid,title,timestamp,urls) VALUES ('$pageid','$title','$timestamp','$urls');";
 
-			//debug
-			var_dump($urls);
-			var_dump($query);
-			continue;
-			//end debug
-			
-			$db->exec($query);
+			$this->db->exec($query);
 		}
-		
-		unset($db);
-
 		return true;
 	}
 
