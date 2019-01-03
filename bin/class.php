@@ -375,7 +375,7 @@ class WebArchiveBOT extends Wiki {
 	**/
 	public function __construct($url,$email_operator,$extlinks_bl,$pages_per_query,$db_server,$db_name,$db_user,$db_password){
 
-		if(!is_array($extlinks_bl)) $extlinks_bl = null
+		if(!is_array($extlinks_bl)) $extlinks_bl = null;
 		
 		Wiki::__construct($url); // Pass main parameter to parent Class' __construct()
 		$this->site_url = parse_url($this->url);
