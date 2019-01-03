@@ -502,6 +502,8 @@ class WebArchiveBOT extends Wiki {
 		$this->db->exec("CREATE TABLE IF NOT EXISTS `data`(`id` INT NOT NULL AUTO_INCREMENT,`pageid` INT NOT NULL,`title` VARCHAR CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,`timestamp` TIMESTAMP NOT NULL,`urls` TEXT CHARACTER SET utf8 COLLATE utf8_bin,UNIQUE KEY `id` (`id`) USING BTREE,UNIQUE KEY `page_title` (`page_id`) USING BTREE,PRIMARY KEY (`id`,`page_id`)) ENGINE=InnoDB;");
 
 		foreach($pages as $page){
+			
+			var_dump($page);
 
 			$urls = $this->GetPageContents($title,'externallinks');
 			$urls = $urls['parse']['externallinks'];
@@ -512,8 +514,6 @@ class WebArchiveBOT extends Wiki {
 			$timestamp = $page['timestamp'];
 			$urls = array_filter($urls);
 			$urls = json_encode($this->urls2archive_urls($urls));
-			
-			var_dump("INSERT INTO data(pageid,title,timestamp,urls) VALUES ('$pageid','$title','$timestamp','$urls');");
 			
 			$stmt = $this->db->prepare("INSERT INTO data(pageid,title,timestamp,urls) VALUES ('$pageid','$title','$timestamp','$urls');");
 			$stmt->execute();
