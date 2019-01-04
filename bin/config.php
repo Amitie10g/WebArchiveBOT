@@ -3,17 +3,16 @@
 // Uncomment and set only if the 'replica.my.cnf' file cannot be set automatically (absolute path!!!)
 //$ts_mycnf = '';
 
-$wiki_user = ''; // Set as $ts_mycnf['user'] when using the replica file
-$wiki_password = ''; // Set as $ts_mycnf['password'] when using the replica file
+$wiki_user = ''; 
+$wiki_password = ''; 
 $wiki_url = '';
 $pages_per_query = 100;
 $interval = 5;
 $email_operator = '';
-$db_type            = ''; // mysql, postgres or sqlite (default)
-$db_server          = ''; // The DB server. For SQLite use the absolute path to the DB file
-$db_name            = ''; // For SQLite, leave empty
-$db_user            = ''; // This too
-$db_password        = ''; // This also too
+$db_server          = ''; 
+$db_name            = '';
+$db_user            = ''; // Set as $ts_mycnf['user'] when using the replica file
+$db_password        = ''; // Set as $ts_mycnf['password'] when using the replica file
 
 $extlinks_bl[] = '^(?!(http(s){0,1}:\/\/))[\p{L}\p{N}]+';
 $extlinks_bl[] = '(([\p{P}\p{N}]+\.)*google\.[\p{L}\p{N}]+)';
