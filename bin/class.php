@@ -386,14 +386,13 @@ class WebArchiveBOT extends Wiki {
 		$this->db_name = $db_name;
 		$this->db_user = $db_user;
 		$this->db_password = $db_password;
+		
+		$dsn = "mysql:dbname=$db_name;host=$db_server";
 
-		// Opening the DB as persistent connection
 		try{
-			$dsn = "mysql:dbname=$db_name;host=$db_server";
-			
-			var_dump("$dsn,$db_user,$db_password");
-			
 			$this->db = new PDO($dsn,$db_user,$db_password);
+			
+			var_dump($this->db->errorInfo)
 		}catch (PDOException $e){
    			$message = 'Connection to the DB failed';
 			echo "$message: " . $e->getMessage();
