@@ -383,6 +383,7 @@ class WebArchiveBOT extends Wiki {
 		$this->email_operator = $email_operator;
 		$this->extlinks_bl = '/('.implode('|',$extlinks_bl).')/';
 		$this->pages_per_query = $pages_per_query;
+		$this->db_server = $db_server;
 		$this->db_name = $db_name;
 		$this->db_user = $db_user;
 		$this->db_password = $db_password;
