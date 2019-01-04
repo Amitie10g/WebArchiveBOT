@@ -378,15 +378,15 @@ class WebArchiveBOT extends Wiki {
 		if(!is_array($extlinks_bl)) $extlinks_bl = null;
 		
 		Wiki::__construct($url); // Pass main parameter to parent Class' __construct()
-		$this->site_url = parse_url($this->url);
-		$this->site_url = $this->site_url['scheme'].'://'.$this->site_url['host'].'/wiki/';
-		$this->email_operator = $email_operator;
-		$this->extlinks_bl = '/('.implode('|',$extlinks_bl).')/';
-		$this->pages_per_query = $pages_per_query;
-		$this->db_server = $db_server;
-		$this->db_name = $db_name;
-		$this->db_user = $db_user;
-		$this->db_password = $db_password;
+		$this->url		= parse_url($this->url);
+		$this->site_url		= $this->site_url['scheme'].'://'.$this->site_url['host'].'/wiki/';
+		$this->email_operator	= $email_operator;
+		$this->extlinks_bl	= '/('.implode('|',$extlinks_bl).')/';
+		$this->pages_per_query	= $pages_per_query;
+		$this->db_server	= $db_server;
+		$this->db_name		= $db_name;
+		$this->db_user		= $db_user;
+		$this->db_password	= $db_password;
 	}
 
 	/**
@@ -519,7 +519,8 @@ class WebArchiveBOT extends Wiki {
 			if(empty($urls)) continue;
 			$urls = json_encode($this->urls2archive_urls($urls));
 
-			$stmt = $db->prepare("INSERT INTO data(pageid,title,timestamp,urls) VALUES ('$pageid','$title','$timestamp','$urls');");
+			$sql = "INSERT INTO data(`pageid`,`title`,`timestamp`,`urls`) VALUES ('$pageid','$title','$timestamp','$urls');";
+			$stmt = $db->prepare($sql);
 			$stmt->execute();
 		}
 		
