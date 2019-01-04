@@ -516,19 +516,16 @@ class WebArchiveBOT extends Wiki {
 			$metadata = $this->GetPageContents($title,'externallinks');
 			$pageid = $metadata['parse']['pageid'];
 			$urls = $metadata['parse']['externallinks'];
-			
-			echo "\n\n\n\n";
-			var_dump($urls);
-			echo "\n\n\n\n";
 
-			if(empty($urls)) continue;
-			
 			$urls = array_filter($urls);
+			if(empty($urls)) continue;
 			$urls = json_encode($this->urls2archive_urls($urls));
-			
+
 			$stmt = $db->prepare("INSERT INTO data(pageid,title,timestamp,urls) VALUES ('$pageid','$title','$timestamp','$urls');");
 			$stmt->execute();
 		}
+		
+		unset($db);
 		return true;
 	}
 
