@@ -20,6 +20,228 @@
  *
  **/
 
+
+/**
+  * This class is designed to provide a simplified interface to cURL which maintains cookies.
+  * @author Cobi
+  * @property $ch The cURL class reference
+  * @property $uid The cURL UID object
+  * @property $cookie_jar The cURL cookie_jar object
+  * @property $postfollowredirs
+  * @property $getfollowredirs
+  * @property $quiet
+  * @property $userAgent The default User agent
+  * @property $httpHeader
+  * @property $defaultHttpHeader
+**/
+class http {
+	private $ch;
+	private $uid;
+	public $cookie_jar;
+	public $postfollowredirs;
+	public $getfollowredirs;
+	public $quiet=false;
+	public $userAgent = 'php wikibot classes';
+	public $httpHeader = array('Expect:');
+	public $defaultHttpHeader = array('Expect:');
+	/**
+	  * This is the Construct.
+	  * @return void
+	 **/
+	public function __construct(){
+		$this->ch = curl_init();
+		$this->uid = dechex(rand(0,99999999));
+		curl_setopt($this->ch,CURLOPT_COOKIEJAR,TEMP_PATH.'/cluewikibot.cookies.'.$this->uid.'.dat');
+		curl_setopt($this->ch,CURLOPT_COOKIEFILE,TEMP_PATH.'/cluewikibot.cookies.'.$this->uid.'.dat');
+		curl_setopt($this->ch,CURLOPT_MAXCONNECTS,100);
+		$this->postfollowredirs = 0;
+		$this->getfollowredirs = 1;
+		$this->cookie_jar = array();
+	}
+	/**
+	  * Get the HTTP code from cURL.
+	  * @return array
+	 **/
+	public function http_code(){
+		return curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
+	}
+	/**
+	  * Encode the HTTP data.
+	  * @param $data
+	  * @param $keyprefix
+	  * @param $keypost
+	  * @return array
+	 **/
+	public function data_encode($data,$keyprefix = "",$keypostfix = ""){
+		assert(is_array($data));
+		$vars=null;
+		foreach($data as $key=>$value){
+			if(is_array($value)) $vars .= $this->data_encode($value, $keyprefix.$key.$keypostfix.urlencode("["), urlencode("]"));
+			else $vars .= $keyprefix.$key.$keypostfix."=".urlencode($value)."&";
+		}
+		return $vars;
+	}
+	/**
+	  * Send data through HTTP POST.
+	  * @param $url The target URL.
+	  * @param $data The POST data.
+	  * @return mixed The response from Server.
+	 **/
+	public function post($url,$data){
+		$time = microtime(1);
+		curl_setopt($this->ch,CURLOPT_URL,$url);
+		curl_setopt($this->ch,CURLOPT_USERAGENT,$this->userAgent);
+		/* Crappy hack to add extra cookies, should be cleaned up */
+		foreach ($this->cookie_jar as $name => $value){
+			if (empty($cookies)) $cookies = "$name=$value";
+			else $cookies .= "; $name=$value";
+		}
+		if ($cookies != null)
+		curl_setopt($this->ch,CURLOPT_COOKIE,$cookies);
+		curl_setopt($this->ch,CURLOPT_FOLLOWLOCATION,$this->postfollowredirs);
+		curl_setopt($this->ch,CURLOPT_MAXREDIRS,10);
+		curl_setopt( $this->ch, CURLOPT_HTTPHEADER, $this->httpHeader );
+		curl_setopt($this->ch,CURLOPT_RETURNTRANSFER,1);
+		curl_setopt($this->ch,CURLOPT_TIMEOUT,30);
+		curl_setopt($this->ch,CURLOPT_CONNECTTIMEOUT,10);
+		curl_setopt($this->ch,CURLOPT_POST,1);
+		curl_setopt($this->ch,CURLOPT_POSTFIELDS, $data);
+		$data = curl_exec($this->ch);
+		return $data;
+	}
+	/**
+	  * Send data through HTTP GET.
+	  * @param $url The target URL.
+	  * @return mixed The response from Server.
+	 **/
+	public function get($url){
+		$time = microtime(1);
+		curl_setopt($this->ch,CURLOPT_URL,$url);
+		curl_setopt($this->ch,CURLOPT_USERAGENT,$this->userAgent);
+		/* Crappy hack to add extra cookies, should be cleaned up */
+		$cookies = null;
+		foreach ($this->cookie_jar as $name => $value){
+			if (empty($cookies)) $cookies = "$name=$value";
+			else $cookies .= "; $name=$value";
+		}
+		if ($cookies != null)
+		curl_setopt($this->ch,CURLOPT_COOKIE,$cookies);
+		curl_setopt($this->ch,CURLOPT_FOLLOWLOCATION,$this->getfollowredirs);
+		curl_setopt($this->ch,CURLOPT_MAXREDIRS,10);
+		curl_setopt($this->ch,CURLOPT_HEADER,0);
+		curl_setopt($this->ch,CURLOPT_RETURNTRANSFER,1);
+		curl_setopt($this->ch,CURLOPT_TIMEOUT,30);
+		curl_setopt($this->ch,CURLOPT_CONNECTTIMEOUT,10);
+		curl_setopt($this->ch,CURLOPT_HTTPGET,1);
+		//curl_setopt($this->ch,CURLOPT_FAILONERROR,1);
+		$data = curl_exec($this->ch);
+		return $data;
+	}
+	/**
+	  * Set the HTTP credentials.
+	  * @param $uname
+	  * @param $pwd
+	  * @return void
+	 **/
+	public function setHTTPcreds($uname,$pwd){
+		curl_setopt($this->ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+		curl_setopt($this->ch, CURLOPT_USERPWD, $uname.":".$pwd);
+	}
+	/**
+	  * This is the destruct.
+	  * @return void
+	 **/
+	public function __destruct (){
+		curl_close($this->ch);
+		@unlink(TEMP_PATH.'/cluewikibot.cookies.'.$this->uid.'.dat');
+	}
+}
+/**
+ * This class interacts with the Wiki using api.php.
+ * This is a modified version of the original class.
+ * @author Chris G and Cobi.
+ * @property string $url The Project URL (API path).
+ **/
+class Wiki {
+	private $http;
+	private $token;
+	private $ecTimestamp;
+	public $url;
+	public $echoRet = false; // For debugging unserialize errors
+	/**
+	  * This is the constructor.
+	  * @param $url The project and API URL
+	  * @param $hu
+	  * @param $hp
+	  * @return void
+	 **/
+	public function __construct ($url='https://commons.wikimedia.org/w/api.php',$hu=null,$hp=null){
+		$this->http = new http();
+		$this->token = null;
+		$this->url = $url;
+		$this->ecTimestamp = null;
+		if ($hu!==null) $this->http->setHTTPcreds($hu,$hp);
+	}
+	/**
+	  * The set.
+	  * @param $var
+	  * @param $val
+	  * @return void
+	 **/
+	public function __set($var,$val){
+		switch($var){
+		case 'quiet':
+			$this->http->quiet=$val;
+			break;
+		default:
+			echo "WARNING: Unknown variable ($var)!\n";
+		}
+	}
+	/**
+	 * Set/change the user agent.
+	 * @param $userAgent The user agent string.
+	**/
+	public function setUserAgent($userAgent){
+		$this->http->userAgent = $userAgent;
+	}
+	/**
+	  * Set/change the http header.
+	  * @param $httpHeader The http header.
+	 **/
+	public function setHttpHeader ( $httpHeader ){
+		$this->http->httpHeader = $httpHeader;
+	}
+	/**
+	  * Set/change the http headers.
+	  * @param $httpHeader The http header.
+	 **/
+	public function useDefaultHttpHeader (){
+		$this->http->httpHeader = $this->http->defaultHttpHeader;
+	}
+	/**
+	 * Sends a query to the API.
+	 * @param $query The query string.
+	 * @param $post POST data if its a post request (optional).
+	 * @param $repeat How many times the request will be repeated.
+	 * @param $url The URL where we want to work (for external services API).
+	 * @return mixed The response from server (API result).
+	 **/
+	public function query($query,$post=null,$repeat=null,$url=null){
+		if(empty($url)) $url = $this->url;
+		if($post==null) $ret = $this->http->get($url.$query);
+		else $ret = $this->http->post($url.$query,$post);
+		if($this->http->http_code() != "200"){
+			if($repeat < 10) return $this->query($query,$post,++$repeat);
+		else throw new Exception("HTTP Error " . $this->http->http_code() . " - $url$query"  );
+		}
+		if($this->echoRet){
+			if( @unserialize( $ret ) === false ){
+				return array( 'errors' => array("The API query result can't be unserialized. Raw text is as follows: $ret\n" ) );
+			}
+		}
+		return unserialize( $ret );
+	}
+
 /**
   * This class does the data retrival and printing.
   * @property string $site_url The Wiki site URL.
@@ -30,18 +252,19 @@
   * @property string $db_user The database access username.
   * @property string $db_password The database access password.
 **/
-class WebArchiveBOT_WWW{
+class WebArchiveBOT_WWW extends Wiki{
 
-	public $site_url;
-	public $sitename;
-	public $db_type;
-	public $db_server;
-	public $db_name;
-	public $db_user;
-	public $db_password;
+	public $url;
+	private $site_url;
+	private $sitename;
+	private $db_server;
+	private $db_name;
+	private $db_user;
+	private $db_password;
 
 	/**
 	 * This is the constructor.
+	 * @param string $url The Project URL (API path).
 	 * @param string $site_url The Wiki site URL.
 	 * @param string $sitename The Wiki site name.
 	 * @param string $db_type The database brand used.
@@ -51,16 +274,35 @@ class WebArchiveBOT_WWW{
 	 * @param string $db_password The database access password.
 	 * @return void
 	**/
-	public function __construct($site_url,$sitename,$db_type,$db_server,$db_name,$db_user,$db_password){
+	public function __construct($url,$site_url,$sitename,$db_server,$db_name,$db_user,$db_password){
 
+		Wiki::__construct($url); // Pass main parameter to parent Class' __construct()
+		$this->url		= $url;
 		$this->site_url		= $site_url;
 		$this->sitename		= $sitename;
-		$this->db_type		= $db_type;
 		$this->db_server	= $db_server;
 		$this->db_name		= $db_name;
 		$this->db_user		= $db_user;
 		$this->db_password	= $db_password;
 		$this->tool_url		= dirname(parse_url($_SERVER['PHP_SELF'],PHP_URL_PATH));
+	}
+	
+	public function getFileid($file){
+		
+		// If the input is just the file ID (numeric value), just return it
+		if(is_numeric($file)) return file;
+		
+		$file = utf8_encode($file);
+		$query = "https://commons.wikimedia.org/w/api.php?action=query&format=php&titles=$file";
+		$query = $this->query($query);
+		$query = $query['query']['pages'];
+		
+		foreach($query as $key=>$value){
+			$pageid = $key;
+		}
+		
+		if(is_numeric($key)) return $key;
+		else return false;
 	}
 
 	/**
@@ -74,50 +316,31 @@ class WebArchiveBOT_WWW{
 		// Max limit is hardcoded to 100.000 to prevent memory exhaustion
 		if(empty($limit) || !is_int($limit) || $limit > 100000) return false;
 
-		if($this->db_type == "mysql"){
+		$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
 
-			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
-
-			try{
-				$db = new PDO($dsn,$this->db_user,$this->db_password);
-			}catch (PDOException $e){
-				die('Connection to the DB failed.');
-			}
-
-		}elseif($this->db_type == "pgsql"){
-
-			$dsn = "pgsql:dbname=$this->db_name;host=$this->db_server";
-			
-			try{
-				$db = new PDO($dsn,$user,$password);
-			}catch (PDOException $e){
-				die('Connection to the DB failed.');
-			}
-		}else{
-
-			$dsn = "sqlite:$this->db_server";
-			
-			try{
-				$db = new PDO($dsn);
-			}catch (PDOException $e){
-				die('Connection to the DB failed.');
-			}
-			
+		try{
+			$db = new PDO($dsn,$this->db_user,$this->db_password);
+		}catch (PDOException $e){
+			die('Connection to the DB failed.');
 		}
 
-		$query = "SELECT * FROM data ORDER BY id DESC LIMIT $limit";
-
-		if(isset($file)) $query = "SELECT * FROM data WHERE title = '". base64_encode($file) . "' LIMIT 1;";
+		if(isset($file)){
+			
+			$fileid = getFileid($file);
+			$sql = "SELECT * FROM `data` WHERE `fileid` = $fileid LIMIT 1;";
+		}else{
+			$sql = "SELECT * FROM data ORDER BY `id` DESC LIMIT $limit";
+		}
 		
-		$result = $db->query($query);
+		$stmt = $db->prepare($sql)
 		
-		if($result !== false){
-
-			$data = array();
+		if($stmt->execute() !== false){
+			
+			$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
 			foreach($result as $row){
-				$title = base64_decode($row['title']);
+				$title = $row['title'];
 				$timestamp = $row['timestamp'];
-				$urls = unserialize(base64_decode($row['urls']));
+				$urls = json_decode($row['urls']);
 				$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
 			}
 		}
