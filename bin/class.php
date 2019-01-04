@@ -392,7 +392,8 @@ class WebArchiveBOT extends Wiki {
 		try{
 			$this->db = new PDO($dsn,$db_user,$db_password);
 			
-			var_dump($this->db->errorInfo);
+			var_dump($this->db->getAttribute(PDO::ATTR_CONNECTION_STATUS);
+			
 		}catch (PDOException $e){
    			$message = 'Connection to the DB failed';
 			echo "$message: " . $e->getMessage();
