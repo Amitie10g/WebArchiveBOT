@@ -288,7 +288,7 @@ class WebArchiveBOT_WWW extends Wiki{
 	}
 	
 	/**
-	 * Retrives the fileid from the Wiki, by providing the title
+	 * Retrives the pageid from the Wiki, by providing the title. View README.md for details
 	 * @param string $title The Project URL (API path).
 	 * @return int
 	**/
