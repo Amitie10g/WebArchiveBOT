@@ -31,7 +31,7 @@ require_once('class.php');
 
 $file = $_GET['file'];
 
-$web = new WebArchiveBOT_WWW($site_url,$sitename,$db_type,$db_server,$db_name,$db_user,$db_password);
+$web = new WebArchiveBOT_WWW($site_url,$sitename,$db_server,$db_name,$db_user,$db_password);
 
 if(!empty($_GET['json_output'])){
 	header('Content-Type: application/x-gzip');
