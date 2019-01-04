@@ -506,7 +506,7 @@ class WebArchiveBOT extends Wiki {
 
 		$stmt1 = $this->db->prepare("CREATE TABLE IF NOT EXISTS `data`(`id` INT NOT NULL AUTO_INCREMENT, `pageid` INT NOT NULL, `title` VARCHAR(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,`timestamp` TIMESTAMP NOT NULL,`urls` TEXT CHARACTER SET utf8 COLLATE utf8_bin,UNIQUE KEY `id` (`id`) USING BTREE,UNIQUE KEY `page_title` (`page_id`) USING BTREE,PRIMARY KEY (`id`,`page_id`)) ENGINE=InnoDB;");
 
-		//var_dump($stmt1->execute());
+		var_dump($stmt1->execute());
 		foreach($pages as $page){
 			$title = $page['canonicaltitle'];
 			$timestamp = $page['timestamp'];
