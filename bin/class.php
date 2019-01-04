@@ -518,7 +518,7 @@ class WebArchiveBOT extends Wiki {
 			$urls = $metadata['parse']['externallinks'];
 
 			$urls = array_filter($urls);
-			if(empty($urls)) continue;
+			if(empty($urls)) die('aaaaaaa') /*continue*/;
 			$urls = json_encode($this->urls2archive_urls($urls));
 
 			$stmt = $db->prepare("INSERT INTO data(pageid,title,timestamp,urls) VALUES ('$pageid','$title','$timestamp','$urls');");
