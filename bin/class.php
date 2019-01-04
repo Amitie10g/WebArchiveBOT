@@ -386,21 +386,6 @@ class WebArchiveBOT extends Wiki {
 		$this->db_name = $db_name;
 		$this->db_user = $db_user;
 		$this->db_password = $db_password;
-		
-		$dsn = "mysql:dbname=$db_name;host=$db_server";
-
-		try{
-			$this->db = new PDO($dsn,$db_user,$db_password);
-			
-			var_dump($this->db->getAttribute(PDO::ATTR_CONNECTION_STATUS));
-			
-		}catch (PDOException $e){
-   			$message = 'Connection to the DB failed';
-			echo "$message: " . $e->getMessage();
-			$this->sendMail("$message: " . $e->getMessage());
-			echo "\n";
-			die;
-		}
 	}
 
 	/**
@@ -506,6 +491,17 @@ class WebArchiveBOT extends Wiki {
 	public function archive($pages){
 
 		if(!is_array($pages) || empty($pages)) return false;
+
+		try{
+			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
+			$db = new PDO($dsn,$this->db_user,$this->db_password);
+		}catch (PDOException $e){
+   			$message = 'Connection to the DB failed';
+			echo "$message: " . $e->getMessage();
+			$this->sendMail("$message: " . $e->getMessage());
+			echo "\n";
+			die;
+		}
 
 		$this->db->exec("CREATE TABLE IF NOT EXISTS `data`(`id` INT NOT NULL AUTO_INCREMENT, `pageid` INT NOT NULL, `title` VARCHAR(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,`timestamp` TIMESTAMP NOT NULL,`urls` TEXT CHARACTER SET utf8 COLLATE utf8_bin,UNIQUE KEY `id` (`id`) USING BTREE,UNIQUE KEY `page_title` (`page_id`) USING BTREE,PRIMARY KEY (`id`,`page_id`)) ENGINE=InnoDB;");
 
