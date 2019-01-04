@@ -287,13 +287,20 @@ class WebArchiveBOT_WWW extends Wiki{
 		$this->tool_url		= dirname(parse_url($_SERVER['PHP_SELF'],PHP_URL_PATH));
 	}
 	
-	public function getFileid($file){
+	/**
+	 * Retrives the fileid from the Wiki, by providing the title
+	 * @param string $title The Project URL (API path).
+	 * @return int
+	**/
+	public function getFileid($title){
 		
-		// If the input is just the file ID (numeric value), just return it
-		if(is_numeric($file)) return file;
+		if(empty($title)) return false;
 		
-		$file = utf8_encode($file);
-		$query = "https://commons.wikimedia.org/w/api.php?action=query&format=php&titles=$file";
+		// If the input is just the page ID (numeric value), just return it
+		if(is_int($title)) return $title;
+		
+		$title = utf8_encode($title);
+		$query = "?action=query&format=php&titles=$title";
 		$query = $this->query($query);
 		$query = $query['query']['pages'];
 		
@@ -301,7 +308,7 @@ class WebArchiveBOT_WWW extends Wiki{
 			$pageid = $key;
 		}
 		
-		if(is_numeric($key)) return $key;
+		if(is_int($pageid)) return $pageid;
 		else return false;
 	}
 
@@ -321,29 +328,25 @@ class WebArchiveBOT_WWW extends Wiki{
 		try{
 			$db = new PDO($dsn,$this->db_user,$this->db_password);
 		}catch (PDOException $e){
-			die('Connection to the DB failed.');
+			die("Connection to the DB failed: " . $e->getMessage());
 		}
 
-		if(isset($file)){
-			
-			$fileid = getFileid($file);
-			$sql = "SELECT * FROM `data` WHERE `fileid` = $fileid LIMIT 1;";
-		}else{
-			$sql = "SELECT * FROM data ORDER BY `id` DESC LIMIT $limit";
-		}
-		
+		// Get the page ID for faster search in the DB
+		if($fileid = getFileid($file) !== false) $sql = "SELECT * FROM `data` WHERE `fileid` = $fileid LIMIT 1;";
+		else $sql = "SELECT * FROM data ORDER BY `id` DESC LIMIT $limit";
+
 		$stmt = $db->prepare($sql)
-		
+
 		if($stmt->execute() !== false){
-			
-			$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
-			foreach($result as $row){
-				$title = $row['title'];
-				$timestamp = $row['timestamp'];
-				$urls = json_decode($row['urls']);
-				$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
-			}
-		}
+			if($result = $stmt->fetchAll(PDO::FETCH_COLUMN) !== false){
+				foreach($result as $row){
+					$title = $row['title'];
+					$timestamp = $row['timestamp'];
+					$urls = json_decode($row['urls']);
+					$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
+				}
+			}else $data = false;
+		}else $data = false;
 		
 		return $data;
 	}
@@ -359,12 +362,10 @@ class WebArchiveBOT_WWW extends Wiki{
 		$data = $this->getArchive($limit,$file);
 		
 		echo <<<EOC
-<!DOCTYPE HTML>
-<html lang="en">
+<html>
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta charset="UTF-8">
 		<title>WebArchiveBOT, archived items</title>
-		<meta http-equiv="refresh" content="120" />
 		<style type="text/css">
 			body{
 				font-family:Roboto,droid-sans,Arial,sans-serif;
@@ -385,8 +386,8 @@ class WebArchiveBOT_WWW extends Wiki{
 	<body>
 		<div>
 			<h1><a href="$this->tool_url">WebArchiveBOT, archived items</a></h1>
-			<p>This page lists the last 50 files uploaded to $this->sitename and their links archived at Internet Archive by Wayback Machine.
-			You can download the latest [<a href="?json_output=100">100</a>] [<a href="?json_output=1000">1.000</a>] [<a href="?json_output=10000">10.000</a>] files list in JSON format.</p>
+			<h2>This page lists the last 50 files uploaded to $this->sitename and their links archived at Internet Archive by Wayback Machine. Just press F5 for refresh.</h2>
+			<p>You can download the latest [<a href="?json_output=100">100</a>] [<a href="?json_output=1000">1.000</a>] [<a href="?json_output=10000">10.000</a>] files list in JSON format.</p>
 			<p>For more information, see the <a href="$this->tool_url/doc/index.html" target="blank">Documentation</a>.
 			<a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU Affero General Public License v3.</p>
 
