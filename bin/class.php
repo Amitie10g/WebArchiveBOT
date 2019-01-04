@@ -505,9 +505,7 @@ class WebArchiveBOT extends Wiki {
 			die;
 		}
 
-		$sql = "CREATE TABLE IF NOT EXISTS `data` (`id` INT NOT NULL AUTO_INCREMENT, `pageid` INT NOT NULL, `title` VARCHAR(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,`timestamp` TIMESTAMP NOT NULL,`urls` TEXT NOT_NULL CHARACTER SET utf8 COLLATE utf8_bin,UNIQUE KEY `id` (`id`) USING BTREE,UNIQUE KEY `page_title` (`pageid`) USING BTREE,PRIMARY KEY (`id`)) ENGINE=InnoDB;";
-		
-		$db->exec($sql);
+		$db->exec("CREATE TABLE IF NOT EXISTS `data` (`id` INT NOT NULL AUTO_INCREMENT, `pageid` INT NOT NULL, `title` VARCHAR(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,`timestamp` TIMESTAMP NOT NULL,`urls` TEXT NOT_NULL CHARACTER SET utf8 COLLATE utf8_bin,UNIQUE KEY `id` (`id`) USING BTREE,UNIQUE KEY `page_title` (`pageid`) USING BTREE,PRIMARY KEY (`id`)) ENGINE=InnoDB;");
 
 		foreach($pages as $page){
 			$title = $page['canonicaltitle'];
@@ -518,7 +516,7 @@ class WebArchiveBOT extends Wiki {
 			$urls = $metadata['parse']['externallinks'];
 
 			$urls = array_filter($urls);
-			if(empty($urls)) die('aaaaaaa') /*continue*/;
+			if(empty($urls)) continue;
 			$urls = json_encode($this->urls2archive_urls($urls));
 
 			$stmt = $db->prepare("INSERT INTO data(pageid,title,timestamp,urls) VALUES ('$pageid','$title','$timestamp','$urls');");
