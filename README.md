@@ -5,6 +5,13 @@ This experimental tool looks for New Files uploaded to Wikimedia Commons (or any
 
 Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
 
+## What's new
+
+* Added support for Kubernetes.
+* Dropped support for Postgres and SQLITE (however, PDO is still used).
+* File search by the File ID instead of the title, for faster retriving from the DB (the file ID is got by querying MediaWiki).
+* Title and URLs are now stored in VARCHAR and TEXT (JSON) format respectively.
+
 ## Requirements
 
 * PHP 7.0 with PDO enabled, including the drivers to be used.
