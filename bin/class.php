@@ -390,7 +390,7 @@ class WebArchiveBOT extends Wiki {
 		// Opening the DB as persistent connection
 		try{
 			$dsn = "mysql:dbname=$db_name;host=$db_server";
-			$this->db = new PDO($dsn,$db_user,$db_password);
+			var_dump($this->db = new PDO($dsn,$db_user,$db_password));
 		}catch (PDOException $e){
    			$message = 'Connection to the DB failed';
 			echo "$message: " . $e->getMessage();
@@ -398,8 +398,6 @@ class WebArchiveBOT extends Wiki {
 			echo "\n";
 			die;
 		}
-		
-		var_dump($this->db);
 	}
 
 	/**
