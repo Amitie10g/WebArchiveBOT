@@ -373,14 +373,11 @@ class WebArchiveBOT extends Wiki {
 	**/
 	public function __construct($wiki_url,$email_operator,$extlinks_bl,$pages_per_query,$db_server,$db_name,$db_user,$db_password){
 
-		echo "\n\n\n\n\n\n\n\n";
-		var_dump($wiki_url);
-		echo "\n\n\n\n\n\n\n\n";
-		
 		if(!is_array($extlinks_bl)) $extlinks_bl = null;
 		
 		Wiki::__construct($wiki_url); // Pass main parameter to parent Class' __construct()
-		$this->wiki_url		= parse_url($this->wiki_url);
+		$this->wiki_url		= $wiki_url;
+		$this->site_url		= parse_url($this->wiki_url);
 		$this->site_url		= $this->wiki_url['scheme'].'://'.$this->wiki_url['host'].'/wiki/';
 		$this->email_operator	= $email_operator;
 		$this->extlinks_bl	= '/('.implode('|',$extlinks_bl).')/';
