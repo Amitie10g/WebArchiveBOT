@@ -226,7 +226,7 @@ class Wiki {
 	 * @return mixed The response from server (API result).
 	 **/
 	public function query($query,$post=null,$repeat=null,$url=null){
-		if(empty($url)) $url = $this->url;
+		if(empty($url)) $url = $this->api_url;
 		if($post==null) $ret = $this->http->get($url.$query);
 		else $ret = $this->http->post($url.$query,$post);
 		if($this->http->http_code() != "200"){
