@@ -275,7 +275,6 @@ class WebArchiveBOT_WWW extends Wiki{
 	**/
 	public function __construct($url,$sitename,$db_server,$db_name,$db_user,$db_password){
 
-		Wiki::__construct($url); // Pass main parameter to parent Class' __construct()
 		$this->url		= $url;
 		$this->api_url		= "$url/w/api.php";
 		$this->sitename		= $sitename;
@@ -284,6 +283,7 @@ class WebArchiveBOT_WWW extends Wiki{
 		$this->db_user		= $db_user;
 		$this->db_password	= $db_password;
 		$this->tool_url		= dirname(parse_url($_SERVER['PHP_SELF'],PHP_URL_PATH));
+		Wiki::__construct($url); // Pass main parameter to parent Class' __construct()
 	}
 	
 	/**
