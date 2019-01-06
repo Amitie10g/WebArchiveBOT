@@ -348,7 +348,8 @@ class Wiki {
  * @property string $db_password The database access password.
 **/
 class WebArchiveBOT extends Wiki {
-	public $url;
+	public  $url;
+	private $site_url;
 	private $email_operator;
 	private $extlinks_bl;
 	private $pages_per_query;
