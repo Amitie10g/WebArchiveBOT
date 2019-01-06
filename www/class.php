@@ -338,17 +338,18 @@ class WebArchiveBOT_WWW extends Wiki{
 		$stmt = $db->prepare($sql);
 
 		if($stmt->execute() !== false){
-			/*if(*/$result = $stmt->fetchAll(PDO::FETCH_COLUMN) !== false/*){*/;
-				
-				var_dump($result);
+			if($result = $stmt->fetchAll(PDO::FETCH_COLUMN) !== false){
 				
 				foreach($result as $row){
+					
+					var_dump($row);
+					
 					$title = $row['title'];
 					$timestamp = $row['timestamp'];
 					$urls = json_decode($row['urls']);
 					$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
 				}
-			//}else $data = false;
+			}else $data = false;
 		}else $data = false;
 		
 		return $data;
