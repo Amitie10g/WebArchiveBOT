@@ -356,7 +356,6 @@ class WebArchiveBOT extends Wiki {
 	private $db_name;
 	private $db_user;
 	private $db_password;
-	private $db;
 
 	/**
 	 * This is the constructor.
