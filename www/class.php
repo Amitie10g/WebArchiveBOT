@@ -336,13 +336,13 @@ class WebArchiveBOT_WWW extends Wiki{
 			
 			$fileid = $this->getFileid($file);
 			
-			var_dump($fileid);
-			
 			$sql = "SELECT * FROM `data` WHERE `fileid` = $fileid LIMIT 1;";
 		}else{
 			$sql = "SELECT * FROM data ORDER BY `id` DESC LIMIT $limit";
 		}
 
+		var_dump($sql);
+		
 		$stmt = $db->prepare($sql);
 		
 		if($stmt->execute() !== false){
