@@ -515,7 +515,10 @@ class WebArchiveBOT extends Wiki {
 
 		foreach($pages as $page){
 			$title = $page['canonicaltitle'];
-			$timestamp = strtotime($page['timestamp']);
+			$timestamp = $page['timestamp'];
+			
+			var_dump($title);
+			var_dump($timestamp);
 			
 			$metadata = $this->GetPageContents($title,'externallinks');
 			$pageid = $metadata['parse']['pageid'];
