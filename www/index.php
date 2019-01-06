@@ -33,8 +33,6 @@ $file = $_GET['file'];
 
 $web = new WebArchiveBOT_WWW($url,$sitename,$db_server,$db_name,$db_user,$db_password);
 
-var_dump($url);
-
 if(!empty($_GET['json_output'])){
 	header('Content-Type: application/x-gzip');
 	header('Content-Disposition: attachment; filename="archive.json.gz"');
