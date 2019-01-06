@@ -254,6 +254,7 @@ class Wiki {
 class WebArchiveBOT_WWW extends Wiki{
 
 	public  $url;
+	private $wiki_url;
 	private $api_url;
 	private $sitename;
 	private $db_server;
