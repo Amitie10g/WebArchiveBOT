@@ -489,6 +489,8 @@ class WebArchiveBOT extends Wiki {
 	 * @return bool The final results.
 	**/
 	public function archive($pages){
+		
+		var_dump($pages);
 
 		if(!is_array($pages) || empty($pages)) return false;
 
