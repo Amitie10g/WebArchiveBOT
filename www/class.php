@@ -261,6 +261,7 @@ class WebArchiveBOT_WWW extends Wiki{
 	private $db_name;
 	private $db_user;
 	private $db_password;
+	private $tool_url;
 
 	/**
 	 * This is the constructor.
@@ -337,7 +338,7 @@ class WebArchiveBOT_WWW extends Wiki{
 		$stmt = $db->prepare($sql);
 
 		if($stmt->execute() !== false){
-			if($result = $stmt->fetchAll(PDO::FETCH_COLUMN) !== false){
+			/*if(*/$result = $stmt->fetchAll(PDO::FETCH_COLUMN) !== false)/*{*/
 				
 				var_dump($result);
 				
@@ -347,7 +348,7 @@ class WebArchiveBOT_WWW extends Wiki{
 					$urls = json_decode($row['urls']);
 					$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
 				}
-			}else $data = false;
+			//}else $data = false;
 		}else $data = false;
 		
 		return $data;
