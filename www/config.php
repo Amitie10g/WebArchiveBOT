@@ -5,7 +5,7 @@
 
 $wiki_user          = '';
 $wiki_password      = '';
-$site_url           = ''; // The MediaWiki API URL (eg. https://commons.wikimedia.org/w/api.php)
+$_url               = ''; // The MediaWiki URL
 $sitename           = '';
 $db_server          = '';
 $db_name            = '';
