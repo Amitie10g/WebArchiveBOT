@@ -365,6 +365,8 @@ class WebArchiveBOT_WWW extends Wiki{
 	**/
 	public function printMain($data){
 		
+		var_dump($data);
+		
 		echo <<<EOC
 <html>
 	<head>
