@@ -333,6 +333,9 @@ class WebArchiveBOT_WWW extends Wiki{
 
 		// Get the page ID for faster search in the DB
 		if(!empty($file)){
+			
+			var_dump($file);
+			
 			$fileid = $this->getFileid($file);
 			$sql = "SELECT * FROM `data` WHERE `fileid` = $fileid LIMIT 1;";
 		}else{
@@ -364,8 +367,6 @@ class WebArchiveBOT_WWW extends Wiki{
 	 * @return void
 	**/
 	public function printMain($data){
-		
-		var_dump($data);
 		
 		echo <<<EOC
 <html>
