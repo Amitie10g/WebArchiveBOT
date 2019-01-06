@@ -321,6 +321,8 @@ class WebArchiveBOT_WWW extends Wiki{
 		
 		// Max limit is hardcoded to 100.000 to prevent memory exhaustion
 		if(!is_int($limit) || $limit > 100000) return false;
+		
+		echo "Hola1";
 
 		$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
 
