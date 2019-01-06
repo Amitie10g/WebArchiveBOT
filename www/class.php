@@ -410,7 +410,7 @@ class WebArchiveBOT_WWW extends Wiki{
 EOC;
 		foreach($data as $title=>$item){
 
-			$url = $this->wiki_url . str_replace(array('%3A','%2F','%3F','%26','%3D','%23'),array(':','/','?','&','=','#'),rawurlencode($title));
+			$url = $this->wiki_url . str_replace(array('%3A','%2F','%3F','%26','%3D','%23',' '),array(':','/','?','&','=','#','_'),rawurlencode($title));
 			$date = $item['timestamp'];
 			
 			echo <<<EOC
