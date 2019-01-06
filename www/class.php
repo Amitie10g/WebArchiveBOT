@@ -335,7 +335,7 @@ class WebArchiveBOT_WWW extends Wiki{
 		if($fileid = getFileid($file) !== false) $sql = "SELECT * FROM `data` WHERE `fileid` = $fileid LIMIT 1;";
 		else $sql = "SELECT * FROM data ORDER BY `id` DESC LIMIT $limit";
 
-		$stmt = $db->prepare($sql)
+		$stmt = $db->prepare($sql);
 
 		if($stmt->execute() !== false){
 			if($result = $stmt->fetchAll(PDO::FETCH_COLUMN) !== false){
