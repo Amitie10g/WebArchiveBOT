@@ -331,7 +331,7 @@ class WebArchiveBOT_WWW extends Wiki{
 		}
 
 		// Get the page ID for faster search in the DB
-		if($fileid = getFileid($file) !== false) $sql = "SELECT * FROM `data` WHERE `fileid` = $fileid LIMIT 1;";
+		if($fileid = $this->getFileid($file) !== false) $sql = "SELECT * FROM `data` WHERE `fileid` = $fileid LIMIT 1;";
 		else $sql = "SELECT * FROM data ORDER BY `id` DESC LIMIT $limit";
 
 		$stmt = $db->prepare($sql);
