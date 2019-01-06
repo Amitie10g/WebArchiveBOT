@@ -50,5 +50,5 @@ if(!empty($_GET['json_output'])){
 	
 	$data = $wiki->getArchive($limit,$file);
 	
-	$web->printMain($data);
+	$wiki->printMain($data);
 }
