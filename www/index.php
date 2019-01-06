@@ -31,7 +31,7 @@ require_once('class.php');
 
 $file = $_GET['file'];
 
-$web = new WebArchiveBOT_WWW($url,$sitename,$db_server,$db_name,$db_user,$db_password);
+$wiki = new WebArchiveBOT_WWW($url,$sitename,$db_server,$db_name,$db_user,$db_password);
 
 if(!empty($_GET['json_output'])){
 	header('Content-Type: application/x-gzip');
@@ -45,9 +45,9 @@ if(!empty($_GET['json_output'])){
 	
 	$limit = $_GET['json_output'] + 0;
 
-	echo gzencode(json_encode($web->getArchive($limit),JSON_PRETTY_PRINT));
+	echo gzencode(json_encode($wiki->getArchive($limit),JSON_PRETTY_PRINT));
 }else{
-	$data = getArchive($limit,$file);
+	$data = $wiki->getArchive($limit,$file);
 	
 	var_dump($data);
 	
