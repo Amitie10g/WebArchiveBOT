@@ -494,9 +494,6 @@ class WebArchiveBOT extends Wiki {
 
 		try{
 			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
-			
-			var_dump("$dsn,$this->db_user,$this->db_password");
-			
 			$db = new PDO($dsn,$this->db_user,$this->db_password);
 
 		}catch (PDOException $e){
@@ -507,6 +504,8 @@ class WebArchiveBOT extends Wiki {
 			die;
 		}
 
+		var_dump("CREATE TABLE IF NOT EXISTS `data` (`id` INT NOT NULL AUTO_INCREMENT, `pageid` INT NOT NULL, `title` VARCHAR(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL, `timestamp` TIMESTAMP NOT NULL, `urls` TEXT NOT_NULL CHARACTER SET utf8 COLLATE utf8_bin, UNIQUE KEY `id` (`id`) USING BTREE, UNIQUE KEY `pageid` (`pageid`) USING BTREE, PRIMARY KEY (`id`)) ENGINE=InnoDB;");
+		
 		$db->exec("CREATE TABLE IF NOT EXISTS `data` (`id` INT NOT NULL AUTO_INCREMENT, `pageid` INT NOT NULL, `title` VARCHAR(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL, `timestamp` TIMESTAMP NOT NULL, `urls` TEXT NOT_NULL CHARACTER SET utf8 COLLATE utf8_bin, UNIQUE KEY `id` (`id`) USING BTREE, UNIQUE KEY `pageid` (`pageid`) USING BTREE, PRIMARY KEY (`id`)) ENGINE=InnoDB;");
 
 		foreach($pages as $page){
