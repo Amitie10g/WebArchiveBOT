@@ -48,5 +48,8 @@ if(!empty($_GET['json_output'])){
 	echo gzencode(json_encode($web->getArchive($limit),JSON_PRETTY_PRINT));
 }else{
 	$data = getArchive($limit,$file);
-	$web->printMain($data);
+	
+	var_dump($data);
+	
+	//$web->printMain($data);
 }
