@@ -47,5 +47,5 @@ if(!empty($_GET['json_output'])){
 
 	echo gzencode(json_encode($web->getArchive($limit),JSON_PRETTY_PRINT));
 }else{
-	//$web->printMain(50,$file);
+	$web->printMain(50,$file);
 }
