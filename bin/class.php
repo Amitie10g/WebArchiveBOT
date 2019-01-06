@@ -338,7 +338,7 @@ class Wiki {
 /**
  * This class is intended to do the archiving.
  * @author Davod.
- * @property string $wiki_url The Project URL (API path).
+ * @property string $url The Project URL (API path).
  * @property string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error.
  * @property array $extlinks_bl The blacklisted URLs to exclude for archiving.
  * @property int $pages_per_query The maximum pages retrived per query (iteration) (100 by default).
@@ -348,7 +348,7 @@ class Wiki {
  * @property string $db_password The database access password.
 **/
 class WebArchiveBOT extends Wiki {
-	public $wiki_url;
+	public $url;
 	private $email_operator;
 	private $extlinks_bl;
 	private $pages_per_query;
@@ -370,14 +370,14 @@ class WebArchiveBOT extends Wiki {
 	 * @param string $db_password The database access password.
 	 * @return void
 	**/
-	public function __construct($wiki_url,$email_operator,$extlinks_bl,$pages_per_query,$db_server,$db_name,$db_user,$db_password){
+	public function __construct($url,$email_operator,$extlinks_bl,$pages_per_query,$db_server,$db_name,$db_user,$db_password){
 
 		if(!is_array($extlinks_bl)) $extlinks_bl = null;
 		
-		Wiki::__construct($wiki_url); // Pass main parameter to parent Class' __construct()
-		$this->wiki_url		= $wiki_url;
-		$this->site_url		= parse_url($this->wiki_url);
-		$this->site_url		= $this->wiki_url['scheme'].'://'.$this->wiki_url['host'].'/wiki/';
+		Wiki::__construct($url); // Pass main parameter to parent Class' __construct()
+		$this->url		= $url;
+		$this->site_url		= parse_url($this->url);
+		$this->site_url		= $this->url['scheme'].'://'.$this->url['host'].'/wiki/';
 		$this->email_operator	= $email_operator;
 		$this->extlinks_bl	= '/('.implode('|',$extlinks_bl).')/';
 		$this->pages_per_query	= $pages_per_query;
