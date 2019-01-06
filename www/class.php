@@ -340,8 +340,6 @@ class WebArchiveBOT_WWW extends Wiki{
 		}else{
 			$sql = "SELECT * FROM data ORDER BY `id` DESC LIMIT $limit";
 		}
-
-		var_dump($sql);
 		
 		$stmt = $db->prepare($sql);
 		
