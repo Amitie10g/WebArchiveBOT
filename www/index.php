@@ -35,8 +35,6 @@ define('TEMP_PATH',sys_get_temp_dir());
 require_once('config.php');
 require_once('class.php');
 
-$file = $_GET['file'];
-
 $wiki = new WebArchiveBOT_WWW($api_url,$wiki_url,$sitename,$db_server,$db_name,$db_user,$db_password);
 
 if(!empty($_GET['json_output'])){
@@ -51,10 +49,10 @@ if(!empty($_GET['json_output'])){
 	
 	$limit = $_GET['json_output'] + 0;
 
-	echo gzencode(json_encode($wiki->getArchive($limit),JSON_PRETTY_PRINT));
+	echo gzencode(json_encode($wiki->getArchive($limit,$_GET['file']),JSON_PRETTY_PRINT));
 }else{
 	
-	$data = $wiki->getArchive(50,$file);
+	$data = $wiki->getArchive($limit,$_GET['file']);
 	
 	$wiki->printMain($data);
 }
