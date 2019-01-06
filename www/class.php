@@ -338,7 +338,7 @@ class WebArchiveBOT_WWW extends Wiki{
 		$stmt = $db->prepare($sql);
 
 		if($stmt->execute() !== false){
-			/*if(*/$result = $stmt->fetchAll(PDO::FETCH_COLUMN) !== false)/*{*/
+			/*if(*/$result = $stmt->fetchAll(PDO::FETCH_COLUMN) !== false/*){*/;
 				
 				var_dump($result);
 				
