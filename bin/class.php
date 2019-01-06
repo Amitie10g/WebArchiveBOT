@@ -515,7 +515,7 @@ class WebArchiveBOT extends Wiki {
 
 		foreach($pages as $page){
 			$title = $page['canonicaltitle'];
-			$timestamp = $page['timestamp'];
+			$timestamp = strtotome($page['timestamp']);
 			
 			$metadata = $this->GetPageContents($title,'externallinks');
 			$pageid = $metadata['parse']['pageid'];
@@ -524,6 +524,9 @@ class WebArchiveBOT extends Wiki {
 			if(empty($urls)) continue;
 
 			$sql = "INSERT INTO data(`pageid`,`title`,`timestamp`,`urls`) VALUES ('$pageid','$title','$timestamp','$urls');";
+			
+			echo $sql;
+			
 			$stmt = $db->prepare($sql);
 			$stmt->execute();
 		}
