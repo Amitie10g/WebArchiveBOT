@@ -317,10 +317,10 @@ class WebArchiveBOT_WWW extends Wiki{
 	 * @param string $file The filename to search.
 	 * @return array
 	**/
-	public function getArchive($limit,$file){
+	public function getArchive($limit=50,$file){
 		
 		// Max limit is hardcoded to 100.000 to prevent memory exhaustion
-		if(empty($limit) || !is_int($limit) || $limit > 100000) return false;
+		if($limit > 100000) return false;
 
 		$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
 
