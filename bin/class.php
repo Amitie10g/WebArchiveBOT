@@ -446,7 +446,7 @@ class WebArchiveBOT extends Wiki {
 	 * @param array $urls the URLs to be parsed.
 	 * @return array the Wayback Machine URLs retrived.
 	**/
-	public function urls2archive_urls($urls){
+	public function urls2archive_urls($urls,$json=false){
 		foreach($urls as $url){
 
 			if(preg_match($this->extlinks_bl,$url)) continue;
@@ -495,7 +495,7 @@ class WebArchiveBOT extends Wiki {
 	 * @param array $pages The pages retrived by getLatestFiles()
 	 * @return bool The final results.
 	**/
-	public function archive($pages,$json=false){
+	public function archive($pages){
 
 		if(!is_array($pages) || empty($pages)) return false;
 
