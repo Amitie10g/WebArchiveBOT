@@ -89,6 +89,10 @@ if($license === true) die($license_text);
 
 $wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl,$pages_per_query,$db_server,$db_name,$db_user,$db_password);
 
+echo "\n\n\n\\n\\n";
+var_dump($wiki);
+echo "\n\n\n\\n\\n";
+
 $login = $wiki->login($wiki_user,$wiki_password);
 
 try{
