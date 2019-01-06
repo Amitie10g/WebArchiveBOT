@@ -48,8 +48,6 @@ if(!empty($_GET['json_output'])){
 	echo gzencode(json_encode($wiki->getArchive($limit),JSON_PRETTY_PRINT));
 }else{
 	
-	var_dump($limit);
-	
 	$data = $wiki->getArchive($limit,$file);
 	
 	var_dump($data);
