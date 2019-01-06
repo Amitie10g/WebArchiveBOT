@@ -332,12 +332,14 @@ class WebArchiveBOT_WWW extends Wiki{
 			die("Connection to the DB failed: " . $e->getMessage());
 		}
 
-		var_dump($file);
-		die;
-		
+
 		// Get the page ID for faster search in the DB
-		if($fileid = $this->getFileid($file) !== false) $sql = "SELECT * FROM `data` WHERE `fileid` = $fileid LIMIT 1;";
-		else $sql = "SELECT * FROM data ORDER BY `id` DESC LIMIT $limit";
+		if(!empty($file)){
+			$fileid = $this->getFileid($file)
+			$sql = "SELECT * FROM `data` WHERE `fileid` = $fileid LIMIT 1;";
+		}else{
+			$sql = "SELECT * FROM data ORDER BY `id` DESC LIMIT $limit";
+		}
 
 		$stmt = $db->prepare($sql);
 		
