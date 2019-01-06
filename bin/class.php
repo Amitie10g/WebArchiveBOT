@@ -494,6 +494,9 @@ class WebArchiveBOT extends Wiki {
 
 		try{
 			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
+			
+			var_dump($dsn);
+			
 			$db = new PDO($dsn,$this->db_user,$this->db_password);
 
 		}catch (PDOException $e){
