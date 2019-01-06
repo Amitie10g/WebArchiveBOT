@@ -409,6 +409,8 @@ EOC;
 			$url = $this->wiki_url . str_replace(array('%3A','%2F','%3F','%26','%3D','%23'),array(':','/','?','&','=','#'),rawurlencode($title));
 			$date = strftime("%F %T",$item['timestamp']);
 
+			var_dump($url);
+			
 			echo <<<EOC
 			<h2><a href="$url" target="blank">$title</a></h2>
 			<b>Uploaded: </b>$date (UTC)
