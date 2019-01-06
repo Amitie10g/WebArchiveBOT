@@ -489,8 +489,6 @@ class WebArchiveBOT extends Wiki {
 	 * @return bool The final results.
 	**/
 	public function archive($pages){
-		
-		var_dump($pages);
 
 		if(!is_array($pages) || empty($pages)) return false;
 
@@ -505,6 +503,8 @@ class WebArchiveBOT extends Wiki {
 			echo "\n";
 			die;
 		}
+		
+		var_dump($db); die;
 
 		$db->exec("CREATE TABLE IF NOT EXISTS `data` (`id` INT NOT NULL AUTO_INCREMENT, `pageid` INT NOT NULL, `title` VARCHAR(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL, `timestamp` TIMESTAMP NOT NULL, `urls` TEXT NOT_NULL CHARACTER SET utf8 COLLATE utf8_bin, UNIQUE KEY `id` (`id`) USING BTREE, UNIQUE KEY `pageid` (`pageid`) USING BTREE, PRIMARY KEY (`id`)) ENGINE=InnoDB;");
 
