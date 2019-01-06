@@ -241,6 +241,7 @@ class Wiki {
 		}
 		return unserialize( $ret );
 	}
+}
 
 /**
   * This class does the data retrival and printing.
