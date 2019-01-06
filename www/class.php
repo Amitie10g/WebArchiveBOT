@@ -254,7 +254,7 @@ class Wiki {
 class WebArchiveBOT_WWW extends Wiki{
 
 	public  $api_url;
-	private  $wiki_url;
+	private $wiki_url;
 	private $sitename;
 	private $db_server;
 	private $db_name;
@@ -276,7 +276,7 @@ class WebArchiveBOT_WWW extends Wiki{
 	public function __construct($api_url,$wiki_url,$sitename,$db_server,$db_name,$db_user,$db_password){
 
 		$this->api_url		= $api_url;
-		$this->wiki_url		= "$url/wiki/";
+		$this->wiki_url		= $wiki_url;
 		$this->sitename		= $sitename;
 		$this->db_server	= $db_server;
 		$this->db_name		= $db_name;
