@@ -321,8 +321,6 @@ class WebArchiveBOT_WWW extends Wiki{
 		
 		// Max limit is hardcoded to 100.000 to prevent memory exhaustion
 		if(!is_int($limit) || $limit > 100000) $limit = 50;
-		
-		echo "Hola1";
 
 		$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
 
@@ -337,12 +335,10 @@ class WebArchiveBOT_WWW extends Wiki{
 		else $sql = "SELECT * FROM data ORDER BY `id` DESC LIMIT $limit";
 
 		$stmt = $db->prepare($sql);
-
-		var_dump();
 		
 		if($stmt->execute() !== false){
-			$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
-			
+			$result = $stmt->fetchAll();
+
 			foreach($result as $row){
 					
 				$title = $row['title'];
