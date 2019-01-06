@@ -338,6 +338,9 @@ class WebArchiveBOT_WWW extends Wiki{
 
 		if($stmt->execute() !== false){
 			if($result = $stmt->fetchAll(PDO::FETCH_COLUMN) !== false){
+				
+				var_dump($result);
+				
 				foreach($result as $row){
 					$title = $row['title'];
 					$timestamp = $row['timestamp'];
