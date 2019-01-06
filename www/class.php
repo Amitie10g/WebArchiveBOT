@@ -336,10 +336,10 @@ class WebArchiveBOT_WWW extends Wiki{
 
 		$stmt = $db->prepare($sql);
 
+		var_dump();
+		
 		if($stmt->execute() !== false){
 			$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
-			
-			var_dump($result);
 			
 			foreach($result as $row){
 					
@@ -360,9 +360,7 @@ class WebArchiveBOT_WWW extends Wiki{
 	 * @param string $file The filename to search.
 	 * @return void
 	**/
-	public function printMain($limit=50,$file){
-
-		$data = $this->getArchive($limit,$file);
+	public function printMain($data){
 		
 		echo <<<EOC
 <html>
