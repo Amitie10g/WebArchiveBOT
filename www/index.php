@@ -54,7 +54,7 @@ if(!empty($_GET['json_output'])){
 	echo gzencode(json_encode($wiki->getArchive($limit),JSON_PRETTY_PRINT));
 }else{
 	
-	$data = $wiki->getArchive($limit,$file);
+	$data = $wiki->getArchive(50,$file);
 	
 	$wiki->printMain($data);
 }
