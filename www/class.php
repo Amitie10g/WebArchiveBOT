@@ -244,7 +244,7 @@ class Wiki {
 
 /**
   * This class does the data retrival and printing.
-  * @property string $site_url The Wiki site URL.
+  * @property string $url The Wiki site URL.
   * @property string $sitename The Wiki site name.
   * @property string $db_server The database server address (absolute path for SQLite).
   * @property string $db_name The database name.
@@ -276,6 +276,7 @@ class WebArchiveBOT_WWW extends Wiki{
 	public function __construct($url,$sitename,$db_server,$db_name,$db_user,$db_password){
 
 		$this->url		= $url;
+		$this->wiki_url		= "$url/wiki/";
 		$this->api_url		= "$url/w/api.php";
 		$this->sitename		= $sitename;
 		$this->db_server	= $db_server;
@@ -405,7 +406,7 @@ class WebArchiveBOT_WWW extends Wiki{
 EOC;
 		foreach($data as $title=>$item){
 
-			$url = $this->site_url . str_replace(array('%3A','%2F','%3F','%26','%3D','%23'),array(':','/','?','&','=','#'),rawurlencode($title));
+			$url = $this->wiki_url . str_replace(array('%3A','%2F','%3F','%26','%3D','%23'),array(':','/','?','&','=','#'),rawurlencode($title));
 			$date = strftime("%F %T",$item['timestamp']);
 
 			echo <<<EOC
