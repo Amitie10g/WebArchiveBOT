@@ -480,8 +480,14 @@ class WebArchiveBOT extends Wiki {
 			}
 		}
 		
-		if(!empty(array_filter($archive_urls))) return array_unique(array_filter($archive_urls));
-		else return false;
+		if(!empty(array_filter($archive_urls))){
+			if($json === true) $archive_urls = json_encode(array_unique(array_filter($archive_urls)));
+			else $archive_urls = array_unique(array_filter($archive_urls));
+			
+			return $archive_urls;
+		}else{
+			return false;
+		}
 	}
 
 	 /**
@@ -489,7 +495,7 @@ class WebArchiveBOT extends Wiki {
 	 * @param array $pages The pages retrived by getLatestFiles()
 	 * @return bool The final results.
 	**/
-	public function archive($pages){
+	public function archive($pages,$json=false){
 
 		if(!is_array($pages) || empty($pages)) return false;
 
@@ -513,11 +519,9 @@ class WebArchiveBOT extends Wiki {
 			
 			$metadata = $this->GetPageContents($title,'externallinks');
 			$pageid = $metadata['parse']['pageid'];
-			$urls = $this->urls2archive_urls($metadata['parse']['externallinks']);
+			$urls = $this->urls2archive_urls($metadata['parse']['externallinks'],true);
 			
 			if(empty($urls)) continue;
-		
-			$urls = json_encode($urls);
 
 			$sql = "INSERT INTO data(`pageid`,`title`,`timestamp`,`urls`) VALUES ('$pageid','$title','$timestamp','$urls');";
 			$stmt = $db->prepare($sql);
