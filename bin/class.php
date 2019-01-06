@@ -479,8 +479,9 @@ class WebArchiveBOT extends Wiki {
 				$archive_urls[] = $latest_archive['archived_snapshots']['closest']['url'];
 			}
 		}
-
-		if(!empty($archive_urls)) return array_unique($archive_urls);
+		
+		if(!empty(array_filter($archive_urls))) return array_unique(array_filter($archive_urls));
+		else return false;
 	}
 
 	 /**
@@ -512,15 +513,11 @@ class WebArchiveBOT extends Wiki {
 			
 			$metadata = $this->GetPageContents($title,'externallinks');
 			$pageid = $metadata['parse']['pageid'];
-			$urls = $metadata['parse']['externallinks'];
+			$urls = $this->urls2archive_urls($metadata['parse']['externallinks']);
 			
-			echo "\n\n\n\n\n\n\n";
-			var_dump($metadata);
-			echo "\n\n\n\n\n\n\n";
-
-			$urls = array_filter($urls);
 			if(empty($urls)) continue;
-			$urls = json_encode($this->urls2archive_urls($urls));
+		
+			$urls = json_encode($urls);
 
 			$sql = "INSERT INTO data(`pageid`,`title`,`timestamp`,`urls`) VALUES ('$pageid','$title','$timestamp','$urls');";
 			$stmt = $db->prepare($sql);
