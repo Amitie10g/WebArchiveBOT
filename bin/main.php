@@ -118,8 +118,6 @@ while(true){
 
 	try{
 		$files  = $wiki->getLatestFiles();
-
-		var_dump($files);
 		
 		$result = $wiki->archive($files);
 
