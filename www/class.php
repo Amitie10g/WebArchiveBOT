@@ -254,8 +254,8 @@ class Wiki {
 **/
 class WebArchiveBOT_WWW extends Wiki{
 
-	public $url;
-	private $site_url;
+	public  $url;
+	private $api_url;
 	private $sitename;
 	private $db_server;
 	private $db_name;
@@ -265,7 +265,6 @@ class WebArchiveBOT_WWW extends Wiki{
 	/**
 	 * This is the constructor.
 	 * @param string $url The Project URL (API path).
-	 * @param string $site_url The Wiki site URL.
 	 * @param string $sitename The Wiki site name.
 	 * @param string $db_type The database brand used.
 	 * @param string $db_server The database server address (absolute path for SQLite).
@@ -274,11 +273,11 @@ class WebArchiveBOT_WWW extends Wiki{
 	 * @param string $db_password The database access password.
 	 * @return void
 	**/
-	public function __construct($url,$site_url,$sitename,$db_server,$db_name,$db_user,$db_password){
+	public function __construct($url,$sitename,$db_server,$db_name,$db_user,$db_password){
 
 		Wiki::__construct($url); // Pass main parameter to parent Class' __construct()
 		$this->url		= $url;
-		$this->site_url		= $site_url;
+		$this->api_url		= "$url/w/api.php";
 		$this->sitename		= $sitename;
 		$this->db_server	= $db_server;
 		$this->db_name		= $db_name;
