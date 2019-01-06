@@ -5,7 +5,7 @@
 
 $wiki_user          = '';
 $wiki_password      = '';
-$_url               = ''; // The MediaWiki URL
+$url                = ''; // The MediaWiki URL
 $sitename           = '';
 $db_server          = '';
 $db_name            = '';
