@@ -335,14 +335,14 @@ class WebArchiveBOT_WWW extends Wiki{
 		if($fileid = $this->getFileid($file) !== false) $sql = "SELECT * FROM `data` WHERE `fileid` = $fileid LIMIT 1;";
 		else $sql = "SELECT * FROM data ORDER BY `id` DESC LIMIT $limit";
 
+		var_dump($sql);
+		
 		$stmt = $db->prepare($sql);
 
 		if($stmt->execute() !== false){
 			$result = $stmt->fetchAll(PDO::FETCH_COLUMN);
 				
 			foreach($result as $row){
-					
-				var_dump($row);
 					
 				$title = $row['title'];
 				$timestamp = $row['timestamp'];
