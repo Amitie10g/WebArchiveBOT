@@ -291,7 +291,7 @@ class WebArchiveBOT_WWW extends Wiki{
 	 * @param string $title The Project URL (API path).
 	 * @return int
 	**/
-	public function getFileid($title){
+	public function getPageid($title){
 		
 		if(empty($title)) return false;
 		
@@ -334,9 +334,9 @@ class WebArchiveBOT_WWW extends Wiki{
 		// Get the page ID for faster search in the DB
 		if(!empty($file)){
 			
-			$fileid = $this->getFileid($file);
+			$pageid = $this->getPageid($file);
 			
-			$sql = "SELECT * FROM `data` WHERE `fileid` = $fileid LIMIT 1;";
+			$sql = "SELECT * FROM `data` WHERE `pageid` = $pageid LIMIT 1;";
 		}else{
 			$sql = "SELECT * FROM data ORDER BY `id` DESC LIMIT $limit";
 		}
