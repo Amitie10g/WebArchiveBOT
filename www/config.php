@@ -11,3 +11,4 @@ $db_server          = '';
 $db_name            = '';
 $db_user            = ''; // Set as $ts_mycnf['user'] when using the replica file
 $db_password        = ''; // Set as $ts_mycnf['password'] when using the replica file
+$limit              = 50;
