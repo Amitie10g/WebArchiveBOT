@@ -35,7 +35,7 @@ define('TEMP_PATH',sys_get_temp_dir());
 require_once('config.php');
 require_once('class.php');
 
-$wiki = new WebArchiveBOT_WWW($api_url,$wiki_url,$sitename,$db_server,$db_name,$db_user,$db_password);
+$wiki = new WebArchiveBOT_WWW($api_url,$wiki_url,$sitename,$db_server,$db_name,$db_user,$db_password,$db_table);
 
 if(!empty($_GET['json_output'])){
 	header('Content-Type: application/x-gzip');
