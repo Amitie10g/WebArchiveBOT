@@ -260,6 +260,7 @@ class WebArchiveBOT_WWW extends Wiki{
 	private $db_name;
 	private $db_user;
 	private $db_password;
+	private $db_table;
 	private $tool_url;
 
 	/**
@@ -273,7 +274,7 @@ class WebArchiveBOT_WWW extends Wiki{
 	 * @param string $db_password The database access password.
 	 * @return void
 	**/
-	public function __construct($api_url,$wiki_url,$sitename,$db_server,$db_name,$db_user,$db_password){
+	public function __construct($api_url,$wiki_url,$sitename,$db_server,$db_name,$db_user,$db_password,$db_table){
 
 		$this->api_url		= $api_url;
 		$this->wiki_url		= $wiki_url;
@@ -282,6 +283,7 @@ class WebArchiveBOT_WWW extends Wiki{
 		$this->db_name		= $db_name;
 		$this->db_user		= $db_user;
 		$this->db_password	= $db_password;
+		$this->db_table		= $db_table;
 		$this->tool_url		= dirname(parse_url($_SERVER['PHP_SELF'],PHP_URL_PATH));
 		Wiki::__construct($api_url); // Pass main parameter to parent Class' __construct()
 	}
@@ -336,9 +338,9 @@ class WebArchiveBOT_WWW extends Wiki{
 			
 			$pageid = $this->getPageid($file);
 			
-			$sql = "SELECT * FROM `data` WHERE `pageid` = $pageid LIMIT 1;";
+			$sql = "SELECT * FROM `$this->db_table` WHERE `pageid` = $pageid LIMIT 1;";
 		}else{
-			$sql = "SELECT * FROM data ORDER BY `id` DESC LIMIT $limit";
+			$sql = "SELECT * FROM `$this->db_table` ORDER BY `id` DESC LIMIT $limit";
 		}
 		
 		$stmt = $db->prepare($sql);
