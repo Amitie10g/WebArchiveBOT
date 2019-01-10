@@ -1,8 +1,8 @@
 <?php
 /**
- * WebArchiveBOT: botclases.php based MediaWiki for archiving external links to Web Archive
+ * WebArchiveBOT: botclases.php based MediaWiki tool for archiving external links to Web Archive
  *
- *  (c) 2015-2018 Davod - https://commons.wikimedia.org/wiki/User:Amitie_10g
+ *  (c) 2015-2019 Davod - https://commons.wikimedia.org/wiki/User:Amitie_10g
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as published by
@@ -26,10 +26,12 @@ if(is_callable('posix_getpwuid') && is_callable('posix_getuid')){
 	$ts_mycnf = parse_ini_file($ts_pw['dir'] . "/replica.my.cnf");
 }
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL ^ E_NOTICE);
+// Uncomment for debug
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL ^ E_NOTICE);
 
+// Get te temp path from system default
 define('TEMP_PATH',sys_get_temp_dir());
 
 require_once('config.php');
