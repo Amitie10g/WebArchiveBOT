@@ -1,8 +1,8 @@
 <?php
 /**
- * WebArchiveBOT: botclases.php based MediaWiki for archiving external links to Web Archive
+ * WebArchiveBOT: botclases.php based MediaWiki tool for archiving external links to Web Archive
  *
- *  (c) 2015-2018 Davod - https://commons.wikimedia.org/wiki/User:Amitie_10g
+ *  (c) 2015-2019 Davod - https://commons.wikimedia.org/wiki/User:Amitie_10g
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as published by
@@ -165,8 +165,8 @@ class Wiki {
 	private $http;
 	private $token;
 	private $ecTimestamp;
-	public $url;
-	public $echoRet = false; // For debugging unserialize errors
+	public  $url;
+	public  $echoRet = false; // For debugging unserialize errors
 	/**
 	  * This is the constructor.
 	  * @param $url The project and API URL
@@ -244,12 +244,15 @@ class Wiki {
 
 /**
   * This class does the data retrival and printing.
-  * @property string $url The Wiki site URL.
+  * @property string $api_url The Wiki API URL.
+  * @property string $wiki_url The Wiki URL.
   * @property string $sitename The Wiki site name.
-  * @property string $db_server The database server address (absolute path for SQLite).
+  * @property string $db_server The database server address.
   * @property string $db_name The database name.
   * @property string $db_user The database access username.
   * @property string $db_password The database access password.
+  * @property string $db_table The table name.
+  * @property string $tool_url The script itself.
 **/
 class WebArchiveBOT_WWW extends Wiki{
 
@@ -265,13 +268,14 @@ class WebArchiveBOT_WWW extends Wiki{
 
 	/**
 	 * This is the constructor.
-	 * @param string $url The Project URL (API path).
-	 * @param string $sitename The Wiki site name.
-	 * @param string $db_type The database brand used.
-	 * @param string $db_server The database server address (absolute path for SQLite).
-	 * @param string $db_name The database name.
-	 * @param string $db_user The database access username.
-	 * @param string $db_password The database access password.
+	  * @param string $api_url The Wiki API URL.
+	  * @param string $wiki_url The Wiki URL.
+	  * @param string $sitename The Wiki site name.
+	  * @param string $db_server The database server address.
+	  * @param string $db_name The database name.
+	  * @param string $db_user The database access username.
+	  * @param string $db_password The database access password.
+	  * @param string $db_table The table name.
 	 * @return void
 	**/
 	public function __construct($api_url,$wiki_url,$sitename,$db_server,$db_name,$db_user,$db_password,$db_table){
@@ -285,7 +289,7 @@ class WebArchiveBOT_WWW extends Wiki{
 		$this->db_password	= $db_password;
 		$this->db_table		= $db_table;
 		$this->tool_url		= dirname(parse_url($_SERVER['PHP_SELF'],PHP_URL_PATH));
-		Wiki::__construct($api_url); // Pass main parameter to parent Class' __construct()
+		Wiki::__construct($api_url); // Pass the main parameter to parent Class' __construct()
 	}
 	
 	/**
@@ -319,10 +323,10 @@ class WebArchiveBOT_WWW extends Wiki{
 	 * @param string $file The filename to search.
 	 * @return array
 	**/
-	public function getArchive($limit=50,$file){
+	public function getArchive($limit=100,$file){
 		
 		// Max limit is hardcoded to 100.000 to prevent memory exhaustion
-		if(!is_int($limit) || $limit > 100000) $limit = 50;
+		if(!is_int($limit) || $limit > 10000) $limit = 100;
 
 		$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
 
@@ -332,16 +336,9 @@ class WebArchiveBOT_WWW extends Wiki{
 			die("Connection to the DB failed: " . $e->getMessage());
 		}
 
-
 		// Get the page ID for faster search in the DB
-		if(!empty($file)){
-			
-			$pageid = $this->getPageid($file);
-			
-			$sql = "SELECT * FROM `$this->db_table` WHERE `pageid` = $pageid LIMIT 1;";
-		}else{
-			$sql = "SELECT * FROM `$this->db_table` ORDER BY `id` DESC LIMIT $limit";
-		}
+		if($pageid = $this->getPageid($file)) $sql = "SELECT * FROM `$this->db_table` WHERE `pageid` = $pageid LIMIT 1;";
+		else $sql = "SELECT * FROM `$this->db_table` ORDER BY `id` DESC LIMIT $limit";
 		
 		$stmt = $db->prepare($sql);
 		
@@ -349,7 +346,6 @@ class WebArchiveBOT_WWW extends Wiki{
 			$result = $stmt->fetchAll();
 
 			foreach($result as $row){
-					
 				$title = $row['title'];
 				$timestamp = $row['timestamp'];
 				$urls = json_decode($row['urls']);
