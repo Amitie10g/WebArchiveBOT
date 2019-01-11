@@ -302,7 +302,7 @@ class WebArchiveBOT_WWW extends Wiki{
 		if(empty($title)) return false;
 		
 		// If the input is just the page ID (numeric value), just return it
-		if(preg_match('/[0-9]/',$title)) return $title;
+		if(preg_match('/[0-9]/',$title) > 0) return $title;
 		
 		$query = '?action=query&format=php&titles='.urlencode($title);
 
