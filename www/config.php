@@ -14,3 +14,4 @@ $db_user            = ''; // Set as $ts_mycnf['user'] when using the replica fil
 $db_password        = ''; // Set as $ts_mycnf['password'] when using the replica file (without the surrounding quotes!).
 $db_table           = 'data'; // The table name ('data' by default)
 $limit              = 100; // Maximum pages per query (100 is a sane limit)
+$debug              = false;
