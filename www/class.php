@@ -325,8 +325,6 @@ class WebArchiveBOT_WWW extends Wiki{
 	**/
 	public function getArchive($limit=100,$title){
 		
-		var_dump($title);
-		
 		// Max limit is hardcoded to 100.000 to prevent memory exhaustion
 		if(!is_int($limit) || $limit > 10000) $limit = 100;
 
@@ -341,6 +339,8 @@ class WebArchiveBOT_WWW extends Wiki{
 		// Get the page ID for faster search in the DB
 		if($pageid = $this->getPageid($title)) $sql = "SELECT * FROM `$this->db_table` WHERE `pageid` = $pageid LIMIT 1;";
 		else $sql = "SELECT * FROM `$this->db_table` ORDER BY `id` DESC LIMIT $limit";
+		
+		var_dump($sql);
 		
 		$stmt = $db->prepare($sql);
 		
