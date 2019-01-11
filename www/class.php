@@ -305,8 +305,6 @@ class WebArchiveBOT_WWW extends Wiki{
 		if(preg_match('/[0-9]/',$title)) return $title;
 		
 		$query = '?action=query&format=php&titles='.urlencode($title);
-		
-		var_dump($query);
 
 		$query = $this->query($query);
 		$query = $query['query']['pages'];
@@ -322,10 +320,12 @@ class WebArchiveBOT_WWW extends Wiki{
 	/**
 	 * Retrive the data.
 	 * @param int $limit The maximum results queried to the DB.
-	 * @param string $file The filename to search.
+	 * @param string $title The filename to search.
 	 * @return array
 	**/
 	public function getArchive($limit=100,$title){
+		
+		var_dump($title);
 		
 		// Max limit is hardcoded to 100.000 to prevent memory exhaustion
 		if(!is_int($limit) || $limit > 10000) $limit = 100;
@@ -361,8 +361,7 @@ class WebArchiveBOT_WWW extends Wiki{
 
 	/**
 	 * Prints the main page to the browser.
-	 * @param int $limit The maximum results queried to the DB.
-	 * @param string $file The filename to search.
+	 * @param string $data The data to be parsed
 	 * @return void
 	**/
 	public function printMain($data){
