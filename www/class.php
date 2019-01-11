@@ -386,12 +386,7 @@ class WebArchiveBOT_WWW extends Wiki{
 			input {
 				font-size: 3vw;
 			}
-			
-			@media only screen and (min-width: 768px){
-				input {
-					font-size: 2vw;
-				}
-			}
+
 		</style>
 	</head>
 	<body>
