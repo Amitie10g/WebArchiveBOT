@@ -174,7 +174,7 @@ class Wiki {
 	  * @param $hp
 	  * @return void
 	 **/
-	public function __construct ($url='https://commons.wikimedia.org/w/api.php',$hu=null,$hp=null){
+	public function __construct ($url,$hu=null,$hp=null){
 		$this->http = new http();
 		$this->token = null;
 		$this->url = $url;
@@ -297,6 +297,8 @@ class WebArchiveBOT_WWW extends Wiki{
 	 * @return int
 	**/
 	public function getPageid($title){
+		
+		var_dump($this->url);
 		
 		if(empty($title)) return false;
 		
