@@ -226,7 +226,7 @@ class Wiki {
 	 * @return mixed The response from server (API result).
 	 **/
 	public function query($query,$post=null,$repeat=null,$url=null){
-		if(empty($url)) $url = $this->api_url;
+		if(empty($url)) $url = $this->url;
 		if($post==null) $ret = $this->http->get($url.$query);
 		else $ret = $this->http->post($url.$query,$post);
 		if($this->http->http_code() != "200"){
@@ -244,7 +244,7 @@ class Wiki {
 
 /**
   * This class does the data retrival and printing.
-  * @property string $api_url The Wiki API URL.
+  * @property string $url The Wiki API URL.
   * @property string $wiki_url The Wiki URL.
   * @property string $sitename The Wiki site name.
   * @property string $db_server The database server address.
@@ -268,7 +268,7 @@ class WebArchiveBOT_WWW extends Wiki{
 
 	/**
 	 * This is the constructor.
-	  * @param string $api_url The Wiki API URL.
+	  * @param string $url The Wiki API URL.
 	  * @param string $wiki_url The Wiki URL.
 	  * @param string $sitename The Wiki site name.
 	  * @param string $db_server The database server address.
