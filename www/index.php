@@ -40,6 +40,8 @@ if($debug === true){
 
 $wiki = new WebArchiveBOT_WWW($api_url,$wiki_url,$sitename,$db_server,$db_name,$db_user,$db_password,$db_table);
 
+var_dump($wiki->url);
+
 if(!empty($_GET['json_output'])){
 	header('Content-Type: application/x-gzip');
 	header('Content-Disposition: attachment; filename="archive.json.gz"');
