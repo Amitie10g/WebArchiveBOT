@@ -175,9 +175,6 @@ class Wiki {
 	  * @return void
 	 **/
 	public function __construct ($url,$hu=null,$hp=null){
-		
-		echo "Wiki<br>\n";
-		
 		$this->http = new http();
 		$this->token = null;
 		$this->url = $url;
@@ -229,7 +226,7 @@ class Wiki {
 	 * @return mixed The response from server (API result).
 	 **/
 	public function query($query,$post=null,$repeat=null,$url=null){
-		if(empty($url)) $url = $this->url;
+		if(empty($url)) $url = $this->api_url;
 		if($post==null) $ret = $this->http->get($url.$query);
 		else $ret = $this->http->post($url.$query,$post);
 		if($this->http->http_code() != "200"){
@@ -247,7 +244,7 @@ class Wiki {
 
 /**
   * This class does the data retrival and printing.
-  * @property string $url The Wiki API URL.
+  * @property string $api_url The Wiki API URL.
   * @property string $wiki_url The Wiki URL.
   * @property string $sitename The Wiki site name.
   * @property string $db_server The database server address.
@@ -259,7 +256,7 @@ class Wiki {
 **/
 class WebArchiveBOT_WWW extends Wiki{
 
-	public  $url;
+	public  $api_url;
 	private $wiki_url;
 	private $sitename;
 	private $db_server;
@@ -271,7 +268,7 @@ class WebArchiveBOT_WWW extends Wiki{
 
 	/**
 	 * This is the constructor.
-	  * @param string $url The Wiki API URL.
+	  * @param string $api_url The Wiki API URL.
 	  * @param string $wiki_url The Wiki URL.
 	  * @param string $sitename The Wiki site name.
 	  * @param string $db_server The database server address.
@@ -281,11 +278,9 @@ class WebArchiveBOT_WWW extends Wiki{
 	  * @param string $db_table The table name.
 	 * @return void
 	**/
-	public function __construct($url,$wiki_url,$sitename,$db_server,$db_name,$db_user,$db_password,$db_table){
-		
-		echo "WebArchiveBOT_WWW<br>\n";
+	public function __construct($api_url,$wiki_url,$sitename,$db_server,$db_name,$db_user,$db_password,$db_table){
 
-		//$this->url		= $url;
+		$this->api_url		= $api_url;
 		$this->wiki_url		= $wiki_url;
 		$this->sitename		= $sitename;
 		$this->db_server	= $db_server;
@@ -294,6 +289,7 @@ class WebArchiveBOT_WWW extends Wiki{
 		$this->db_password	= $db_password;
 		$this->db_table		= $db_table;
 		$this->tool_url		= dirname(parse_url($_SERVER['PHP_SELF'],PHP_URL_PATH));
+		Wiki::__construct($api_url); // Pass the main parameter to parent Class' __construct()
 	}
 	
 	/**
