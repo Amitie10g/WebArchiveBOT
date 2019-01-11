@@ -384,7 +384,7 @@ class WebArchiveBOT_WWW extends Wiki{
 			}
 
 			input {
-				font-size: 2vw;
+				font-size: 1vw;
 			}
 }
 			
