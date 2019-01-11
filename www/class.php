@@ -325,6 +325,8 @@ class WebArchiveBOT_WWW extends Wiki{
 	**/
 	public function getArchive($limit=100,$file){
 		
+		var_dump($file);
+		
 		// Max limit is hardcoded to 100.000 to prevent memory exhaustion
 		if(!is_int($limit) || $limit > 10000) $limit = 100;
 
