@@ -175,6 +175,9 @@ class Wiki {
 	  * @return void
 	 **/
 	public function __construct ($url,$hu=null,$hp=null){
+		
+		echo "Wiki<br>\n";
+		
 		$this->http = new http();
 		$this->token = null;
 		$this->url = $url;
@@ -279,6 +282,8 @@ class WebArchiveBOT_WWW extends Wiki{
 	 * @return void
 	**/
 	public function __construct($url,$wiki_url,$sitename,$db_server,$db_name,$db_user,$db_password,$db_table){
+		
+		echo "WebArchiveBOT_WWW<br>\n";
 
 		$this->url		= $url;
 		$this->wiki_url		= $wiki_url;
@@ -297,8 +302,6 @@ class WebArchiveBOT_WWW extends Wiki{
 	 * @return int
 	**/
 	public function getPageid($title){
-		
-		var_dump($this->url);
 		
 		if(empty($title)) return false;
 		
