@@ -201,7 +201,7 @@ class Wiki {
 	  * @param $hp
 	  * @return void
 	 **/
-	public function __construct ($url='https://commons.wikimedia.org/w/api.php',$hu=null,$hp=null){
+	public function __construct ($url,$hu=null,$hp=null){
 		$this->http = new http();
 		$this->token = null;
 		$this->url = $url;
@@ -339,23 +339,20 @@ class Wiki {
  * This class is intended to do the archiving.
  * @author Davod.
  * @property string $url The Project URL (API path).
- * @property string $site_url The Project URL (website).
  * @property string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error.
  * @property array $extlinks_bl The blacklisted URLs to exclude for archiving.
  * @property int $pages_per_query The maximum pages retrived per query (iteration) (100 by default).
- * @property string $db_type The database brand used.
  * @property string $db_server The database server address (absolute path for SQLite).
  * @property string $db_name The database name.
  * @property string $db_user The database access username.
  * @property string $db_password The database access password.
 **/
 class WebArchiveBOT extends Wiki {
-	public $url;
+	public  $url;
 	private $site_url;
 	private $email_operator;
 	private $extlinks_bl;
 	private $pages_per_query;
-	private $db_type;
 	private $db_server;
 	private $db_name;
 	private $db_user;
@@ -374,21 +371,21 @@ class WebArchiveBOT extends Wiki {
 	 * @param string $db_password The database access password.
 	 * @return void
 	**/
-	public function __construct($url,$email_operator,$extlinks_bl,$pages_per_query,$db_type,$db_server,$db_name,$db_user,$db_password){
+	public function __construct($url,$email_operator,$extlinks_bl,$pages_per_query,$db_server,$db_name,$db_user,$db_password){
 
 		if(!is_array($extlinks_bl)) $extlinks_bl = null;
-
+		
 		Wiki::__construct($url); // Pass main parameter to parent Class' __construct()
-		$this->site_url = parse_url($this->url);
-		$this->site_url = $this->site_url['scheme'].'://'.$this->site_url['host'].'/wiki/';
-		$this->email_operator = $email_operator;
-		$this->extlinks_bl = '/('.implode('|',$extlinks_bl).')/';
-		$this->pages_per_query = $pages_per_query;
-		$this->db_type = $db_type;
-		$this->db_server = $db_server;
-		$this->db_name = $db_name;
-		$this->db_user = $db_user;
-		$this->db_password = $db_password;
+		$this->url		= $url;
+		$this->site_url		= parse_url($this->url);
+		$this->site_url		= $this->url['scheme'].'://'.$this->url['host'].'/wiki/';
+		$this->email_operator	= $email_operator;
+		$this->extlinks_bl	= '/('.implode('|',$extlinks_bl).')/';
+		$this->pages_per_query	= $pages_per_query;
+		$this->db_server	= $db_server;
+		$this->db_name		= $db_name;
+		$this->db_user		= $db_user;
+		$this->db_password	= $db_password;
 	}
 
 	/**
@@ -449,7 +446,7 @@ class WebArchiveBOT extends Wiki {
 	 * @param array $urls the URLs to be parsed.
 	 * @return array the Wayback Machine URLs retrived.
 	**/
-	public function urls2archive_urls($urls){
+	public function urls2archive_urls($urls,$json=false){
 		foreach($urls as $url){
 
 			if(preg_match($this->extlinks_bl,$url)) continue;
@@ -482,8 +479,15 @@ class WebArchiveBOT extends Wiki {
 				$archive_urls[] = $latest_archive['archived_snapshots']['closest']['url'];
 			}
 		}
-
-		if(!empty($archive_urls)) return array_unique($archive_urls);
+		
+		if(!empty(array_filter($archive_urls))){
+			if($json === true) $archive_urls = json_encode(array_unique(array_filter($archive_urls)));
+			else $archive_urls = array_unique(array_filter($archive_urls));
+			
+			return $archive_urls;
+		}else{
+			return false;
+		}
 	}
 
 	 /**
@@ -494,78 +498,40 @@ class WebArchiveBOT extends Wiki {
 	public function archive($pages){
 
 		if(!is_array($pages) || empty($pages)) return false;
-		
-		if($this->db_type == 'mysql'){
 
+		try{
 			$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
-			
-			try{
-				$db = new PDO($dsn,$this->db_user,$this->db_password);
-			}catch (PDOException $e){
-   				$message = 'Connection to the DB failed';
-				echo "$message.";
-				$this->sendMail("$message: " . $e->getMessage());
-				die();
-			}
-			
-			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTO_INCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
+			$db = new PDO($dsn,$this->db_user,$this->db_password);
 
-		}elseif($this->db_type == 'pgsql'){
-
-			$dsn = "pgsql:dbname=$this->db_name;host=$this->db_server";
-
-			try{
-				$db = new PDO($dsn,$this->db_user,$this->db_password);
-
-			}catch (PDOException $e){
-   				$message = 'Connection to the DB failed';
-				echo "$message.";
-				$this->sendMail("$message: " . $e->getMessage());
-				die();
-			}
-
-			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTO_INCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
-
-		}else{
-
-			$dsn = "sqlite:$this->db_server";
-			
-			try{
-				$db = new PDO($dsn);
-			}catch (PDOException $e){
-   				$message = 'Connection to the DB failed';
-				echo "$message.";
-				$this->sendMail("$message: " . $e->getMessage());
-				die();
-			}
-			
-			$db->exec('CREATE TABLE IF NOT EXISTS `data` (`id` INTEGER PRIMARY KEY AUTOINCREMENT,`title` BLOB,`timestamp` INTEGER,`urls` BLOB);');
-
+		}catch (PDOException $e){
+   			$message = 'Connection to the DB failed';
+			echo "$message: " . $e->getMessage();
+			$this->sendMail("$message: " . $e->getMessage());
+			echo "\n";
+			die;
 		}
 
+		$db->exec("CREATE TABLE IF NOT EXISTS `data`( `id` INT NOT NULL AUTO_INCREMENT, `pageid` INT NOT NULL, `title` VARCHAR(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL, `timestamp` TIMESTAMP NOT NULL, `urls` TEXT CHARACTER SET utf8 COLLATE utf8_bin NOT NULL, UNIQUE KEY `id` (`id`) USING BTREE, UNIQUE KEY `pageid` (`pageid`) USING BTREE, PRIMARY KEY (`id`)) ENGINE = InnoDB;");
+
 		foreach($pages as $page){
-
 			$title = $page['canonicaltitle'];
-			$timestamp = strtotime($page['timestamp']);
-
-			$urls = $this->GetPageContents($title,'externallinks');
-			$urls = $urls['parse']['externallinks'];
+			$timestamp = $page['timestamp'];
+			
+			$metadata = $this->GetPageContents($title,'externallinks');
+			$pageid = $metadata['parse']['pageid'];
+			$urls = $this->urls2archive_urls($metadata['parse']['externallinks'],true);
+			
 			if(empty($urls)) continue;
 
-			$urls = array_filter($urls);
-
-			$title = base64_encode($title);
-
-			$urls = base64_encode(serialize($this->urls2archive_urls($urls)));
-			if($urls == "Tjs=") continue;
-
-			$query .= "INSERT INTO data(title,timestamp,urls) VALUES ('$title','$timestamp','$urls');";
+			$sql = "INSERT INTO data(`pageid`,`title`,`timestamp`,`urls`) VALUES ('$pageid','$title','$timestamp','$urls');";
 			
-			$db->exec($query);
+			var_dump($sql);
+			
+			$stmt = $db->prepare($sql);
+			$stmt->execute();
 		}
 		
 		unset($db);
-
 		return true;
 	}
 

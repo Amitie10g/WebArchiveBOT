@@ -89,8 +89,6 @@ if($license === true) die($license_text);
 
 $wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl,$pages_per_query,$db_server,$db_name,$db_user,$db_password);
 
-var_dump($wiki);
-
 $login = $wiki->login($wiki_user,$wiki_password);
 
 try{
@@ -120,6 +118,7 @@ while(true){
 
 	try{
 		$files  = $wiki->getLatestFiles();
+		
 		$result = $wiki->archive($files);
 
 		if($result !== true) throw new Exception("errors ocurred when trying to archive. See the log for details.\n");
@@ -140,8 +139,8 @@ while(true){
 
 		$wiki->sendMail($message);
 	}
-	
+
 	unset($files,$result);
-	
+
 	sleep($interval);
 }

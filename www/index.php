@@ -1,8 +1,8 @@
 <?php
 /**
- * WebArchiveBOT: botclases.php based MediaWiki for archiving external links to Web Archive
+ * WebArchiveBOT: botclases.php based MediaWiki tool for archiving external links to Web Archive
  *
- *  (c) 2015-2018 Davod - https://commons.wikimedia.org/wiki/User:Amitie_10g
+ *  (c) 2015-2019 Davod - https://commons.wikimedia.org/wiki/User:Amitie_10g
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Affero General Public License as published by
@@ -26,12 +26,19 @@ if(is_callable('posix_getpwuid') && is_callable('posix_getuid')){
 	$ts_mycnf = parse_ini_file($ts_pw['dir'] . "/replica.my.cnf");
 }
 
+// Get te temp path from system default
+define('TEMP_PATH',sys_get_temp_dir());
+
 require_once('config.php');
 require_once('class.php');
 
-$file = $_GET['file'];
+if($debug === true){
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL ^ E_NOTICE);
+}
 
-$web = new WebArchiveBOT_WWW($site_url,$sitename,$db_type,$db_server,$db_name,$db_user,$db_password);
+$wiki = new WebArchiveBOT_WWW($api_url,$wiki_url,$sitename,$db_server,$db_name,$db_user,$db_password,$db_table);
 
 if(!empty($_GET['json_output'])){
 	header('Content-Type: application/x-gzip');
@@ -42,10 +49,13 @@ if(!empty($_GET['json_output'])){
 	header('Cache-Control: private');
 	header('Pragma: private');
 	header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-	
+
 	$limit = $_GET['json_output'] + 0;
 
-	echo gzencode(json_encode($web->getArchive($limit),JSON_PRETTY_PRINT));
+	echo gzencode(json_encode($wiki->getArchive($limit,$_GET['file']),JSON_PRETTY_PRINT));
 }else{
-	$web->printMain(50,$file);
+
+	$data = $wiki->getArchive($limit,$_GET['file']);
+
+	$wiki->printMain($data);
 }
