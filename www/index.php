@@ -26,16 +26,17 @@ if(is_callable('posix_getpwuid') && is_callable('posix_getuid')){
 	$ts_mycnf = parse_ini_file($ts_pw['dir'] . "/replica.my.cnf");
 }
 
-// Uncomment for debug
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL ^ E_NOTICE);
-
 // Get te temp path from system default
 define('TEMP_PATH',sys_get_temp_dir());
 
 require_once('config.php');
 require_once('class.php');
+
+if($debug === true){
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL ^ E_NOTICE);
+}
 
 $wiki = new WebArchiveBOT_WWW($api_url,$wiki_url,$sitename,$db_server,$db_name,$db_user,$db_password,$db_table);
 
