@@ -396,7 +396,7 @@ class WebArchiveBOT_WWW extends Wiki{
 	<body>
 		<div>
 			<h1><a href="$this->tool_url">WebArchiveBOT, archived items</a></h1>
-			<h2>This page lists the last 50 files uploaded to $this->sitename and their links archived at Internet Archive by Wayback Machine. Just press F5 for refresh.</h2>
+			<h2>This page lists the last 100 files uploaded to $this->sitename and their links archived at Internet Archive by Wayback Machine. Just press F5 for refresh.</h2>
 			<p>You can download the latest [<a href="?json_output=100">100</a>] [<a href="?json_output=1000">1.000</a>] [<a href="?json_output=10000">10.000</a>] files list in JSON format.</p>
 			<p>For more information, see the <a href="$this->tool_url/doc/index.html" target="blank">Documentation</a>.
 			<a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU Affero General Public License v3.</p>
