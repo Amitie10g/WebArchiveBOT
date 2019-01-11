@@ -304,7 +304,7 @@ class WebArchiveBOT_WWW extends Wiki{
 		// If the input is just the page ID (numeric value), just return it
 		if(is_numeric($title)) return $title;
 		
-		//$title = str_replace(array('%3A','%2F','%3F','%26','%3D','%23','%20',' '),array(':','/','?','&','=','#','_','_'),utf8_encode($title));
+		$title = urlencode($title));
 		$query = "?action=query&format=php&titles=$title";
 
 		var_dump($query);
