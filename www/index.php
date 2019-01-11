@@ -57,5 +57,7 @@ if(!empty($_GET['json_output'])){
 	
 	$data = $wiki->getArchive($limit,$_GET['file']);
 	
+	var_dump($data);
+	
 	$wiki->printMain($data);
 }
