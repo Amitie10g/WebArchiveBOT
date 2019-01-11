@@ -299,22 +299,23 @@ class WebArchiveBOT_WWW extends Wiki{
 	**/
 	public function getPageid($title){
 		
-		var_dump($title);
-		
 		if(empty($title)) return false;
 		
 		// If the input is just the page ID (numeric value), just return it
-		if(is_int($title)) return $title;
+		if(is_numeric($title)) return $title;
 		
-		$title = str_replace(array('%3A','%2F','%3F','%26','%3D','%23','%20',' '),array(':','/','?','&','=','#','_','_'),utf8_encode($title));
+		//$title = str_replace(array('%3A','%2F','%3F','%26','%3D','%23','%20',' '),array(':','/','?','&','=','#','_','_'),utf8_encode($title));
 		$query = "?action=query&format=php&titles=$title";
+
+		var_dump($query);
+
 		$query = $this->query($query);
 		$query = $query['query']['pages'];
 		
 		foreach($query as $key=>$value){
 			$pageid = $key;
 		}
-		
+
 		if(is_int($pageid)) return $pageid;
 		else return false;
 	}
