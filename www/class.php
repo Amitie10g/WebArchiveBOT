@@ -387,9 +387,9 @@ class WebArchiveBOT_WWW extends Wiki{
 				font-size: 1.5vw;
 			}
 			
-			@media only screen and (min-width: 720px){
+			@media only screen and (max-width: 768px){
 				input {
-					font-size: 3vw;
+					font-size: 4vw;
 				}
 			}
 		</style>
