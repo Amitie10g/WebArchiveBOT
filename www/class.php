@@ -382,6 +382,14 @@ class WebArchiveBOT_WWW extends Wiki{
 				white-space: nowrap;
 				text-overflow: ellipsis;
 			}
+			
+			/*@media only screen and (min-width: 400px) {*/
+				input {
+					font-size: 100%;
+				}
+			/*}*/
+}
+			
 		</style>
 	</head>
 	<body>
