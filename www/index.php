@@ -49,15 +49,13 @@ if(!empty($_GET['json_output'])){
 	header('Cache-Control: private');
 	header('Pragma: private');
 	header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-	
+
 	$limit = $_GET['json_output'] + 0;
 
 	echo gzencode(json_encode($wiki->getArchive($limit,$_GET['file']),JSON_PRETTY_PRINT));
 }else{
-	
+
 	$data = $wiki->getArchive($limit,$_GET['file']);
-	
-	var_dump($data);
-	
+
 	$wiki->printMain($data);
 }
