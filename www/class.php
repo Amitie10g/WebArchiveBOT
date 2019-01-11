@@ -285,7 +285,7 @@ class WebArchiveBOT_WWW extends Wiki{
 		
 		echo "WebArchiveBOT_WWW<br>\n";
 
-		$this->url		= $url;
+		//$this->url		= $url;
 		$this->wiki_url		= $wiki_url;
 		$this->sitename		= $sitename;
 		$this->db_server	= $db_server;
