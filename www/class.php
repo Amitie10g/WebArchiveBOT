@@ -306,6 +306,8 @@ class WebArchiveBOT_WWW extends Wiki{
 		
 		$query = '?action=query&format=php&titles='.urlencode($title);
 
+		var_dump($query);
+		
 		$query = $this->query($query);
 		$query = $query['query']['pages'];
 		
