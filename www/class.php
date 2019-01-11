@@ -299,6 +299,8 @@ class WebArchiveBOT_WWW extends Wiki{
 	**/
 	public function getPageid($title){
 		
+		var_dump($title);
+		
 		if(empty($title)) return false;
 		
 		// If the input is just the page ID (numeric value), just return it
