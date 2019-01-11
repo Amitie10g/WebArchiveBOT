@@ -369,12 +369,13 @@ class WebArchiveBOT_WWW extends Wiki{
 		<style type="text/css">
 			body{
 				font-family:Roboto,droid-sans,Arial,sans-serif;
+				font-size:12pt;
 			}
 			h1{
-				font-size:16pt;
+				font-size:140%;
 			}
 			h2{
-				font-size:14pt;
+				font-size:120%;
 			}
 			a {
 				overflow: hidden;
