@@ -337,8 +337,6 @@ class WebArchiveBOT_WWW extends Wiki{
 		if($pageid = $this->getPageid($title)) $sql = "SELECT * FROM `$this->db_table` WHERE `pageid` = $pageid LIMIT 1;";
 		else $sql = "SELECT * FROM `$this->db_table` ORDER BY `id` DESC LIMIT $limit";
 		
-		var_dump($sql);
-		
 		$stmt = $db->prepare($sql);
 		
 		if($stmt->execute() !== false){
@@ -362,7 +360,7 @@ class WebArchiveBOT_WWW extends Wiki{
 	 * @return void
 	**/
 	public function printMain($data){
-		
+
 		echo <<<EOC
 <html>
 	<head>
@@ -399,9 +397,9 @@ class WebArchiveBOT_WWW extends Wiki{
 					<input type="text" name="file">
 					<input type="submit">
 				</form>
-			
+
 			</div>
-		
+
 		</div>
 		<div>
 
