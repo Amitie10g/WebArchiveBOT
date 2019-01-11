@@ -305,6 +305,8 @@ class WebArchiveBOT_WWW extends Wiki{
 		if(preg_match('/[0-9]/',$title)) return $title;
 		
 		$query = '?action=query&format=php&titles='.urlencode($title);
+		
+		var_dump($query);
 
 		$query = $this->query($query);
 		$query = $query['query']['pages'];
@@ -323,7 +325,7 @@ class WebArchiveBOT_WWW extends Wiki{
 	 * @param string $file The filename to search.
 	 * @return array
 	**/
-	public function getArchive($limit=100,$file){
+	public function getArchive($limit=100,$title){
 		
 		// Max limit is hardcoded to 100.000 to prevent memory exhaustion
 		if(!is_int($limit) || $limit > 10000) $limit = 100;
@@ -337,10 +339,8 @@ class WebArchiveBOT_WWW extends Wiki{
 		}
 
 		// Get the page ID for faster search in the DB
-		if($pageid = $this->getPageid($file)) $sql = "SELECT * FROM `$this->db_table` WHERE `pageid` = $pageid LIMIT 1;";
+		if($pageid = $this->getPageid($title)) $sql = "SELECT * FROM `$this->db_table` WHERE `pageid` = $pageid LIMIT 1;";
 		else $sql = "SELECT * FROM `$this->db_table` ORDER BY `id` DESC LIMIT $limit";
-		
-		var_dump($sql);
 		
 		$stmt = $db->prepare($sql);
 		
