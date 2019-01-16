@@ -549,3 +549,197 @@ class WebArchiveBOT extends Wiki {
 		mail($to,$subject,$message,$headers);
 	}
 }
+
+class WebArchiveBOT_WWW extends Wiki{
+
+	public  $api_url;
+	private $wiki_url;
+	private $sitename;
+	private $db_server;
+	private $db_name;
+	private $db_user;
+	private $db_password;
+	private $db_table;
+	private $tool_url;
+
+	/**
+	 * This is the constructor.
+	 * @param string $url The Project URL (API path).
+	 * @param string $sitename The Wiki site name.
+	 * @param string $db_type The database brand used.
+	 * @param string $db_server The database server address (absolute path for SQLite).
+	 * @param string $db_name The database name.
+	 * @param string $db_user The database access username.
+	 * @param string $db_password The database access password.
+	 * @return void
+	**/
+	public function __construct($api_url,$wiki_url,$sitename,$db_server,$db_name,$db_user,$db_password,$db_table){
+
+		$this->api_url		= $api_url;
+		$this->wiki_url		= $wiki_url;
+		$this->sitename		= $sitename;
+		$this->db_server	= $db_server;
+		$this->db_name		= $db_name;
+		$this->db_user		= $db_user;
+		$this->db_password	= $db_password;
+		$this->db_table		= $db_table;
+		$this->tool_url		= dirname(parse_url($_SERVER['PHP_SELF'],PHP_URL_PATH));
+		Wiki::__construct($api_url); // Pass main parameter to parent Class' __construct()
+	}
+	
+	/**
+	 * Retrives the pageid from the Wiki, by providing the title. View README.md for details
+	 * @param string $title The Project URL (API path).
+	 * @return int
+	**/
+	public function getPageid($title){
+		
+		if(empty($title)) return false;
+		
+		// If the input is just the page ID (numeric value), just return it
+		if(is_int($title)) return $title;
+		
+		$title = str_replace(array('%3A','%2F','%3F','%26','%3D','%23','%20',' '),array(':','/','?','&','=','#','_','_'),utf8_encode($title));
+		$query = "?action=query&format=php&titles=$title";
+		$query = $this->query($query);
+		$query = $query['query']['pages'];
+		
+		foreach($query as $key=>$value){
+			$pageid = $key;
+		}
+		
+		if(is_int($pageid)) return $pageid;
+		else return false;
+	}
+
+	/**
+	 * Retrive the data.
+	 * @param int $limit The maximum results queried to the DB.
+	 * @param string $file The filename to search.
+	 * @return array
+	**/
+	public function getArchive($limit=50,$file){
+		
+		// Max limit is hardcoded to 100.000 to prevent memory exhaustion
+		if(!is_int($limit) || $limit > 100000) $limit = 50;
+
+		$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
+
+		try{
+			$db = new PDO($dsn,$this->db_user,$this->db_password);
+		}catch (PDOException $e){
+			die("Connection to the DB failed: " . $e->getMessage());
+		}
+
+
+		// Get the page ID for faster search in the DB
+		if(!empty($file)){
+			
+			$pageid = $this->getPageid($file);
+			
+			$sql = "SELECT * FROM `$this->db_table` WHERE `pageid` = $pageid LIMIT 1;";
+		}else{
+			$sql = "SELECT * FROM `$this->db_table` ORDER BY `id` DESC LIMIT $limit";
+		}
+		
+		$stmt = $db->prepare($sql);
+		
+		if($stmt->execute() !== false){
+			$result = $stmt->fetchAll();
+
+			foreach($result as $row){
+					
+				$title = $row['title'];
+				$timestamp = $row['timestamp'];
+				$urls = json_decode($row['urls']);
+				$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
+			}
+			if(empty($data)) $data = false;
+		}else $data = false;
+		
+		return $data;
+	}
+
+	/**
+	 * Prints the main page to the browser.
+	 * @param int $limit The maximum results queried to the DB.
+	 * @param string $file The filename to search.
+	 * @return void
+	**/
+	public function printMain($data){
+		
+		echo <<<EOC
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>WebArchiveBOT, archived items</title>
+		<style type="text/css">
+			body{
+				font-family:Roboto,droid-sans,Arial,sans-serif;
+			}
+			h1{
+				font-size:16pt;
+			}
+			h2{
+				font-size:14pt;
+			}
+			a {
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<h1><a href="$this->tool_url">WebArchiveBOT, archived items</a></h1>
+			<h2>This page lists the last 50 files uploaded to $this->sitename and their links archived at Internet Archive by Wayback Machine. Just press F5 for refresh.</h2>
+			<p>You can download the latest [<a href="?json_output=100">100</a>] [<a href="?json_output=1000">1.000</a>] [<a href="?json_output=10000">10.000</a>] files list in JSON format.</p>
+			<p>For more information, see the <a href="$this->tool_url/doc/index.html" target="blank">Documentation</a>.
+			<a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU Affero General Public License v3.</p>
+
+			<div>
+				Find a file (with the prefix <code>File:</code>)&nbsp;
+				<form method="get" action="$this->tool_url">
+					<input type="text" name="file">
+					<input type="submit">
+				</form>
+			
+			</div>
+		
+		</div>
+		<div>
+
+EOC;
+		foreach($data as $title=>$item){
+
+			$url = $this->wiki_url . str_replace(array('%3A','%2F','%3F','%26','%3D','%23','%20',' '),array(':','/','?','&','=','#','_','_'),rawurlencode($title));
+			$date = $item['timestamp'];
+			
+			echo <<<EOC
+			<h2><a href="$url" target="blank">$title</a></h2>
+			<b>Uploaded: </b>$date (UTC)
+			<ul>
+
+EOC;
+			foreach($item['urls'] as $link){
+				$escaped_link = str_replace(array('%3A','%2F','%3F','%26','%3D','%23','%20',' '),array(':','/','?','&','=','#','_','_'),rawurlencode($link));
+				echo <<<EOC
+				<li><a href="$escaped_link" target="blank">$link</a></li>
+
+EOC;
+
+			}
+		echo <<<EOC
+			</ul>
+
+EOC;
+		}
+		echo <<<EOC
+		</div>
+	</body>
+</html>
+
+EOC;
+	}
+}

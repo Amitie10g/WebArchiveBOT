@@ -26,7 +26,7 @@ Page with latest 50 files archived at https://tools.wmflabs.org/webarchivebot
 * Symlink "bin/main.php", "bin/class.php" and "bin/WebArchiveBOT.sh" to your scripts path.
 
 * Copy "www/.config.php" to your www directory and edit it.
-* Symlink "www/index.php" and "www/doc" (optional) to your www directory.
+* Symlink "www/index.php", "bin/class.php", and "www/doc" (optional) to your www directory.
 
 * Ensure the `WebArchiveBOT.sh` has exec permissions.
 
