@@ -122,10 +122,7 @@ while(true){
 
 	try{
 		$files  = $wiki->getLatestFiles();
-		
-		$result = $wiki->archive($files);
-
-		if($result !== true) throw new Exception("errors ocurred when trying to archive. See the log for details.\n");
+		if($wiki->archive($files) !== true) throw new Exception("errors ocurred when trying to archive. See the log for details.\n");
 		echo "everything OK.\n";
 		if($debug === true){
 			$memory_peak = memory_get_peak_usage (true);
