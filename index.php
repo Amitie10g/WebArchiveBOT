@@ -20,14 +20,15 @@
  *
  **/
 
+// Get te temp path from system default
+define('TEMP_PATH',sys_get_temp_dir());
+define('IN_WAB',true);
+
 //This, when running under ToolForge tool account using the 'replica.my.cnf' file
 if(is_callable('posix_getpwuid') && is_callable('posix_getuid')){
 	$ts_pw = posix_getpwuid(posix_getuid());
 	$ts_mycnf = parse_ini_file($ts_pw['dir'] . "/replica.my.cnf");
 }
-
-// Get te temp path from system default
-define('TEMP_PATH',sys_get_temp_dir());
 
 require_once('config.php');
 require_once('class.php');
@@ -38,7 +39,7 @@ if($debug === true){
 	error_reporting(E_ALL ^ E_NOTICE);
 }
 
-$wiki = new WebArchiveBOT_WWW($api_url,$wiki_url,$sitename,$db_server,$db_name,$db_user,$db_password,$db_table);
+$wiki = new WebArchiveBOT($api_url,$wiki_url,$sitename,$email_operator,$extlinks_bl,$pages_per_query,$db_server,$db_name,$db_user,$db_password,$db_table);
 
 if(!empty($_GET['json_output'])){
 	header('Content-Type: application/x-gzip');

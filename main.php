@@ -19,6 +19,10 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  **/
 
+// Get te temp path from system default
+define('TEMP_PATH',sys_get_temp_dir());
+define('IN_WAB',true);
+
 //This, when running under ToolForge tool account using the 'replica.my.cnf' file
 if(is_callable('posix_getpwuid') && is_callable('posix_getuid')){
 	$ts_pw = posix_getpwuid(posix_getuid());
@@ -87,7 +91,7 @@ EOL;
 if($help === true) die($help_text);
 if($license === true) die($license_text);
 
-$wiki = new WebArchiveBOT($wiki_url,$email_operator,$extlinks_bl,$pages_per_query,$db_server,$db_name,$db_user,$db_password);
+$wiki = new WebArchiveBOT($api_url,$wiki_url,$sitename,$email_operator,$extlinks_bl,$pages_per_query,$db_server,$db_name,$db_user,$db_password,$db_table);
 
 $login = $wiki->login($wiki_user,$wiki_password);
 
@@ -118,10 +122,7 @@ while(true){
 
 	try{
 		$files  = $wiki->getLatestFiles();
-		
-		$result = $wiki->archive($files);
-
-		if($result !== true) throw new Exception("errors ocurred when trying to archive. See the log for details.\n");
+		if($wiki->archive($files) !== true) throw new Exception("errors ocurred when trying to archive. See the log for details.\n");
 		echo "everything OK.\n";
 		if($debug === true){
 			$memory_peak = memory_get_peak_usage (true);
