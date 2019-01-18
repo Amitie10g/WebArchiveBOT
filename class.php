@@ -378,17 +378,17 @@ class WebArchiveBOT extends Wiki {
 		if(!is_array($extlinks_bl)) $extlinks_bl = null;
 		
 		Wiki::__construct($api_url); // Pass main parameter to parent Class' __construct()
-		$this->api_url			= $api_url;
-		$this->wiki_url			= $wiki_url;
-		$this->sitename			= $sitename;
+		$this->api_url		= $api_url;
+		$this->wiki_url		= $wiki_url;
+		$this->sitename		= $sitename;
 		$this->email_operator	= $email_operator;
-		$this->extlinks_bl		= '/('.implode('|',$extlinks_bl).')/';
+		$this->extlinks_bl	= '/('.implode('|',$extlinks_bl).')/';
 		$this->pages_per_query	= $pages_per_query;
-		$this->db_server		= $db_server;
-		$this->db_name			= $db_name;
-		$this->db_user			= $db_user;
-		$this->db_password		= $db_password;
-		$this->db_table			= $db_table;
+		$this->db_server	= $db_server;
+		$this->db_name		= $db_name;
+		$this->db_user		= $db_user;
+		$this->db_password	= $db_password;
+		$this->db_table		= $db_table;
 	}
 
 	/**
