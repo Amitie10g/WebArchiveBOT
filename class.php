@@ -348,8 +348,9 @@ class Wiki {
  * @property string $db_password The database access password.
 **/
 class WebArchiveBOT extends Wiki {
-	public  $url;
-	private $site_url;
+	public  $api_url;
+	private $wiki_url;
+	private $sitename;
 	private $email_operator;
 	private $extlinks_bl;
 	private $pages_per_query;
@@ -357,6 +358,8 @@ class WebArchiveBOT extends Wiki {
 	private $db_name;
 	private $db_user;
 	private $db_password;
+	private $db_table;
+	private $tool_url;
 
 	/**
 	 * This is the constructor.
@@ -369,23 +372,23 @@ class WebArchiveBOT extends Wiki {
 	 * @param string $db_name The database name.
 	 * @param string $db_user The database access username.
 	 * @param string $db_password The database access password.
-	 * @return void
 	**/
-	public function __construct($url,$email_operator,$extlinks_bl,$pages_per_query,$db_server,$db_name,$db_user,$db_password){
+	public function __construct($api_url,$wiki_url,$sitename,$email_operator,$extlinks_bl,$pages_per_query,$db_server,$db_name,$db_user,$db_password,$db_table){
 
 		if(!is_array($extlinks_bl)) $extlinks_bl = null;
 		
-		Wiki::__construct($url); // Pass main parameter to parent Class' __construct()
-		$this->url		= $url;
-		$this->site_url		= parse_url($this->url);
-		$this->site_url		= $this->url['scheme'].'://'.$this->url['host'].'/wiki/';
+		Wiki::__construct($api_url); // Pass main parameter to parent Class' __construct()
+		$this->api_url			= $api_url;
+		$this->wiki_url			= $wiki_url;
+		$this->sitename			= $sitename;
 		$this->email_operator	= $email_operator;
-		$this->extlinks_bl	= '/('.implode('|',$extlinks_bl).')/';
+		$this->extlinks_bl		= '/('.implode('|',$extlinks_bl).')/';
 		$this->pages_per_query	= $pages_per_query;
-		$this->db_server	= $db_server;
-		$this->db_name		= $db_name;
-		$this->db_user		= $db_user;
-		$this->db_password	= $db_password;
+		$this->db_server		= $db_server;
+		$this->db_name			= $db_name;
+		$this->db_user			= $db_user;
+		$this->db_password		= $db_password;
+		$this->db_table			= $db_table;
 	}
 
 	/**
@@ -548,4 +551,154 @@ class WebArchiveBOT extends Wiki {
 		$headers = "From: WebArchiveBOT <$from>\r\n";
 		mail($to,$subject,$message,$headers);
 	}
+	
+	public function getPageid($title){
+		
+		if(empty($title)) return false;
+		
+		$query = '?action=query&format=php&titles='.urlencode($title);
+		
+		$query = $this->query($query);
+		$query = $query['query']['pages'];
+		
+		foreach($query as $key=>$value){
+			$pageid = $key;
+		}
+
+		if(is_int($pageid)) return $pageid;
+		else return false;
+	}
+
+	/**
+	 * Retrive the data.
+	 * @param int $limit The maximum results queried to the DB.
+	 * @param string $title The filename to search.
+	 * @return array
+	**/
+	public function getArchive($limit=100,$title){
+		
+		// Max limit is hardcoded to 100.000 to prevent memory exhaustion
+		if(!is_int($limit) || $limit > 10000) $limit = 100;
+
+		$dsn = "mysql:dbname=$this->db_name;host=$this->db_server";
+
+		try{
+			$db = new PDO($dsn,$this->db_user,$this->db_password);
+		}catch (PDOException $e){
+			die("Connection to the DB failed: " . $e->getMessage());
+		}
+
+		// Get the page ID for faster search in the DB
+		if($pageid = $this->getPageid($title)) $sql = "SELECT * FROM `$this->db_table` WHERE `pageid` = $pageid LIMIT 1;";
+		else $sql = "SELECT * FROM `$this->db_table` ORDER BY `id` DESC LIMIT $limit";
+		
+		$stmt = $db->prepare($sql);
+		
+		if($stmt->execute() !== false){
+			$result = $stmt->fetchAll();
+
+			foreach($result as $row){
+				$title = $row['title'];
+				$timestamp = $row['timestamp'];
+				$urls = json_decode($row['urls']);
+				$data[$title] = array('timestamp'=>$timestamp,'urls'=>$urls);
+			}
+			if(empty($data)) $data = false;
+		}else $data = false;
+		
+		return $data;
+	}
+
+	/**
+	 * Prints the main page to the browser.
+	 * @param string $data The data to be parsed
+	 * @return void
+	**/
+	public function printMain($data){
+
+		echo <<<EOC
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>WebArchiveBOT, archived items</title>
+		<style type="text/css">
+			body{
+				font-family:Roboto,droid-sans,Arial,sans-serif;
+				font-size:1vw;
+			}
+			h1{
+				font-size:2vw;
+			}
+			h2{
+				font-size:1.5vw;
+			}
+			a {
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+
+			input {
+				font-size: 1.5vw;
+			}
+			
+			@media screen and (max-width: 1024px) {
+				font-size: 6vw;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div>
+			<h1><a href="$this->tool_url">WebArchiveBOT, archived items</a></h1>
+			<h2>This page lists the last 100 files uploaded to $this->sitename and their links archived at Internet Archive by Wayback Machine. Just press F5 for refresh.</h2>
+			<p>You can download the latest [<a href="?json_output=100">100</a>] [<a href="?json_output=1000">1.000</a>] [<a href="?json_output=10000">10.000</a>] files list in JSON format.</p>
+			<p>For more information, see the <a href="$this->tool_url/doc/index.html" target="blank">Documentation</a>.
+			<a href="https://github.com/Amitie10g/WebArchiveBOT" target="blank">Source code</a> is available at GitHub under the GNU Affero General Public License v3.</p>
+
+			<div>
+				Find a file (with the prefix <code>File:</code>)&nbsp;
+				<form method="get" action="$this->tool_url">
+					<input type="text" name="file">
+					<input type="submit">
+				</form>
+
+			</div>
+
+		</div>
+		<div>
+
+EOC;
+		foreach($data as $title=>$item){
+
+			$url = $this->wiki_url . str_replace(array('%3A','%2F','%3F','%26','%3D','%23','%20',' '),array(':','/','?','&','=','#','_','_'),rawurlencode($title));
+			$date = $item['timestamp'];
+			
+			echo <<<EOC
+			<h2><a href="$url" target="blank">$title</a></h2>
+			<b>Uploaded: </b>$date (UTC)
+			<ul>
+
+EOC;
+			foreach($item['urls'] as $link){
+				$escaped_link = str_replace(array('%3A','%2F','%3F','%26','%3D','%23','%20',' '),array(':','/','?','&','=','#','_','_'),rawurlencode($link));
+				echo <<<EOC
+				<li><a href="$escaped_link" target="blank">$link</a></li>
+
+EOC;
+
+			}
+		echo <<<EOC
+			</ul>
+
+EOC;
+		}
+		echo <<<EOC
+		</div>
+	</body>
+</html>
+
+EOC;
+	}
+}
 }

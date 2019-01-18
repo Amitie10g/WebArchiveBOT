@@ -38,7 +38,7 @@ if($debug === true){
 	error_reporting(E_ALL ^ E_NOTICE);
 }
 
-$wiki = new WebArchiveBOT_WWW($api_url,$wiki_url,$sitename,$db_server,$db_name,$db_user,$db_password,$db_table);
+$wiki = new WebArchiveBOT($api_url,$wiki_url,$sitename,$email_operator,$extlinks_bl,$pages_per_query,$db_server,$db_name,$db_user,$db_password,$db_table);
 
 if(!empty($_GET['json_output'])){
 	header('Content-Type: application/x-gzip');
