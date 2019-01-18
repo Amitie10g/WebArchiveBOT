@@ -338,14 +338,18 @@ class Wiki {
 /**
  * This class is intended to do the archiving.
  * @author Davod.
- * @property string $url The Project URL (API path).
+ * @property string $api_url MediaWiki API URL
+ * @property string $wiki_url MediaWiki Wiki URL
+ * @property string $sitename MediaWiki site name
  * @property string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error.
  * @property array $extlinks_bl The blacklisted URLs to exclude for archiving.
- * @property int $pages_per_query The maximum pages retrived per query (iteration) (100 by default).
+ * @property int $pages_per_query The maximum pages retrived per query (iteration) (250 by default).
  * @property string $db_server The database server address (absolute path for SQLite).
  * @property string $db_name The database name.
  * @property string $db_user The database access username.
  * @property string $db_password The database access password.
+ * @property string $db_table The database access password.
+ * @property string $tool_url The tool URL.
 **/
 class WebArchiveBOT extends Wiki {
 	public  $api_url;
@@ -363,32 +367,35 @@ class WebArchiveBOT extends Wiki {
 
 	/**
 	 * This is the constructor.
-	 * @param string $url The Project URL (API path).
+	 * @param string $api_url MediaWiki API URL
+	 * @param string $wiki_url MediaWiki Wiki URL
+	 * @param string $sitename MediaWiki site name
 	 * @param string $email_operator The emailaddress of the operator,to be used to send mails to him/her in case of error.
 	 * @param array $extlinks_bl The blacklisted URLs to exclude for archiving.
-	 * @param int $pages_per_query The maximum pages retrived per query (iteration) (100 by default).
-	 * @param string $db_type The database brand used.
+	 * @param int $pages_per_query The maximum pages retrived per query (iteration) (250 by default).
 	 * @param string $db_server The database server address (absolute path for SQLite).
 	 * @param string $db_name The database name.
 	 * @param string $db_user The database access username.
 	 * @param string $db_password The database access password.
+	 * @param string $db_table The database access password.
+	 * @param string $tool_url The tool URL.
 	**/
 	public function __construct($api_url,$wiki_url,$sitename,$email_operator,$extlinks_bl,$pages_per_query,$db_server,$db_name,$db_user,$db_password,$db_table){
 
 		if(!is_array($extlinks_bl)) $extlinks_bl = null;
 		
 		Wiki::__construct($api_url); // Pass main parameter to parent Class' __construct()
-		$this->api_url		= $api_url;
-		$this->wiki_url		= $wiki_url;
-		$this->sitename		= $sitename;
+		$this->api_url			= $api_url;
+		$this->wiki_url			= $wiki_url;
+		$this->sitename			= $sitename;
 		$this->email_operator	= $email_operator;
-		$this->extlinks_bl	= '/('.implode('|',$extlinks_bl).')/';
+		$this->extlinks_bl		= '/('.implode('|',$extlinks_bl).')/';
 		$this->pages_per_query	= $pages_per_query;
-		$this->db_server	= $db_server;
-		$this->db_name		= $db_name;
-		$this->db_user		= $db_user;
-		$this->db_password	= $db_password;
-		$this->db_table		= $db_table;
+		$this->db_server		= $db_server;
+		$this->db_name			= $db_name;
+		$this->db_user			= $db_user;
+		$this->db_password		= $db_password;
+		$this->db_table			= $db_table;
 	}
 
 	/**
