@@ -19,6 +19,10 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  **/
 
+// Get te temp path from system default
+define('TEMP_PATH',sys_get_temp_dir());
+define('IN_WAB',true);
+
 //This, when running under ToolForge tool account using the 'replica.my.cnf' file
 if(is_callable('posix_getpwuid') && is_callable('posix_getuid')){
 	$ts_pw = posix_getpwuid(posix_getuid());
