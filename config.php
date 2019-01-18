@@ -12,12 +12,12 @@ $db_server          = ''; // The MySQL/MariaDB server address.
 $db_name            = ''; // The DB name.
 $db_user            = ''; // Set as $ts_mycnf['user'] when using the replica file (without the surrounding quotes!).
 $db_password        = ''; // Set as $ts_mycnf['password'] when using the replica file (without the surrounding quotes!).
+$email_operator		= '';
 $db_table           = 'data'; // The table name ('data' by default)
 $limit              = 100; // Maximum pages per query (100 is a sane limit)
-$debug              = false;
+$debug              = false; // Set true to increase the verbosity
 $pages_per_query	= 100;
 $interval			= 5;
-$email_operator		= '';
 
 $extlinks_bl[] = '^(?!(http(s){0,1}:\/\/))[\p{L}\p{N}]+';
 $extlinks_bl[] = '(([\p{P}\p{N}]+\.)*google\.[\p{L}\p{N}]+)';
