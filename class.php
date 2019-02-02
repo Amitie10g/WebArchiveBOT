@@ -558,7 +558,12 @@ class WebArchiveBOT extends Wiki {
 		$headers = "From: WebArchiveBOT <$from>\r\n";
 		mail($to,$subject,$message,$headers);
 	}
-	
+
+	/**
+	 * Get the page ID from MediaWiki, by the title
+	 * @param string $title the title where the ID is needed.
+	 * @return int
+	**/	
 	public function getPageid($title){
 		
 		if(empty($title)) return false;
