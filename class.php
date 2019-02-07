@@ -536,8 +536,6 @@ class WebArchiveBOT extends Wiki {
 
 			$sql = "INSERT INTO data(`pageid`,`title`,`timestamp`,`urls`) VALUES ('$pageid','$title','$timestamp','$urls');";
 			
-			var_dump($sql);
-			
 			$stmt = $db->prepare($sql);
 			$stmt->execute();
 		}
@@ -628,7 +626,6 @@ class WebArchiveBOT extends Wiki {
 	 * @return void
 	**/
 	public function printMain($data){
-		var_dump($data);
 
 		echo <<<EOC
 <html>
