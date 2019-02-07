@@ -681,32 +681,28 @@ class WebArchiveBOT extends Wiki {
 		<div>
 
 EOC;
-		if(!empty($data)){
-			foreach($data as $title=>$item){
+		foreach($data as $title=>$item){
 
-				$url = $this->wiki_url . str_replace(array('%3A','%2F','%3F','%26','%3D','%23','%20',' '),array(':','/','?','&','=','#','_','_'),rawurlencode($title));
-				$date = $item['timestamp'];
+			$url = $this->wiki_url . str_replace(array('%3A','%2F','%3F','%26','%3D','%23','%20',' '),array(':','/','?','&','=','#','_','_'),rawurlencode($title));
+			$date = $item['timestamp'];
 
-				echo <<<EOC
-				<h2><a href="$url" target="blank">$title</a></h2>
-				<b>Uploaded: </b>$date (UTC)
-				<ul>
-
-EOC;
-				foreach($item['urls'] as $link){
-					$escaped_link = str_replace(array('%3A','%2F','%3F','%26','%3D','%23','%20',' '),array(':','/','?','&','=','#','_','_'),rawurlencode($link));
-					echo <<<EOC
-					<li><a href="$escaped_link" target="blank">$link</a></li>
-
-EOC;
-
-				}
-			}
-		}else{
-			echo "<i>No data available.</i>";
-		}
 			echo <<<EOC
-				</ul>
+			<h2><a href="$url" target="blank">$title</a></h2>
+			<b>Uploaded: </b>$date (UTC)
+			<ul>
+
+EOC;
+			foreach($item['urls'] as $link){
+				$escaped_link = str_replace(array('%3A','%2F','%3F','%26','%3D','%23','%20',' '),array(':','/','?','&','=','#','_','_'),rawurlencode($link));
+				echo <<<EOC
+				<li><a href="$escaped_link" target="blank">$link</a></li>
+
+EOC;
+
+			}
+		}
+		echo <<<EOC
+			</ul>
 
 EOC;
 			}
