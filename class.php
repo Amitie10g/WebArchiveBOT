@@ -387,7 +387,7 @@ class WebArchiveBOT extends Wiki {
 		Wiki::__construct($api_url); // Pass main parameter to parent Class' __construct()
 		$this->api_url		= $api_url;
 		$this->wiki_url		= $wiki_url;
-		$this->tool_url		= $_SERVER['SCRIPT_NAME'];
+		$this->tool_url		= dirname($_SERVER['SCRIPT_NAME']);
 		$this->sitename		= $sitename;
 		$this->email_operator	= $email_operator;
 		$this->extlinks_bl	= '/('.implode('|',$extlinks_bl).')/';
