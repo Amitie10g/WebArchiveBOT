@@ -701,9 +701,10 @@ EOC;
 	EOC;
 
 				}
-			}else{
-				echo "<i>No data available.</i>";
 			}
+		}else{
+			echo "<i>No data available.</i>";
+		}
 			echo <<<EOC
 				</ul>
 
