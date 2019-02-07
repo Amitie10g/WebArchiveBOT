@@ -692,13 +692,13 @@ EOC;
 				<b>Uploaded: </b>$date (UTC)
 				<ul>
 
-	EOC;
+EOC;
 				foreach($item['urls'] as $link){
 					$escaped_link = str_replace(array('%3A','%2F','%3F','%26','%3D','%23','%20',' '),array(':','/','?','&','=','#','_','_'),rawurlencode($link));
 					echo <<<EOC
 					<li><a href="$escaped_link" target="blank">$link</a></li>
 
-	EOC;
+EOC;
 
 				}
 			}
@@ -708,7 +708,7 @@ EOC;
 			echo <<<EOC
 				</ul>
 
-	EOC;
+EOC;
 			}
 		echo <<<EOC
 		</div>
